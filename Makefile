@@ -17,6 +17,7 @@ COMMPILE_DIRS:= \
   interface/usbnet \
   interface/fpu \
   interface/driver \
+  interface/soundbox \
 
 
 
