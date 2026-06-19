@@ -9,7 +9,12 @@ MAKEFILE_PATH :=$(subst $(strip \),/,$(abspath $(lastword $(MAKEFILE_LIST))))
 # Configure source code files
 #-------------------------------------------------------------------------------
 SRC_FILES+= \
-  src/sb_phase0_build_anchor.c \
+  src/sb_app_main.c \
+  src/sb_error.c \
+  src/sb_event.c \
+  src/sb_event_bus.c \
+  src/sb_log.c \
+  src/sb_supervisor.c \
 
 #-------------------------------------------------------------------------------
 # the include directories
@@ -17,6 +22,8 @@ SRC_FILES+= \
 INC_DIRS+= \
   -I${TOP_DIR}/ \
   -I${TOP_DIR}/common/include \
+  -I${TOP_DIR}/common/include/fs \
+  -I${TOP_DIR}/common/include/mqtt \
   -I${TOP_DIR}/interface/soundbox/include \
 
 #-------------------------------------------------------------------------------
@@ -35,7 +42,8 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE0_BUILD_ANCHOR=1 \
+  -DSB_PHASE_NUMBER=1 \
+  -DSB_BUILD_TARGET_EG800AK=1 \
 
 #-------------------------------------------------------------------------------
 # Configure link library

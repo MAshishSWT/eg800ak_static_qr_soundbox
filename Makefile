@@ -13,10 +13,6 @@ endif
 # Configure compile directories
 #-------------------------------------------------------------------------------
 COMMPILE_DIRS:= \
-  interface/wifi \
-  interface/usbnet \
-  interface/fpu \
-  interface/driver \
   interface/soundbox \
 
 
