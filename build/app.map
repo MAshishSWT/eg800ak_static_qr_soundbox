@@ -12,6 +12,18 @@ D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/sou
                               (--whole-archive)
 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
                               (--whole-archive)
+D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+                              (--whole-archive)
+D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+                              (--whole-archive)
+D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+                              (--whole-archive)
+D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+                              (--whole-archive)
+D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+                              (--whole-archive)
+D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+                              (--whole-archive)
 common/lib/ql_common_api.lib(ql_main.o)
                               (--whole-archive)
 common/lib/ql_common_api.lib(ql_adc.o)
@@ -451,16 +463,42 @@ Discarded input sections
  .text          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
  .data          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
  .bss           0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+ .text          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .data          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .bss           0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .text.sb_bsp_board_set_speaker_amp
+                0x00000000        0x8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .text.sb_bsp_board_read_battery
+                0x00000000        0x8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .text          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .data          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .bss           0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .text          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .data          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .bss           0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .text.sb_hal_audio_pa_set_enabled
+                0x00000000       0x28 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .text.sb_hal_audio_pa_is_enabled
+                0x00000000        0xc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .text          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .data          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .bss           0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .text.sb_hal_gpio_disable_eint
+                0x00000000       0x14 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .text          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .data          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .bss           0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .text.sb_hal_key_gpio
+                0x00000000       0x18 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .text          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+ .data          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+ .bss           0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
  .text          0x00000000        0x0 common/lib/ql_common_api.lib(ql_main.o)
  .data          0x00000000        0x0 common/lib/ql_common_api.lib(ql_main.o)
  .bss           0x00000000        0x0 common/lib/ql_common_api.lib(ql_main.o)
  .text          0x00000000        0x0 common/lib/ql_common_api.lib(ql_adc.o)
  .data          0x00000000        0x0 common/lib/ql_common_api.lib(ql_adc.o)
  .bss           0x00000000        0x0 common/lib/ql_common_api.lib(ql_adc.o)
- .text.ql_adc_init
-                0x00000000       0x30 common/lib/ql_common_api.lib(ql_adc.o)
- .text.ql_adc_read
-                0x00000000       0x3c common/lib/ql_common_api.lib(ql_adc.o)
  .text.ql_get_cur_source_vol
                 0x00000000       0x30 common/lib/ql_common_api.lib(ql_adc.o)
  .text.ql_adc_onff
@@ -469,11 +507,7 @@ Discarded input sections
                 0x00000000       0x3c common/lib/ql_common_api.lib(ql_adc.o)
  .text.ql_get_temperature_celsius_value
                 0x00000000       0x30 common/lib/ql_common_api.lib(ql_adc.o)
- .bss.m_ql_adc_init
-                0x00000000        0x4 common/lib/ql_common_api.lib(ql_adc.o)
  .bss.m_ql_adc_onoff
-                0x00000000        0x4 common/lib/ql_common_api.lib(ql_adc.o)
- .bss.m_ql_adc_read
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_adc.o)
  .bss.m_ql_adc_read_raw_value
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_adc.o)
@@ -481,10 +515,6 @@ Discarded input sections
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_adc.o)
  .bss.m_ql_get_temperature_celsius_value
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_adc.o)
- .rodata.__FUNCTION__.5629
-                0x00000000        0xc common/lib/ql_common_api.lib(ql_adc.o)
- .rodata.__FUNCTION__.5635
-                0x00000000        0xc common/lib/ql_common_api.lib(ql_adc.o)
  .rodata.__FUNCTION__.5640
                 0x00000000       0x16 common/lib/ql_common_api.lib(ql_adc.o)
  .rodata.__FUNCTION__.5645
@@ -493,18 +523,6 @@ Discarded input sections
                 0x00000000       0x16 common/lib/ql_common_api.lib(ql_adc.o)
  .rodata.__FUNCTION__.5656
                 0x00000000       0x21 common/lib/ql_common_api.lib(ql_adc.o)
- .debug_info    0x00000000      0x497 common/lib/ql_common_api.lib(ql_adc.o)
- .debug_abbrev  0x00000000      0x157 common/lib/ql_common_api.lib(ql_adc.o)
- .debug_loc     0x00000000      0x1d9 common/lib/ql_common_api.lib(ql_adc.o)
- .debug_aranges
-                0x00000000       0x48 common/lib/ql_common_api.lib(ql_adc.o)
- .debug_ranges  0x00000000       0x38 common/lib/ql_common_api.lib(ql_adc.o)
- .debug_line    0x00000000      0x231 common/lib/ql_common_api.lib(ql_adc.o)
- .debug_str     0x00000000      0x425 common/lib/ql_common_api.lib(ql_adc.o)
- .comment       0x00000000       0x7a common/lib/ql_common_api.lib(ql_adc.o)
- .debug_frame   0x00000000       0xe8 common/lib/ql_common_api.lib(ql_adc.o)
- .ARM.attributes
-                0x00000000       0x33 common/lib/ql_common_api.lib(ql_adc.o)
  .text          0x00000000        0x0 common/lib/ql_common_api.lib(ql_atcmd.o)
  .data          0x00000000        0x0 common/lib/ql_common_api.lib(ql_atcmd.o)
  .bss           0x00000000        0x0 common/lib/ql_common_api.lib(ql_atcmd.o)
@@ -2354,16 +2372,10 @@ Discarded input sections
                 0x00000000       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
  .text.ql_sfp_eint_unregister
                 0x00000000       0x34 common/lib/ql_common_api.lib(ql_gpio.o)
- .text.ql_gpio_init
-                0x00000000       0x44 common/lib/ql_common_api.lib(ql_gpio.o)
  .text.ql_gpio_map_clock
                 0x00000000       0x34 common/lib/ql_common_api.lib(ql_gpio.o)
  .text.ql_gpio_deinit
                 0x00000000       0x34 common/lib/ql_common_api.lib(ql_gpio.o)
- .text.ql_gpio_set_level
-                0x00000000       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
- .text.ql_gpio_get_level
-                0x00000000       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
  .text.ql_gpio_set_drv_level
                 0x00000000       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
  .text.ql_gpio_get_drv_level
@@ -2376,12 +2388,8 @@ Discarded input sections
                 0x00000000       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
  .text.ql_gpio_get_pull
                 0x00000000       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
- .text.ql_eint_register
-                0x00000000       0x4c common/lib/ql_common_api.lib(ql_gpio.o)
  .text.ql_eint_unregister
                 0x00000000       0x34 common/lib/ql_common_api.lib(ql_gpio.o)
- .text.ql_eint_enable
-                0x00000000       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
  .text.ql_eint_disable
                 0x00000000       0x34 common/lib/ql_common_api.lib(ql_gpio.o)
  .text.ql_eint_enable_wakeup
@@ -2398,11 +2406,7 @@ Discarded input sections
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_ql_eint_disable_wakeup
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
- .bss.m_ql_eint_enable
-                0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_ql_eint_enable_wakeup
-                0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
- .bss.m_ql_eint_register
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_ql_eint_unregister
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
@@ -2412,19 +2416,13 @@ Discarded input sections
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_ql_gpio_get_drv_level
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
- .bss.m_ql_gpio_get_level
-                0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_ql_gpio_get_pull
-                0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
- .bss.m_ql_gpio_init
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_ql_gpio_map_clock
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_ql_gpio_set_direction
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_ql_gpio_set_drv_level
-                0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
- .bss.m_ql_gpio_set_level
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_ql_gpio_set_pull
                 0x00000000        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
@@ -2446,16 +2444,10 @@ Discarded input sections
                 0x00000000       0x15 common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.5935
                 0x00000000       0x17 common/lib/ql_common_api.lib(ql_gpio.o)
- .rodata.__FUNCTION__.5943
-                0x00000000        0xd common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.5948
                 0x00000000       0x12 common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.5953
                 0x00000000        0xf common/lib/ql_common_api.lib(ql_gpio.o)
- .rodata.__FUNCTION__.5959
-                0x00000000       0x12 common/lib/ql_common_api.lib(ql_gpio.o)
- .rodata.__FUNCTION__.5965
-                0x00000000       0x12 common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.5971
                 0x00000000       0x16 common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.5977
@@ -2468,12 +2460,8 @@ Discarded input sections
                 0x00000000       0x11 common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.6001
                 0x00000000       0x11 common/lib/ql_common_api.lib(ql_gpio.o)
- .rodata.__FUNCTION__.6010
-                0x00000000       0x11 common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.6015
                 0x00000000       0x13 common/lib/ql_common_api.lib(ql_gpio.o)
- .rodata.__FUNCTION__.6021
-                0x00000000        0xf common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.6026
                 0x00000000       0x10 common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.6032
@@ -2486,18 +2474,6 @@ Discarded input sections
                 0x00000000       0x14 common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.__FUNCTION__.6054
                 0x00000000       0x1e common/lib/ql_common_api.lib(ql_gpio.o)
- .debug_info    0x00000000     0x169d common/lib/ql_common_api.lib(ql_gpio.o)
- .debug_abbrev  0x00000000      0x1ce common/lib/ql_common_api.lib(ql_gpio.o)
- .debug_loc     0x00000000      0xa73 common/lib/ql_common_api.lib(ql_gpio.o)
- .debug_aranges
-                0x00000000       0xd0 common/lib/ql_common_api.lib(ql_gpio.o)
- .debug_ranges  0x00000000       0xc0 common/lib/ql_common_api.lib(ql_gpio.o)
- .debug_line    0x00000000      0x7c6 common/lib/ql_common_api.lib(ql_gpio.o)
- .debug_str     0x00000000     0x135b common/lib/ql_common_api.lib(ql_gpio.o)
- .comment       0x00000000       0x7a common/lib/ql_common_api.lib(ql_gpio.o)
- .debug_frame   0x00000000      0x3b8 common/lib/ql_common_api.lib(ql_gpio.o)
- .ARM.attributes
-                0x00000000       0x33 common/lib/ql_common_api.lib(ql_gpio.o)
  .text          0x00000000        0x0 common/lib/ql_common_api.lib(ql_iic.o)
  .data          0x00000000        0x0 common/lib/ql_common_api.lib(ql_iic.o)
  .bss           0x00000000        0x0 common/lib/ql_common_api.lib(ql_iic.o)
@@ -9672,7 +9648,7 @@ Linker script and memory map
 .userStartUp
  *(.userInit)
 
-.text           0x80322028     0x6fb4
+.text           0x80322028     0x7624
  *(.text)
  .text          0x80322028       0xec D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memcpy.o)
                 0x80322028                memcpy
@@ -9694,432 +9670,542 @@ Linker script and memory map
                 0x80322674                __udivmoddi4
  *(.text*)
  .text.sb_app_entry
-                0x80322790       0xa8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
+                0x80322790       0xe4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
  .text.sb_status_to_string
-                0x80322838       0x1c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
-                0x80322838                sb_status_to_string
+                0x80322874       0x1c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
+                0x80322874                sb_status_to_string
  .text.sb_event_init
-                0x80322854       0x24 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
-                0x80322854                sb_event_init
+                0x80322890       0x24 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
+                0x80322890                sb_event_init
  .text.sb_event_id_to_string
-                0x80322878       0x18 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
-                0x80322878                sb_event_id_to_string
+                0x803228b4       0x18 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
+                0x803228b4                sb_event_id_to_string
  .text.sb_event_bus_init
-                0x80322890       0x38 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
-                0x80322890                sb_event_bus_init
+                0x803228cc       0x38 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
+                0x803228cc                sb_event_bus_init
  .text.sb_event_post
-                0x803228c8       0x40 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
-                0x803228c8                sb_event_post
+                0x80322904       0x40 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
+                0x80322904                sb_event_post
  .text.sb_event_wait
-                0x80322908       0x40 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
-                0x80322908                sb_event_wait
+                0x80322944       0x40 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
+                0x80322944                sb_event_wait
  .text.sb_event_pending_count
-                0x80322948       0x38 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
-                0x80322948                sb_event_pending_count
+                0x80322984       0x38 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
+                0x80322984                sb_event_pending_count
  .text.sb_log_init
-                0x80322980        0xc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
-                0x80322980                sb_log_init
+                0x803229bc        0xc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
+                0x803229bc                sb_log_init
  .text.sb_log_write
-                0x8032298c       0x70 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
-                0x8032298c                sb_log_write
+                0x803229c8       0x70 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
+                0x803229c8                sb_log_write
  .text.sb_supervisor_timer_cb
-                0x803229fc       0x24 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+                0x80322a38       0x24 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
  .text.sb_supervisor_task
-                0x80322a20      0x108 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+                0x80322a5c      0x140 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
  .text.sb_supervisor_post_boot_event
-                0x80322b28       0x24 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
-                0x80322b28                sb_supervisor_post_boot_event
+                0x80322b9c       0x24 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+                0x80322b9c                sb_supervisor_post_boot_event
  .text.sb_supervisor_start
-                0x80322b4c       0x78 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
-                0x80322b4c                sb_supervisor_start
+                0x80322bc0       0x78 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+                0x80322bc0                sb_supervisor_start
+ .text.sb_bsp_check_status
+                0x80322c38       0x48 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .text.sb_bsp_board_post_status
+                0x80322c80       0x5c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+                0x80322c80                sb_bsp_board_post_status
+ .text.sb_bsp_board_set_status_led
+                0x80322cdc        0xc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+                0x80322cdc                sb_bsp_board_set_status_led
+ .text.sb_bsp_board_init
+                0x80322ce8       0x78 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+                0x80322ce8                sb_bsp_board_init
+ .text.sb_bsp_board_toggle_status_led
+                0x80322d60        0xc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+                0x80322d60                sb_bsp_board_toggle_status_led
+ .text.sb_hal_adc_battery_percent_from_mv
+                0x80322d6c       0x30 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+                0x80322d6c                sb_hal_adc_battery_percent_from_mv
+ .text.sb_hal_adc_init
+                0x80322d9c       0x28 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+                0x80322d9c                sb_hal_adc_init
+ .text.sb_hal_adc_read_battery
+                0x80322dc4       0x64 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+                0x80322dc4                sb_hal_adc_read_battery
+ .text.sb_hal_audio_pa_init
+                0x80322e28       0x18 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+                0x80322e28                sb_hal_audio_pa_init
+ .text.sb_hal_gpio_input
+                0x80322e40       0x1c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+                0x80322e40                sb_hal_gpio_input
+ .text.sb_hal_gpio_output
+                0x80322e5c       0x1c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+                0x80322e5c                sb_hal_gpio_output
+ .text.sb_hal_gpio_set
+                0x80322e78       0x14 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+                0x80322e78                sb_hal_gpio_set
+ .text.sb_hal_gpio_get
+                0x80322e8c       0x1c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+                0x80322e8c                sb_hal_gpio_get
+ .text.sb_hal_gpio_register_eint
+                0x80322ea8       0x24 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+                0x80322ea8                sb_hal_gpio_register_eint
+ .text.sb_hal_gpio_enable_eint
+                0x80322ecc       0x14 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+                0x80322ecc                sb_hal_gpio_enable_eint
+ .text.sb_hal_key_configure
+                0x80322ee0       0x50 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .text.sb_hal_key_get_state
+                0x80322f30       0x4c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+                0x80322f30                sb_hal_key_get_state
+ .text.sb_key_post_edge
+                0x80322f7c       0x54 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .text.sb_key_mode_irq
+                0x80322fd0        0xc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .text.sb_key_volume_down_irq
+                0x80322fdc        0xc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .text.sb_key_volume_up_irq
+                0x80322fe8        0xc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .text.sb_hal_key_init
+                0x80322ff4       0x34 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+                0x80322ff4                sb_hal_key_init
+ .text.sb_hal_led_init
+                0x80323028       0x14 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+                0x80323028                sb_hal_led_init
+ .text.sb_hal_led_set
+                0x8032303c       0x28 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+                0x8032303c                sb_hal_led_set
+ .text.sb_hal_led_toggle
+                0x80323064       0x20 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+                0x80323064                sb_hal_led_toggle
  .text.appStartupTask
-                0x80322bc4       0x28 common/lib/ql_common_api.lib(ql_main.o)
+                0x80323084       0x28 common/lib/ql_common_api.lib(ql_main.o)
  .text.kernelStartupTask
-                0x80322bec       0x18 common/lib/ql_common_api.lib(ql_main.o)
+                0x803230ac       0x18 common/lib/ql_common_api.lib(ql_main.o)
  .text.appRegTableQuickSort.constprop.0
-                0x80322c04       0xa0 common/lib/ql_common_api.lib(ql_main.o)
- .text.ql_main  0x80322ca4       0x90 common/lib/ql_common_api.lib(ql_main.o)
+                0x803230c4       0xa0 common/lib/ql_common_api.lib(ql_main.o)
+ .text.ql_main  0x80323164       0x90 common/lib/ql_common_api.lib(ql_main.o)
  .text.userKernelTableQuickSort.constprop.0
-                0x80322d34       0xa0 common/lib/ql_common_api.lib(ql_main.o)
+                0x803231f4       0xa0 common/lib/ql_common_api.lib(ql_main.o)
  .text.ql_kernel
-                0x80322dd4       0x7c common/lib/ql_common_api.lib(ql_main.o)
+                0x80323294       0x7c common/lib/ql_common_api.lib(ql_main.o)
  .text.userBootTableQuickSort.constprop.0
-                0x80322e50       0x90 common/lib/ql_common_api.lib(ql_main.o)
- .text.ql_boot  0x80322ee0       0xa8 common/lib/ql_common_api.lib(ql_main.o)
+                0x80323310       0x90 common/lib/ql_common_api.lib(ql_main.o)
+ .text.ql_boot  0x803233a0       0xa8 common/lib/ql_common_api.lib(ql_main.o)
+ .text.ql_adc_init
+                0x80323448       0x30 common/lib/ql_common_api.lib(ql_adc.o)
+                0x80323448                ql_adc_init
+ .text.ql_adc_read
+                0x80323478       0x3c common/lib/ql_common_api.lib(ql_adc.o)
+                0x80323478                ql_adc_read
+ .text.ql_gpio_init
+                0x803234b4       0x44 common/lib/ql_common_api.lib(ql_gpio.o)
+                0x803234b4                ql_gpio_init
+ .text.ql_gpio_set_level
+                0x803234f8       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
+                0x803234f8                ql_gpio_set_level
+ .text.ql_gpio_get_level
+                0x80323534       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
+                0x80323534                ql_gpio_get_level
+ .text.ql_eint_register
+                0x80323570       0x4c common/lib/ql_common_api.lib(ql_gpio.o)
+                0x80323570                ql_eint_register
+ .text.ql_eint_enable
+                0x803235bc       0x3c common/lib/ql_common_api.lib(ql_gpio.o)
+                0x803235bc                ql_eint_enable
  .text.seagull_uart_putc
-                0x80322f88       0x30 common/lib/ql_common_api.lib(ql_log.o)
-                0x80322f88                seagull_uart_putc
- .text.printf   0x80322fb8       0x94 common/lib/ql_common_api.lib(ql_log.o)
-                0x80322fb8                printf
+                0x803235f8       0x30 common/lib/ql_common_api.lib(ql_log.o)
+                0x803235f8                seagull_uart_putc
+ .text.printf   0x80323628       0x94 common/lib/ql_common_api.lib(ql_log.o)
+                0x80323628                printf
  .text.ql_rtos_task_create
-                0x8032304c       0x50 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x8032304c                ql_rtos_task_create
+                0x803236bc       0x50 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x803236bc                ql_rtos_task_create
  .text.ql_rtos_task_delete
-                0x8032309c       0x34 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x8032309c                ql_rtos_task_delete
+                0x8032370c       0x34 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x8032370c                ql_rtos_task_delete
  .text.ql_rtos_task_sleep_ms
-                0x803230d0       0x30 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x803230d0                ql_rtos_task_sleep_ms
+                0x80323740       0x30 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323740                ql_rtos_task_sleep_ms
  .text.ql_rtos_queue_create
-                0x80323100       0x40 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x80323100                ql_rtos_queue_create
+                0x80323770       0x40 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323770                ql_rtos_queue_create
  .text.ql_rtos_queue_wait
-                0x80323140       0x44 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x80323140                ql_rtos_queue_wait
+                0x803237b0       0x44 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x803237b0                ql_rtos_queue_wait
  .text.ql_rtos_queue_release
-                0x80323184       0x44 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x80323184                ql_rtos_queue_release
+                0x803237f4       0x44 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x803237f4                ql_rtos_queue_release
  .text.ql_rtos_queue_get_cnt
-                0x803231c8       0x3c common/lib/ql_common_api.lib(ql_rtos.o)
-                0x803231c8                ql_rtos_queue_get_cnt
+                0x80323838       0x3c common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323838                ql_rtos_queue_get_cnt
  .text.ql_rtos_timer_create
-                0x80323204       0x34 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x80323204                ql_rtos_timer_create
+                0x80323874       0x34 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323874                ql_rtos_timer_create
  .text.ql_rtos_timer_start
-                0x80323238       0x4c common/lib/ql_common_api.lib(ql_rtos.o)
-                0x80323238                ql_rtos_timer_start
+                0x803238a8       0x4c common/lib/ql_common_api.lib(ql_rtos.o)
+                0x803238a8                ql_rtos_timer_start
  .text.ql_rtos_timer_delete
-                0x80323284       0x34 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x80323284                ql_rtos_timer_delete
+                0x803238f4       0x34 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x803238f4                ql_rtos_timer_delete
  .text.ql_rtos_get_systicks
-                0x803232b8       0x30 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x803232b8                ql_rtos_get_systicks
- .text.malloc   0x803232e8       0x30 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x803232e8                malloc
- .text.free     0x80323318       0x30 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x80323318                free
- .text.realloc  0x80323348       0x38 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x80323348                realloc
- .text.calloc   0x80323380       0x38 common/lib/ql_common_api.lib(ql_rtos.o)
-                0x80323380                calloc
+                0x80323928       0x30 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323928                ql_rtos_get_systicks
+ .text.malloc   0x80323958       0x30 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323958                malloc
+ .text.free     0x80323988       0x30 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323988                free
+ .text.realloc  0x803239b8       0x38 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x803239b8                realloc
+ .text.calloc   0x803239f0       0x38 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x803239f0                calloc
  .text._malloc_r
-                0x803233b8        0xc common/lib/ql_common_api.lib(ql_rtos.o)
-                0x803233b8                _malloc_r
+                0x80323a28        0xc common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323a28                _malloc_r
  .text._calloc_r
-                0x803233c4        0xc common/lib/ql_common_api.lib(ql_rtos.o)
-                0x803233c4                _calloc_r
- .text._free_r  0x803233d0        0xc common/lib/ql_common_api.lib(ql_rtos.o)
-                0x803233d0                _free_r
+                0x80323a34        0xc common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323a34                _calloc_r
+ .text._free_r  0x80323a40        0xc common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323a40                _free_r
  .text._realloc_r
-                0x803233dc        0xc common/lib/ql_common_api.lib(ql_rtos.o)
-                0x803233dc                _realloc_r
- .text.memmove  0x803233e8       0xd0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memmove.o)
-                0x803233e8                memmove
- .text.memset   0x803234b8       0xa0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memset.o)
-                0x803234b8                memset
- .text.__sread  0x80323558       0x24 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
-                0x80323558                __sread
+                0x80323a4c        0xc common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80323a4c                _realloc_r
+ .text.memmove  0x80323a58       0xd0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memmove.o)
+                0x80323a58                memmove
+ .text.memset   0x80323b28       0xa0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memset.o)
+                0x80323b28                memset
+ .text.__sread  0x80323bc8       0x24 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
+                0x80323bc8                __sread
  .text.__swrite
-                0x8032357c       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
-                0x8032357c                __swrite
- .text.__sseek  0x803235bc       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
-                0x803235bc                __sseek
+                0x80323bec       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
+                0x80323bec                __swrite
+ .text.__sseek  0x80323c2c       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
+                0x80323c2c                __sseek
  .text.__sclose
-                0x803235dc        0x8 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
-                0x803235dc                __sclose
- .text.strlen   0x803235e4       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strlen-stub.o)
-                0x803235e4                strlen
- .text.strncpy  0x80323640       0x74 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strncpy.o)
-                0x80323640                strncpy
+                0x80323c4c        0x8 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
+                0x80323c4c                __sclose
+ .text.strlen   0x80323c54       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strlen-stub.o)
+                0x80323c54                strlen
+ .text.strncpy  0x80323cb0       0x74 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strncpy.o)
+                0x80323cb0                strncpy
  .text.__ssprint_r
-                0x803236b4       0xf4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfiprintf.o)
-                0x803236b4                __ssprint_r
+                0x80323d24       0xf4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfiprintf.o)
+                0x80323d24                __ssprint_r
  .text._svfprintf_r
-                0x803237a8     0x19ac D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
-                0x803237a8                _svfprintf_r
- .text.vprintf  0x80325154       0x1c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vprintf.o)
-                0x80325154                vprintf
+                0x80323e18     0x19ac D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
+                0x80323e18                _svfprintf_r
+ .text.vprintf  0x803257c4       0x1c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vprintf.o)
+                0x803257c4                vprintf
  .text._vsnprintf_r
-                0x80325170       0x6c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vsnprintf.o)
-                0x80325170                _vsnprintf_r
+                0x803257e0       0x6c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vsnprintf.o)
+                0x803257e0                _vsnprintf_r
  .text.vsnprintf
-                0x803251dc       0x24 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vsnprintf.o)
-                0x803251dc                vsnprintf
+                0x8032584c       0x24 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vsnprintf.o)
+                0x8032584c                vsnprintf
  .text._write_r
-                0x80325200       0x30 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-writer.o)
-                0x80325200                _write_r
+                0x80325870       0x30 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-writer.o)
+                0x80325870                _write_r
  .text._close_r
-                0x80325230       0x28 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-closer.o)
-                0x80325230                _close_r
- .text.quorem   0x80325258      0x12c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
- *fill*         0x80325384        0x4 
- .text._dtoa_r  0x80325388      0xd28 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
-                0x80325388                _dtoa_r
+                0x803258a0       0x28 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-closer.o)
+                0x803258a0                _close_r
+ .text.quorem   0x803258c8      0x12c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
+ *fill*         0x803259f4        0x4 
+ .text._dtoa_r  0x803259f8      0xd28 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
+                0x803259f8                _dtoa_r
  .text.__locale_mb_cur_max
-                0x803260b0       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
-                0x803260b0                __locale_mb_cur_max
+                0x80326720       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
+                0x80326720                __locale_mb_cur_max
  .text._localeconv_r
-                0x803260c0        0x8 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-localeconv.o)
-                0x803260c0                _localeconv_r
+                0x80326730        0x8 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-localeconv.o)
+                0x80326730                _localeconv_r
  .text._lseek_r
-                0x803260c8       0x30 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lseekr.o)
-                0x803260c8                _lseek_r
+                0x80326738       0x30 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lseekr.o)
+                0x80326738                _lseek_r
  .text.__ascii_mbtowc
-                0x803260f8       0x24 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mbtowc_r.o)
-                0x803260f8                __ascii_mbtowc
- .text.memchr   0x8032611c       0x7c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memchr-stub.o)
-                0x8032611c                memchr
- .text._Balloc  0x80326198       0x4c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x80326198                _Balloc
- .text._Bfree   0x803261e4       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x803261e4                _Bfree
+                0x80326768       0x24 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mbtowc_r.o)
+                0x80326768                __ascii_mbtowc
+ .text.memchr   0x8032678c       0x7c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memchr-stub.o)
+                0x8032678c                memchr
+ .text._Balloc  0x80326808       0x4c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326808                _Balloc
+ .text._Bfree   0x80326854       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326854                _Bfree
  .text.__multadd
-                0x803261f8       0x8c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x803261f8                __multadd
+                0x80326868       0x8c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326868                __multadd
  .text.__hi0bits
-                0x80326284       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x80326284                __hi0bits
+                0x803268f4       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x803268f4                __hi0bits
  .text.__lo0bits
-                0x803262c4       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x803262c4                __lo0bits
- .text.__i2b    0x80326320       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x80326320                __i2b
+                0x80326934       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326934                __lo0bits
+ .text.__i2b    0x80326990       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326990                __i2b
  .text.__multiply
-                0x80326334      0x150 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x80326334                __multiply
+                0x803269a4      0x150 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x803269a4                __multiply
  .text.__pow5mult
-                0x80326484       0xa4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x80326484                __pow5mult
+                0x80326af4       0xa4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326af4                __pow5mult
  .text.__lshift
-                0x80326528       0xd0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x80326528                __lshift
- .text.__mcmp   0x803265f8       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x803265f8                __mcmp
- .text.__mdiff  0x80326634      0x148 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x80326634                __mdiff
- .text.__d2b    0x8032677c       0xb4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x8032677c                __d2b
- .text._read_r  0x80326830       0x30 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-readr.o)
-                0x80326830                _read_r
- .text.frexp    0x80326860       0x70 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-s_frexp.o)
-                0x80326860                frexp
+                0x80326b98       0xd0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326b98                __lshift
+ .text.__mcmp   0x80326c68       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326c68                __mcmp
+ .text.__mdiff  0x80326ca4      0x148 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326ca4                __mdiff
+ .text.__d2b    0x80326dec       0xb4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80326dec                __d2b
+ .text._read_r  0x80326ea0       0x30 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-readr.o)
+                0x80326ea0                _read_r
+ .text.frexp    0x80326ed0       0x70 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-s_frexp.o)
+                0x80326ed0                frexp
  .text._vfprintf_r
-                0x803268d0     0x1aa4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
-                0x803268d0                _vfprintf_r
+                0x80326f40     0x1aa4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
+                0x80326f40                _vfprintf_r
  .text.__sbprintf
-                0x80328374       0x84 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
+                0x803289e4       0x84 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
  .text.__ascii_wctomb
-                0x803283f8       0x1c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wctomb_r.o)
-                0x803283f8                __ascii_wctomb
+                0x80328a68       0x1c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wctomb_r.o)
+                0x80328a68                __ascii_wctomb
  .text.__swsetup_r
-                0x80328414       0xcc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wsetup.o)
-                0x80328414                __swsetup_r
+                0x80328a84       0xcc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wsetup.o)
+                0x80328a84                __swsetup_r
  .text.__sflush_r
-                0x803284e0      0x148 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fflush.o)
-                0x803284e0                __sflush_r
+                0x80328b50      0x148 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fflush.o)
+                0x80328b50                __sflush_r
  .text._fflush_r
-                0x80328628       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fflush.o)
-                0x80328628                _fflush_r
- .text.std      0x80328684       0x58 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
+                0x80328c98       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fflush.o)
+                0x80328c98                _fflush_r
+ .text.std      0x80328cf4       0x58 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
  .text._cleanup_r
-                0x803286dc        0xc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
-                0x803286dc                _cleanup_r
- .text.__sinit  0x803286e8       0x70 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
-                0x803286e8                __sinit
+                0x80328d4c        0xc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
+                0x80328d4c                _cleanup_r
+ .text.__sinit  0x80328d58       0x70 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
+                0x80328d58                __sinit
  .text.__sfp_lock_acquire
-                0x80328758        0xc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
-                0x80328758                __sfp_lock_acquire
+                0x80328dc8        0xc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
+                0x80328dc8                __sfp_lock_acquire
  .text.__sfp_lock_release
-                0x80328764        0xc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
-                0x80328764                __sfp_lock_release
+                0x80328dd4        0xc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
+                0x80328dd4                __sfp_lock_release
  .text._fwalk_reent
-                0x80328770       0x44 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fwalk.o)
-                0x80328770                _fwalk_reent
+                0x80328de0       0x44 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fwalk.o)
+                0x80328de0                _fwalk_reent
  .text.__retarget_lock_init_recursive
-                0x803287b4        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
-                0x803287b4                __retarget_lock_init_recursive
+                0x80328e24        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
+                0x80328e24                __retarget_lock_init_recursive
  .text.__retarget_lock_close_recursive
-                0x803287b8        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
-                0x803287b8                __retarget_lock_close_recursive
+                0x80328e28        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
+                0x80328e28                __retarget_lock_close_recursive
  .text.__retarget_lock_acquire_recursive
-                0x803287bc        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
-                0x803287bc                __retarget_lock_acquire_recursive
+                0x80328e2c        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
+                0x80328e2c                __retarget_lock_acquire_recursive
  .text.__retarget_lock_release_recursive
-                0x803287c0        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
-                0x803287c0                __retarget_lock_release_recursive
+                0x80328e30        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
+                0x80328e30                __retarget_lock_release_recursive
  .text.__swhatbuf_r
-                0x803287c4       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-makebuf.o)
-                0x803287c4                __swhatbuf_r
+                0x80328e34       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-makebuf.o)
+                0x80328e34                __swhatbuf_r
  .text.__smakebuf_r
-                0x80328820       0x9c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-makebuf.o)
-                0x80328820                __smakebuf_r
+                0x80328e90       0x9c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-makebuf.o)
+                0x80328e90                __smakebuf_r
  .text.__sprint_r.part.0
-                0x803288bc       0x74 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfiprintf.o)
+                0x80328f2c       0x74 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfiprintf.o)
  .text.__sprint_r
-                0x80328930       0x18 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfiprintf.o)
-                0x80328930                __sprint_r
+                0x80328fa0       0x18 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfiprintf.o)
+                0x80328fa0                __sprint_r
  .text._fclose_r
-                0x80328948       0xcc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fclose.o)
-                0x80328948                _fclose_r
+                0x80328fb8       0xcc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fclose.o)
+                0x80328fb8                _fclose_r
  .text.__fputwc
-                0x80328a14       0xac D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fputwc.o)
-                0x80328a14                __fputwc
+                0x80329084       0xac D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fputwc.o)
+                0x80329084                __fputwc
  .text._fputwc_r
-                0x80328ac0       0x68 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fputwc.o)
-                0x80328ac0                _fputwc_r
+                0x80329130       0x68 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fputwc.o)
+                0x80329130                _fputwc_r
  .text._fstat_r
-                0x80328b28       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fstatr.o)
-                0x80328b28                _fstat_r
+                0x80329198       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fstatr.o)
+                0x80329198                _fstat_r
  .text.__sfvwrite_r
-                0x80328b54      0x300 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fvwrite.o)
-                0x80328b54                __sfvwrite_r
+                0x803291c4      0x300 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fvwrite.o)
+                0x803291c4                __sfvwrite_r
  .text._isatty_r
-                0x80328e54       0x28 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-isattyr.o)
-                0x80328e54                _isatty_r
+                0x803294c4       0x28 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-isattyr.o)
+                0x803294c4                _isatty_r
  .text.__swbuf_r
-                0x80328e7c       0xb0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wbuf.o)
-                0x80328e7c                __swbuf_r
+                0x803294ec       0xb0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wbuf.o)
+                0x803294ec                __swbuf_r
  .text._wcrtomb_r
-                0x80328f2c       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wcrtomb.o)
-                0x80328f2c                _wcrtomb_r
- .text._close   0x80328f68       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(close.o)
-                0x80328f68                _close
- .text._fstat   0x80328f7c       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(fstat.o)
-                0x80328f7c                _fstat
- .text._isatty  0x80328f90       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(isatty.o)
-                0x80328f90                _isatty
- .text._lseek   0x80328fa0       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(lseek.o)
-                0x80328fa0                _lseek
- .text._read    0x80328fb4       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(read.o)
-                0x80328fb4                _read
- .text._write   0x80328fc8       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(write.o)
-                0x80328fc8                _write
+                0x8032959c       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wcrtomb.o)
+                0x8032959c                _wcrtomb_r
+ .text._close   0x803295d8       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(close.o)
+                0x803295d8                _close
+ .text._fstat   0x803295ec       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(fstat.o)
+                0x803295ec                _fstat
+ .text._isatty  0x80329600       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(isatty.o)
+                0x80329600                _isatty
+ .text._lseek   0x80329610       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(lseek.o)
+                0x80329610                _lseek
+ .text._read    0x80329624       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(read.o)
+                0x80329624                _read
+ .text._write   0x80329638       0x14 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(write.o)
+                0x80329638                _write
 
-.glue_7         0x80328fdc        0x0
- .glue_7        0x80328fdc        0x0 linker stubs
+.glue_7         0x8032964c        0x0
+ .glue_7        0x8032964c        0x0 linker stubs
 
-.glue_7t        0x80328fdc        0x0
- .glue_7t       0x80328fdc        0x0 linker stubs
+.glue_7t        0x8032964c        0x0
+ .glue_7t       0x8032964c        0x0 linker stubs
 
-.vfp11_veneer   0x80328fdc        0x0
- .vfp11_veneer  0x80328fdc        0x0 linker stubs
+.vfp11_veneer   0x8032964c        0x0
+ .vfp11_veneer  0x8032964c        0x0 linker stubs
 
-.v4_bx          0x80328fdc        0x0
- .v4_bx         0x80328fdc        0x0 linker stubs
+.v4_bx          0x8032964c        0x0
+ .v4_bx         0x8032964c        0x0 linker stubs
 
-.iplt           0x80328fdc        0x0
- .iplt          0x80328fdc        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
+.iplt           0x8032964c        0x0
+ .iplt          0x8032964c        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
 
-.rodata         0x80328fe0      0x78c
+.rodata         0x80329650      0x8c4
  *(.rodata)
  *(.rodata*)
  .rodata.sb_app_entry.str1.1
-                0x80328fe0       0x92 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
-                                 0x96 (size before relaxing)
+                0x80329650       0xc9 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
+                                 0xcd (size before relaxing)
  .rodata.str1.1
-                0x80329072        0x7 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
+                0x80329719        0x7 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
  .rodata.sb_status_to_string.str1.1
-                0x80329079        0x8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
+                0x80329720        0x8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
  .rodata.str1.1
-                0x80329081       0x70 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
+                0x80329728       0x70 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
                                  0x76 (size before relaxing)
- *fill*         0x803290f1        0x3 
  .rodata.CSWTCH.1
-                0x803290f4       0x2c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
+                0x80329798       0x2c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
  .rodata.sb_event_id_to_string.str1.1
-                0x80329120        0x8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
+                0x803297c4        0x8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
  .rodata.str1.1
-                0x80329120       0xa5 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
- *fill*         0x803291c5        0x3 
+                0x803297c4       0xc9 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
+ *fill*         0x8032988d        0x3 
  .rodata.CSWTCH.4
-                0x803291c8       0x2c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
+                0x80329890       0x38 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
  .rodata.sb_log_write.str1.1
-                0x803291f4       0x15 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
+                0x803298c8       0x15 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
                                  0x19 (size before relaxing)
  .rodata.str1.1
-                0x80329209        0x4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
+                0x803298dd        0x4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
                                   0x8 (size before relaxing)
- *fill*         0x8032920d        0x3 
+ *fill*         0x803298e1        0x3 
  .rodata.CSWTCH.2
-                0x80329210       0x10 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
+                0x803298e4       0x10 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
  .rodata.sb_supervisor_task.str1.1
-                0x80329220       0xa6 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
-                                 0xb1 (size before relaxing)
+                0x803298f4       0xdc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+                                 0xe7 (size before relaxing)
  .rodata.sb_supervisor_start.str1.1
-                0x803292c6        0xe D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+                0x803299d0        0xe D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+ .rodata.sb_bsp_check_status.str1.1
+                0x803299de       0x1e D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .rodata.sb_bsp_board_init.str1.1
+                0x803299fc       0x14 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+                                 0x18 (size before relaxing)
+ .rodata.CSWTCH.3
+                0x80329a10        0x3 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
  .rodata.appStartupTask.str1.1
-                0x803292d4       0x14 common/lib/ql_common_api.lib(ql_main.o)
+                0x80329a13       0x14 common/lib/ql_common_api.lib(ql_main.o)
  .rodata.ql_main.str1.1
-                0x803292e8       0x42 common/lib/ql_common_api.lib(ql_main.o)
+                0x80329a27       0x42 common/lib/ql_common_api.lib(ql_main.o)
  .rodata.ql_kernel.str1.1
-                0x8032932a       0x25 common/lib/ql_common_api.lib(ql_main.o)
+                0x80329a69       0x25 common/lib/ql_common_api.lib(ql_main.o)
  .rodata.ql_boot.str1.1
-                0x8032934f       0x34 common/lib/ql_common_api.lib(ql_main.o)
+                0x80329a8e       0x34 common/lib/ql_common_api.lib(ql_main.o)
+ .rodata.__FUNCTION__.5629
+                0x80329ac2        0xc common/lib/ql_common_api.lib(ql_adc.o)
+ .rodata.__FUNCTION__.5635
+                0x80329ace        0xc common/lib/ql_common_api.lib(ql_adc.o)
+ .rodata.__FUNCTION__.5943
+                0x80329ada        0xd common/lib/ql_common_api.lib(ql_gpio.o)
+ .rodata.__FUNCTION__.5959
+                0x80329ae7       0x12 common/lib/ql_common_api.lib(ql_gpio.o)
+ .rodata.__FUNCTION__.5965
+                0x80329af9       0x12 common/lib/ql_common_api.lib(ql_gpio.o)
+ .rodata.__FUNCTION__.6010
+                0x80329b0b       0x11 common/lib/ql_common_api.lib(ql_gpio.o)
+ .rodata.__FUNCTION__.6021
+                0x80329b1c        0xf common/lib/ql_common_api.lib(ql_gpio.o)
  .rodata.printf.str1.1
-                0x80329383       0x2c common/lib/ql_common_api.lib(ql_log.o)
+                0x80329b2b       0x2c common/lib/ql_common_api.lib(ql_log.o)
  .rodata.__FUNCTION__.6407
-                0x803293af       0x12 common/lib/ql_common_api.lib(ql_log.o)
+                0x80329b57       0x12 common/lib/ql_common_api.lib(ql_log.o)
  .rodata.__FUNCTION__.6065
-                0x803293c1       0x14 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329b69       0x14 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6084
-                0x803293d5       0x14 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329b7d       0x14 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6118
-                0x803293e9       0x16 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329b91       0x16 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6184
-                0x803293ff       0x15 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329ba7       0x15 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6192
-                0x80329414       0x13 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329bbc       0x13 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6200
-                0x80329427       0x16 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329bcf       0x16 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6214
-                0x8032943d       0x16 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329be5       0x16 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6224
-                0x80329453       0x15 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329bfb       0x15 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6239
-                0x80329468       0x14 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329c10       0x14 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6264
-                0x8032947c       0x15 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329c24       0x15 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6284
-                0x80329491       0x15 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329c39       0x15 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6333
-                0x803294a6        0x7 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329c4e        0x7 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6338
-                0x803294ad        0x5 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329c55        0x5 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6344
-                0x803294b2        0x8 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x80329c5a        0x8 common/lib/ql_common_api.lib(ql_rtos.o)
  .rodata.__FUNCTION__.6350
-                0x803294ba        0x7 common/lib/ql_common_api.lib(ql_rtos.o)
- *fill*         0x803294c1        0x3 
+                0x80329c62        0x7 common/lib/ql_common_api.lib(ql_rtos.o)
+ *fill*         0x80329c69        0x3 
  .rodata._ctype_
-                0x803294c4      0x101 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-ctype_.o)
-                0x803294c4                _ctype_
- *fill*         0x803295c5        0x3 
+                0x80329c6c      0x101 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-ctype_.o)
+                0x80329c6c                _ctype_
+ *fill*         0x80329d6d        0x3 
  .rodata._svfprintf_r.str1.4
-                0x803295c8       0x42 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
- *fill*         0x8032960a        0x2 
+                0x80329d70       0x42 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
+ *fill*         0x80329db2        0x2 
  .rodata.blanks.8708
-                0x8032960c       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
+                0x80329db4       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
  .rodata.zeroes.8709
-                0x8032961c       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
+                0x80329dc4       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
  .rodata._dtoa_r.str1.4
-                0x8032962c        0xd D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
+                0x80329dd4        0xd D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
                                  0x12 (size before relaxing)
- *fill*         0x80329639        0x3 
+ *fill*         0x80329de1        0x3 
  .rodata._setlocale_r.str1.4
-                0x8032963c        0xa D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
+                0x80329de4        0xa D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
                                   0xd (size before relaxing)
- *fill*         0x80329646        0x2 
+ *fill*         0x80329dee        0x2 
  .rodata.str1.4
-                0x80329648        0x2 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
- *fill*         0x8032964a        0x6 
+                0x80329df0        0x2 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
+ *fill*         0x80329df2        0x6 
  .rodata.__mprec_bigtens
-                0x80329650       0x28 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x80329650                __mprec_bigtens
+                0x80329df8       0x28 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80329df8                __mprec_bigtens
  .rodata.__mprec_tens
-                0x80329678       0xc8 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
-                0x80329678                __mprec_tens
+                0x80329e20       0xc8 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80329e20                __mprec_tens
  .rodata.p05.7478
-                0x80329740        0xc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x80329ee8        0xc D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
  .rodata._vfprintf_r.str1.4
-                0x8032974c       0x42 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
+                0x80329ef4       0x42 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
  .rodata.blanks.8723
-                0x8032974c       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
+                0x80329ef4       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
  .rodata.zeroes.8724
-                0x8032975c       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
+                0x80329f04       0x10 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
                 0x7e1f0800                . = __RAM_START_ADDR
 
-.data           0x7e1f0800      0x59c load address 0x8032976c
-                0x8032976c                PROVIDE (__data_load = LOADADDR (.data))
+.data           0x7e1f0800      0x59c load address 0x80329f14
+                0x80329f14                PROVIDE (__data_load = LOADADDR (.data))
                 0x7e1f0800                PROVIDE (__data_start = .)
  *(.data)
  *(.data*)
@@ -10136,39 +10222,39 @@ Linker script and memory map
                 0x7e1f0c30                __global_locale
                 [!provide]                PROVIDE (_edata = .)
 
-.igot.plt       0x7e1f0d9c        0x0 load address 0x80329d08
+.igot.plt       0x7e1f0d9c        0x0 load address 0x8032a4b0
  .igot.plt      0x7e1f0d9c        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
 
-.userBootTable  0x7e1f0d9c        0x0 load address 0x80329d08
+.userBootTable  0x7e1f0d9c        0x0 load address 0x8032a4b0
                 0x7e1f0d9c                PROVIDE (__userBoot_start__ = .)
  *(.userBootTable)
                 0x7e1f0d9c                PROVIDE (__userBoot_end__ = .)
 
 .userKernelTable
-                0x7e1f0d9c        0x0 load address 0x80329d08
+                0x7e1f0d9c        0x0 load address 0x8032a4b0
                 0x7e1f0d9c                PROVIDE (__userKernel_start__ = .)
  *(.userKernelTable)
                 0x7e1f0d9c                PROVIDE (__userKernel_end__ = .)
 
-.appRegTable    0x7e1f0d9c       0x10 load address 0x80329d08
+.appRegTable    0x7e1f0d9c       0x10 load address 0x8032a4b0
                 0x7e1f0d9c                PROVIDE (__appRegTable_start__ = .)
  *(.appRegTable)
  .appRegTable   0x7e1f0d9c       0x10 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
                 0x7e1f0d9c                _regAppItem_sb_app_entry
                 0x7e1f0dac                PROVIDE (__appRegTable_end__ = .)
 
-.ARM.exidx      0x7e1f0dac        0x8 load address 0x80329d18
+.ARM.exidx      0x7e1f0dac        0x8 load address 0x8032a4c0
                 [!provide]                PROVIDE (__exidx_start = .)
  *(.ARM.exidx)
  .ARM.exidx     0x7e1f0dac        0x8 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_udivmoddi4.o)
                 0x7e1f0db4                PROVIDE (__exidx_end = .)
-                0x80329d20                _bin_end = (LOADADDR (.ARM.exidx) + SIZEOF (.ARM.exidx))
+                0x8032a4c8                _bin_end = (LOADADDR (.ARM.exidx) + SIZEOF (.ARM.exidx))
                 0x00000001                ASSERT (((_bin_end - __ROM_START_ADDR) < __MAX_ROM_SIZE), xxxx ERR:APP ROM OVERFLOW !!)
 
-.rel.dyn        0x7e1f0db4        0x0 load address 0x80329d20
+.rel.dyn        0x7e1f0db4        0x0 load address 0x8032a4c8
  .rel.iplt      0x7e1f0db4        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
 
-.bss            0x7e1f0db4      0x899 load address 0x80329d20
+.bss            0x7e1f0db4      0x8c5 load address 0x8032a4c8
                 0x7e1f0db4                PROVIDE (__bss_start__ = .)
  *(.bss)
  *(.bss*)
@@ -10182,71 +10268,93 @@ Linker script and memory map
                 0x7e1f0dc0        0x4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
  .bss.s_supervisor_task
                 0x7e1f0dc4        0x4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+ .bss.s_board_ready
+                0x7e1f0dc8        0x4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .bss.s_adc_ready
+                0x7e1f0dcc        0x4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .bss.s_pa_enabled
+                0x7e1f0dd0        0x4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .bss.s_status_led_on
+                0x7e1f0dd4        0x4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
  .bss.func_table_size
-                0x7e1f0dc8        0x4 common/lib/ql_common_api.lib(ql_main.o)
-                0x7e1f0dc8                func_table_size
+                0x7e1f0dd8        0x4 common/lib/ql_common_api.lib(ql_main.o)
+                0x7e1f0dd8                func_table_size
  .bss.m_get_api_ptr
-                0x7e1f0dcc        0x4 common/lib/ql_common_api.lib(ql_main.o)
-                0x7e1f0dcc                m_get_api_ptr
+                0x7e1f0ddc        0x4 common/lib/ql_common_api.lib(ql_main.o)
+                0x7e1f0ddc                m_get_api_ptr
  .bss.ql_boot_para
-                0x7e1f0dd0        0x8 common/lib/ql_common_api.lib(ql_main.o)
-                0x7e1f0dd0                ql_boot_para
- .bss.ql_trace  0x7e1f0dd8        0x4 common/lib/ql_common_api.lib(ql_main.o)
-                0x7e1f0dd8                ql_trace
+                0x7e1f0de0        0x8 common/lib/ql_common_api.lib(ql_main.o)
+                0x7e1f0de0                ql_boot_para
+ .bss.ql_trace  0x7e1f0de8        0x4 common/lib/ql_common_api.lib(ql_main.o)
+                0x7e1f0de8                ql_trace
+ .bss.m_ql_adc_init
+                0x7e1f0dec        0x4 common/lib/ql_common_api.lib(ql_adc.o)
+ .bss.m_ql_adc_read
+                0x7e1f0df0        0x4 common/lib/ql_common_api.lib(ql_adc.o)
+ .bss.m_ql_eint_enable
+                0x7e1f0df4        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
+ .bss.m_ql_eint_register
+                0x7e1f0df8        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
+ .bss.m_ql_gpio_get_level
+                0x7e1f0dfc        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
+ .bss.m_ql_gpio_init
+                0x7e1f0e00        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
+ .bss.m_ql_gpio_set_level
+                0x7e1f0e04        0x4 common/lib/ql_common_api.lib(ql_gpio.o)
  .bss.m_debug_printf_lock
-                0x7e1f0ddc        0x4 common/lib/ql_common_api.lib(ql_log.o)
+                0x7e1f0e08        0x4 common/lib/ql_common_api.lib(ql_log.o)
  .bss.m_debug_printf_unlock
-                0x7e1f0de0        0x4 common/lib/ql_common_api.lib(ql_log.o)
+                0x7e1f0e0c        0x4 common/lib/ql_common_api.lib(ql_log.o)
  .bss.m_seagull_uart_putc
-                0x7e1f0de4        0x4 common/lib/ql_common_api.lib(ql_log.o)
+                0x7e1f0e10        0x4 common/lib/ql_common_api.lib(ql_log.o)
  .bss.print_buf
-                0x7e1f0de8      0x801 common/lib/ql_common_api.lib(ql_log.o)
+                0x7e1f0e14      0x801 common/lib/ql_common_api.lib(ql_log.o)
  .bss.ql_debug_log_mode
-                0x7e1f15e9        0x1 common/lib/ql_common_api.lib(ql_log.o)
-                0x7e1f15e9                ql_debug_log_mode
- *fill*         0x7e1f15ea        0x2 
- .bss.m_calloc  0x7e1f15ec        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_free    0x7e1f15f0        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_malloc  0x7e1f15f4        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x7e1f1615        0x1 common/lib/ql_common_api.lib(ql_log.o)
+                0x7e1f1615                ql_debug_log_mode
+ *fill*         0x7e1f1616        0x2 
+ .bss.m_calloc  0x7e1f1618        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_free    0x7e1f161c        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_malloc  0x7e1f1620        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
  .bss.m_ql_rtos_get_systicks
-                0x7e1f15f8        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_queue_create
-                0x7e1f15fc        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_queue_get_cnt
-                0x7e1f1600        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_queue_release
-                0x7e1f1604        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_queue_wait
-                0x7e1f1608        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_task_create
-                0x7e1f160c        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_task_delete
-                0x7e1f1610        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_task_sleep_ms
-                0x7e1f1614        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_timer_create
-                0x7e1f1618        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_timer_delete
-                0x7e1f161c        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_ql_rtos_timer_start
-                0x7e1f1620        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
- .bss.m_realloc
                 0x7e1f1624        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_queue_create
+                0x7e1f1628        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_queue_get_cnt
+                0x7e1f162c        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_queue_release
+                0x7e1f1630        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_queue_wait
+                0x7e1f1634        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_task_create
+                0x7e1f1638        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_task_delete
+                0x7e1f163c        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_task_sleep_ms
+                0x7e1f1640        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_timer_create
+                0x7e1f1644        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_timer_delete
+                0x7e1f1648        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_ql_rtos_timer_start
+                0x7e1f164c        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
+ .bss.m_realloc
+                0x7e1f1650        0x4 common/lib/ql_common_api.lib(ql_rtos.o)
  *(COMMON)
- COMMON         0x7e1f1628        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-reent.o)
-                0x7e1f1628                errno
- COMMON         0x7e1f162c       0x21 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
-                0x7e1f162c                __lock___atexit_recursive_mutex
-                0x7e1f1630                __lock___arc4random_mutex
-                0x7e1f1634                __lock___env_recursive_mutex
-                0x7e1f1638                __lock___sinit_recursive_mutex
-                0x7e1f163c                __lock___malloc_recursive_mutex
-                0x7e1f1640                __lock___at_quick_exit_mutex
-                0x7e1f1644                __lock___dd_hash_mutex
-                0x7e1f1648                __lock___tz_mutex
-                0x7e1f164c                __lock___sfp_recursive_mutex
-                0x7e1f164d                PROVIDE (__bss_end__ = .)
-                0x7e1f164d                end = .
+ COMMON         0x7e1f1654        0x4 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-reent.o)
+                0x7e1f1654                errno
+ COMMON         0x7e1f1658       0x21 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
+                0x7e1f1658                __lock___atexit_recursive_mutex
+                0x7e1f165c                __lock___arc4random_mutex
+                0x7e1f1660                __lock___env_recursive_mutex
+                0x7e1f1664                __lock___sinit_recursive_mutex
+                0x7e1f1668                __lock___malloc_recursive_mutex
+                0x7e1f166c                __lock___at_quick_exit_mutex
+                0x7e1f1670                __lock___dd_hash_mutex
+                0x7e1f1674                __lock___tz_mutex
+                0x7e1f1678                __lock___sfp_recursive_mutex
+                0x7e1f1679                PROVIDE (__bss_end__ = .)
+                0x7e1f1679                end = .
                 0x00000001                ASSERT (((__bss_end__ - __RAM_START_ADDR) < __MAX_RAM_SIZE), xxxx ERR:APP RAM OVERFLOW !!)
 LOAD D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib
 LOAD common/lib/ql_common_api.lib
@@ -10266,40 +10374,64 @@ LOAD D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\q
 LOAD D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libm.a
 OUTPUT(build/app.elf elf32-littlearm)
 
-.debug_info     0x00000000     0x6b87
- .debug_info    0x00000000      0x3a8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
- .debug_info    0x000003a8       0xcb D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
- .debug_info    0x00000473      0x34a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
- .debug_info    0x000007bd      0x3f6 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
- .debug_info    0x00000bb3      0x232 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
- .debug_info    0x00000de5      0x66e D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
- .debug_info    0x00001453     0x1627 common/lib/ql_common_api.lib(ql_main.o)
- .debug_info    0x00002a7a     0x11f5 common/lib/ql_common_api.lib(ql_log.o)
- .debug_info    0x00003c6f     0x2f18 common/lib/ql_common_api.lib(ql_rtos.o)
+.debug_info     0x00000000     0xac3a
+ .debug_info    0x00000000      0x400 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
+ .debug_info    0x00000400       0xcb D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
+ .debug_info    0x000004cb      0x35c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
+ .debug_info    0x00000827      0x408 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
+ .debug_info    0x00000c2f      0x232 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
+ .debug_info    0x00000e61      0x67d D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+ .debug_info    0x000014de      0x6eb D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .debug_info    0x00001bc9      0x296 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .debug_info    0x00001e5f      0x49e D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .debug_info    0x000022fd      0x729 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .debug_info    0x00002a26      0xa64 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .debug_info    0x0000348a      0x548 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+ .debug_info    0x000039d2     0x1627 common/lib/ql_common_api.lib(ql_main.o)
+ .debug_info    0x00004ff9      0x497 common/lib/ql_common_api.lib(ql_adc.o)
+ .debug_info    0x00005490     0x169d common/lib/ql_common_api.lib(ql_gpio.o)
+ .debug_info    0x00006b2d     0x11f5 common/lib/ql_common_api.lib(ql_log.o)
+ .debug_info    0x00007d22     0x2f18 common/lib/ql_common_api.lib(ql_rtos.o)
 
-.debug_abbrev   0x00000000     0x1365
+.debug_abbrev   0x00000000     0x1fa2
  .debug_abbrev  0x00000000      0x177 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
  .debug_abbrev  0x00000177       0x95 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
  .debug_abbrev  0x0000020c      0x1a6 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
  .debug_abbrev  0x000003b2      0x153 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
  .debug_abbrev  0x00000505      0x1c6 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
  .debug_abbrev  0x000006cb      0x1e7 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
- .debug_abbrev  0x000008b2      0x40e common/lib/ql_common_api.lib(ql_main.o)
- .debug_abbrev  0x00000cc0      0x461 common/lib/ql_common_api.lib(ql_log.o)
- .debug_abbrev  0x00001121      0x244 common/lib/ql_common_api.lib(ql_rtos.o)
+ .debug_abbrev  0x000008b2      0x1ec D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .debug_abbrev  0x00000a9e      0x1a5 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .debug_abbrev  0x00000c43      0x11e D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .debug_abbrev  0x00000d61       0xf3 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .debug_abbrev  0x00000e54      0x220 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .debug_abbrev  0x00001074      0x156 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+ .debug_abbrev  0x000011ca      0x40e common/lib/ql_common_api.lib(ql_main.o)
+ .debug_abbrev  0x000015d8      0x157 common/lib/ql_common_api.lib(ql_adc.o)
+ .debug_abbrev  0x0000172f      0x1ce common/lib/ql_common_api.lib(ql_gpio.o)
+ .debug_abbrev  0x000018fd      0x461 common/lib/ql_common_api.lib(ql_log.o)
+ .debug_abbrev  0x00001d5e      0x244 common/lib/ql_common_api.lib(ql_rtos.o)
 
-.debug_loc      0x00000000     0x355f
- .debug_loc     0x00000000       0x6e D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
- .debug_loc     0x0000006e       0x25 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
- .debug_loc     0x00000093      0x168 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
- .debug_loc     0x000001fb      0x14b D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
- .debug_loc     0x00000346       0x9e D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
- .debug_loc     0x000003e4       0xcd D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
- .debug_loc     0x000004b1      0x7a3 common/lib/ql_common_api.lib(ql_main.o)
- .debug_loc     0x00000c54      0x24d common/lib/ql_common_api.lib(ql_log.o)
- .debug_loc     0x00000ea1     0x26be common/lib/ql_common_api.lib(ql_rtos.o)
+.debug_loc      0x00000000     0x4afb
+ .debug_loc     0x00000000       0x95 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
+ .debug_loc     0x00000095       0x25 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
+ .debug_loc     0x000000ba      0x168 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
+ .debug_loc     0x00000222      0x14b D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
+ .debug_loc     0x0000036d       0x9e D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
+ .debug_loc     0x0000040b       0xcd D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+ .debug_loc     0x000004d8      0x1d9 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .debug_loc     0x000006b1      0x129 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .debug_loc     0x000007da       0x54 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .debug_loc     0x0000082e      0x299 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .debug_loc     0x00000ac7      0x25a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .debug_loc     0x00000d21       0xe0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+ .debug_loc     0x00000e01      0x7a3 common/lib/ql_common_api.lib(ql_main.o)
+ .debug_loc     0x000015a4      0x1d9 common/lib/ql_common_api.lib(ql_adc.o)
+ .debug_loc     0x0000177d      0xa73 common/lib/ql_common_api.lib(ql_gpio.o)
+ .debug_loc     0x000021f0      0x24d common/lib/ql_common_api.lib(ql_log.o)
+ .debug_loc     0x0000243d     0x26be common/lib/ql_common_api.lib(ql_rtos.o)
 
-.debug_aranges  0x00000000      0x3d0
+.debug_aranges  0x00000000      0x670
  .debug_aranges
                 0x00000000       0x20 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
  .debug_aranges
@@ -10313,52 +10445,100 @@ OUTPUT(build/app.elf elf32-littlearm)
  .debug_aranges
                 0x000000e0       0x38 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
  .debug_aranges
-                0x00000118       0x58 common/lib/ql_common_api.lib(ql_main.o)
+                0x00000118       0x50 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
  .debug_aranges
-                0x00000170       0x60 common/lib/ql_common_api.lib(ql_log.o)
+                0x00000168       0x30 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
  .debug_aranges
-                0x000001d0      0x200 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x00000198       0x30 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .debug_aranges
+                0x000001c8       0x50 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .debug_aranges
+                0x00000218       0x58 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .debug_aranges
+                0x00000270       0x30 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+ .debug_aranges
+                0x000002a0       0x58 common/lib/ql_common_api.lib(ql_main.o)
+ .debug_aranges
+                0x000002f8       0x48 common/lib/ql_common_api.lib(ql_adc.o)
+ .debug_aranges
+                0x00000340       0xd0 common/lib/ql_common_api.lib(ql_gpio.o)
+ .debug_aranges
+                0x00000410       0x60 common/lib/ql_common_api.lib(ql_log.o)
+ .debug_aranges
+                0x00000470      0x200 common/lib/ql_common_api.lib(ql_rtos.o)
 
-.debug_ranges   0x00000000      0x520
+.debug_ranges   0x00000000      0x770
  .debug_ranges  0x00000000       0x10 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
  .debug_ranges  0x00000010       0x10 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
  .debug_ranges  0x00000020       0x20 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
  .debug_ranges  0x00000040       0x30 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
  .debug_ranges  0x00000070       0x20 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
  .debug_ranges  0x00000090       0x28 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
- .debug_ranges  0x000000b8      0x198 common/lib/ql_common_api.lib(ql_main.o)
- .debug_ranges  0x00000250       0xb0 common/lib/ql_common_api.lib(ql_log.o)
- .debug_ranges  0x00000300      0x220 common/lib/ql_common_api.lib(ql_rtos.o)
+ .debug_ranges  0x000000b8       0x40 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .debug_ranges  0x000000f8       0x38 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .debug_ranges  0x00000130       0x20 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .debug_ranges  0x00000150       0x40 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .debug_ranges  0x00000190       0x48 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .debug_ranges  0x000001d8       0x38 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+ .debug_ranges  0x00000210      0x198 common/lib/ql_common_api.lib(ql_main.o)
+ .debug_ranges  0x000003a8       0x38 common/lib/ql_common_api.lib(ql_adc.o)
+ .debug_ranges  0x000003e0       0xc0 common/lib/ql_common_api.lib(ql_gpio.o)
+ .debug_ranges  0x000004a0       0xb0 common/lib/ql_common_api.lib(ql_log.o)
+ .debug_ranges  0x00000550      0x220 common/lib/ql_common_api.lib(ql_rtos.o)
 
-.debug_line     0x00000000     0x2a3a
- .debug_line    0x00000000      0x1c1 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
- .debug_line    0x000001c1       0xb4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
- .debug_line    0x00000275      0x1eb D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
- .debug_line    0x00000460      0x2a7 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
- .debug_line    0x00000707      0x1d0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
- .debug_line    0x000008d7      0x2b0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
- .debug_line    0x00000b87      0x617 common/lib/ql_common_api.lib(ql_main.o)
- .debug_line    0x0000119e      0x575 common/lib/ql_common_api.lib(ql_log.o)
- .debug_line    0x00001713     0x1327 common/lib/ql_common_api.lib(ql_rtos.o)
+.debug_line     0x00000000     0x42a6
+ .debug_line    0x00000000      0x20a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
+ .debug_line    0x0000020a       0xb4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
+ .debug_line    0x000002be      0x1eb D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
+ .debug_line    0x000004a9      0x2a7 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
+ .debug_line    0x00000750      0x1d0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
+ .debug_line    0x00000920      0x2db D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+ .debug_line    0x00000bfb      0x32e D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .debug_line    0x00000f29      0x221 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .debug_line    0x0000114a      0x1a5 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .debug_line    0x000012ef      0x21d D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .debug_line    0x0000150c      0x332 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .debug_line    0x0000183e      0x1be D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+ .debug_line    0x000019fc      0x617 common/lib/ql_common_api.lib(ql_main.o)
+ .debug_line    0x00002013      0x231 common/lib/ql_common_api.lib(ql_adc.o)
+ .debug_line    0x00002244      0x7c6 common/lib/ql_common_api.lib(ql_gpio.o)
+ .debug_line    0x00002a0a      0x575 common/lib/ql_common_api.lib(ql_log.o)
+ .debug_line    0x00002f7f     0x1327 common/lib/ql_common_api.lib(ql_rtos.o)
 
-.debug_str      0x00000000     0x20ef
- .debug_str     0x00000000      0x476 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
-                                0x4d1 (size before relaxing)
- .debug_str     0x00000476        0xf D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
+.debug_str      0x00000000     0x35df
+ .debug_str     0x00000000      0x49a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
+                                0x4fc (size before relaxing)
+ .debug_str     0x0000049a        0xf D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
                                 0x2f4 (size before relaxing)
- .debug_str     0x00000485      0x258 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
-                                0x5b1 (size before relaxing)
- .debug_str     0x000006dd       0x9b D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
-                                0x665 (size before relaxing)
- .debug_str     0x00000778       0x93 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
+ .debug_str     0x000004a9      0x297 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
+                                0x5f0 (size before relaxing)
+ .debug_str     0x00000740       0x9b D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
+                                0x6a4 (size before relaxing)
+ .debug_str     0x000007db       0x93 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
                                 0x2f4 (size before relaxing)
- .debug_str     0x0000080b       0xcc D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
-                                0x788 (size before relaxing)
- .debug_str     0x000008d7      0x7bd common/lib/ql_common_api.lib(ql_main.o)
+ .debug_str     0x0000086e       0xeb D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+                                0x7e6 (size before relaxing)
+ .debug_str     0x00000959      0x170 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+                                0x7f8 (size before relaxing)
+ .debug_str     0x00000ac9       0x68 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+                                0x426 (size before relaxing)
+ .debug_str     0x00000b31      0x85d D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+                                0xb7a (size before relaxing)
+ .debug_str     0x0000138e      0x17e D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+                                0xceb (size before relaxing)
+ .debug_str     0x0000150c      0x101 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+                                0xfeb (size before relaxing)
+ .debug_str     0x0000160d       0x45 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+                                0xb93 (size before relaxing)
+ .debug_str     0x00001652      0x7b7 common/lib/ql_common_api.lib(ql_main.o)
                                 0xaec (size before relaxing)
- .debug_str     0x00001094      0x2ae common/lib/ql_common_api.lib(ql_log.o)
+ .debug_str     0x00001e09      0x167 common/lib/ql_common_api.lib(ql_adc.o)
+                                0x425 (size before relaxing)
+ .debug_str     0x00001f70      0x626 common/lib/ql_common_api.lib(ql_gpio.o)
+                               0x135b (size before relaxing)
+ .debug_str     0x00002596      0x2a1 common/lib/ql_common_api.lib(ql_log.o)
                                 0x9d8 (size before relaxing)
- .debug_str     0x00001342      0xdad common/lib/ql_common_api.lib(ql_rtos.o)
+ .debug_str     0x00002837      0xda8 common/lib/ql_common_api.lib(ql_rtos.o)
                                0x156d (size before relaxing)
 
 .comment        0x00000000       0x79
@@ -10369,7 +10549,15 @@ OUTPUT(build/app.elf elf32-littlearm)
  .comment       0x00000079       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
  .comment       0x00000079       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
  .comment       0x00000079       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
+ .comment       0x00000079       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .comment       0x00000079       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .comment       0x00000079       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .comment       0x00000079       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .comment       0x00000079       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .comment       0x00000079       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
  .comment       0x00000079       0x7a common/lib/ql_common_api.lib(ql_main.o)
+ .comment       0x00000079       0x7a common/lib/ql_common_api.lib(ql_adc.o)
+ .comment       0x00000079       0x7a common/lib/ql_common_api.lib(ql_gpio.o)
  .comment       0x00000079       0x7a common/lib/ql_common_api.lib(ql_log.o)
  .comment       0x00000079       0x7a common/lib/ql_common_api.lib(ql_rtos.o)
 
@@ -10388,171 +10576,195 @@ OUTPUT(build/app.elf elf32-littlearm)
  .ARM.attributes
                 0x000000ff       0x33 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
  .ARM.attributes
-                0x00000132       0x33 common/lib/ql_common_api.lib(ql_main.o)
+                0x00000132       0x33 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
  .ARM.attributes
-                0x00000165       0x33 common/lib/ql_common_api.lib(ql_log.o)
+                0x00000165       0x33 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
  .ARM.attributes
-                0x00000198       0x33 common/lib/ql_common_api.lib(ql_rtos.o)
+                0x00000198       0x33 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
  .ARM.attributes
-                0x000001cb       0x29 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-ctype_.o)
+                0x000001cb       0x33 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
  .ARM.attributes
-                0x000001f4       0x29 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-impure.o)
+                0x000001fe       0x33 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
  .ARM.attributes
-                0x0000021d       0x17 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memcpy.o)
+                0x00000231       0x33 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
  .ARM.attributes
-                0x00000234       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memmove.o)
+                0x00000264       0x33 common/lib/ql_common_api.lib(ql_main.o)
  .ARM.attributes
-                0x0000025f       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memset.o)
+                0x00000297       0x33 common/lib/ql_common_api.lib(ql_adc.o)
  .ARM.attributes
-                0x0000028a       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
+                0x000002ca       0x33 common/lib/ql_common_api.lib(ql_gpio.o)
  .ARM.attributes
-                0x000002b5       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strlen-stub.o)
+                0x000002fd       0x33 common/lib/ql_common_api.lib(ql_log.o)
  .ARM.attributes
-                0x000002e0       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strncpy.o)
+                0x00000330       0x33 common/lib/ql_common_api.lib(ql_rtos.o)
  .ARM.attributes
-                0x0000030b       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfiprintf.o)
+                0x00000363       0x29 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-ctype_.o)
  .ARM.attributes
-                0x00000336       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
+                0x0000038c       0x29 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-impure.o)
  .ARM.attributes
-                0x00000361       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vprintf.o)
+                0x000003b5       0x17 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memcpy.o)
  .ARM.attributes
-                0x0000038c       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vsnprintf.o)
+                0x000003cc       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memmove.o)
  .ARM.attributes
-                0x000003b7       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-writer.o)
+                0x000003f7       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memset.o)
  .ARM.attributes
-                0x000003e2       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-closer.o)
+                0x00000422       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
  .ARM.attributes
-                0x0000040d       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
+                0x0000044d       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strlen-stub.o)
  .ARM.attributes
-                0x00000438       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
+                0x00000478       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strncpy.o)
  .ARM.attributes
-                0x00000463       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-localeconv.o)
+                0x000004a3       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfiprintf.o)
  .ARM.attributes
-                0x0000048e       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lseekr.o)
+                0x000004ce       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
  .ARM.attributes
-                0x000004b9       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mbtowc_r.o)
+                0x000004f9       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vprintf.o)
  .ARM.attributes
-                0x000004e4       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memchr-stub.o)
+                0x00000524       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vsnprintf.o)
  .ARM.attributes
-                0x0000050f       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+                0x0000054f       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-writer.o)
  .ARM.attributes
-                0x0000053a       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-readr.o)
+                0x0000057a       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-closer.o)
  .ARM.attributes
-                0x00000565       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-reent.o)
+                0x000005a5       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
  .ARM.attributes
-                0x00000590       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-s_frexp.o)
+                0x000005d0       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
  .ARM.attributes
-                0x000005bb       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
+                0x000005fb       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-localeconv.o)
  .ARM.attributes
-                0x000005e6       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wctomb_r.o)
+                0x00000626       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lseekr.o)
  .ARM.attributes
-                0x00000611       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wsetup.o)
+                0x00000651       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mbtowc_r.o)
  .ARM.attributes
-                0x0000063c       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fflush.o)
+                0x0000067c       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memchr-stub.o)
  .ARM.attributes
-                0x00000667       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
+                0x000006a7       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
  .ARM.attributes
-                0x00000692       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fwalk.o)
+                0x000006d2       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-readr.o)
  .ARM.attributes
-                0x000006bd       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
+                0x000006fd       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-reent.o)
  .ARM.attributes
-                0x000006e8       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-makebuf.o)
+                0x00000728       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-s_frexp.o)
  .ARM.attributes
-                0x00000713       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfiprintf.o)
+                0x00000753       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
  .ARM.attributes
-                0x0000073e       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fclose.o)
+                0x0000077e       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wctomb_r.o)
  .ARM.attributes
-                0x00000769       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fputwc.o)
+                0x000007a9       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wsetup.o)
  .ARM.attributes
-                0x00000794       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fstatr.o)
+                0x000007d4       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fflush.o)
  .ARM.attributes
-                0x000007bf       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fvwrite.o)
+                0x000007ff       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
  .ARM.attributes
-                0x000007ea       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-isattyr.o)
+                0x0000082a       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fwalk.o)
  .ARM.attributes
-                0x00000815       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wbuf.o)
+                0x00000855       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
  .ARM.attributes
-                0x00000840       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wcrtomb.o)
+                0x00000880       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-makebuf.o)
  .ARM.attributes
-                0x0000086b       0x19 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_udivsi3.o)
+                0x000008ab       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfiprintf.o)
  .ARM.attributes
-                0x00000884       0x19 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_divsi3.o)
+                0x000008d6       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fclose.o)
  .ARM.attributes
-                0x0000089d       0x19 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_dvmd_tls.o)
+                0x00000901       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fputwc.o)
  .ARM.attributes
-                0x000008b6       0x19 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_aeabi_uldivmod.o)
+                0x0000092c       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fstatr.o)
  .ARM.attributes
-                0x000008cf       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_udivmoddi4.o)
+                0x00000957       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fvwrite.o)
  .ARM.attributes
-                0x000008fa       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(close.o)
+                0x00000982       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-isattyr.o)
  .ARM.attributes
-                0x00000925       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(fstat.o)
+                0x000009ad       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wbuf.o)
  .ARM.attributes
-                0x00000950       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(isatty.o)
+                0x000009d8       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wcrtomb.o)
  .ARM.attributes
-                0x0000097b       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(lseek.o)
+                0x00000a03       0x19 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_udivsi3.o)
  .ARM.attributes
-                0x000009a6       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(read.o)
+                0x00000a1c       0x19 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_divsi3.o)
  .ARM.attributes
-                0x000009d1       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(write.o)
+                0x00000a35       0x19 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_dvmd_tls.o)
+ .ARM.attributes
+                0x00000a4e       0x19 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_aeabi_uldivmod.o)
+ .ARM.attributes
+                0x00000a67       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_udivmoddi4.o)
+ .ARM.attributes
+                0x00000a92       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(close.o)
+ .ARM.attributes
+                0x00000abd       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(fstat.o)
+ .ARM.attributes
+                0x00000ae8       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(isatty.o)
+ .ARM.attributes
+                0x00000b13       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(lseek.o)
+ .ARM.attributes
+                0x00000b3e       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(read.o)
+ .ARM.attributes
+                0x00000b69       0x2b D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(write.o)
 
-.debug_frame    0x00000000     0x1f34
+.debug_frame    0x00000000     0x2708
  .debug_frame   0x00000000       0x38 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_app_main.o)
  .debug_frame   0x00000038       0x20 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_error.o)
  .debug_frame   0x00000058       0x54 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event.o)
  .debug_frame   0x000000ac       0x94 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_event_bus.o)
  .debug_frame   0x00000140       0x70 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_log.o)
  .debug_frame   0x000001b0       0x90 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_supervisor.o)
- .debug_frame   0x00000240      0x140 common/lib/ql_common_api.lib(ql_main.o)
- .debug_frame   0x00000380      0x1a0 common/lib/ql_common_api.lib(ql_log.o)
- .debug_frame   0x00000520      0x91c common/lib/ql_common_api.lib(ql_rtos.o)
- .debug_frame   0x00000e3c       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memmove.o)
- .debug_frame   0x00000e7c       0x38 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memset.o)
- .debug_frame   0x00000eb4       0x8c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
- .debug_frame   0x00000f40       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strlen-stub.o)
- .debug_frame   0x00000f60       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strncpy.o)
- .debug_frame   0x00000f9c       0x88 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfiprintf.o)
- .debug_frame   0x00001024       0x7c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
- .debug_frame   0x000010a0       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vprintf.o)
- .debug_frame   0x000010dc       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vsnprintf.o)
- .debug_frame   0x00001138       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-writer.o)
- .debug_frame   0x00001164       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-closer.o)
- .debug_frame   0x00001190       0x7c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
- .debug_frame   0x0000120c       0x54 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
- .debug_frame   0x00001260       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-localeconv.o)
- .debug_frame   0x000012a0       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lseekr.o)
- .debug_frame   0x000012cc       0x48 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mbtowc_r.o)
- .debug_frame   0x00001314       0x44 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memchr-stub.o)
- .debug_frame   0x00001358      0x258 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
- .debug_frame   0x000015b0       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-readr.o)
- .debug_frame   0x000015dc       0x60 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-reent.o)
- .debug_frame   0x0000163c       0x30 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-s_frexp.o)
- .debug_frame   0x0000166c       0xd8 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
- .debug_frame   0x00001744       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wctomb_r.o)
- .debug_frame   0x00001780       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wsetup.o)
- .debug_frame   0x000017ac       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fflush.o)
- .debug_frame   0x00001808      0x154 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
- .debug_frame   0x0000195c       0x54 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fwalk.o)
- .debug_frame   0x000019b0       0xb0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
- .debug_frame   0x00001a60       0x6c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-makebuf.o)
- .debug_frame   0x00001acc       0xd0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfiprintf.o)
- .debug_frame   0x00001b9c       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fclose.o)
- .debug_frame   0x00001bd8       0xa0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fputwc.o)
- .debug_frame   0x00001c78       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fstatr.o)
- .debug_frame   0x00001ca4       0x64 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fvwrite.o)
- .debug_frame   0x00001d08       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-isattyr.o)
- .debug_frame   0x00001d34       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wbuf.o)
- .debug_frame   0x00001d74       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wcrtomb.o)
- .debug_frame   0x00001dd0       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_udivsi3.o)
- .debug_frame   0x00001df0       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_divsi3.o)
- .debug_frame   0x00001e10       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_aeabi_uldivmod.o)
- .debug_frame   0x00001e3c       0x38 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_udivmoddi4.o)
- .debug_frame   0x00001e74       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(close.o)
- .debug_frame   0x00001e94       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(fstat.o)
- .debug_frame   0x00001eb4       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(isatty.o)
- .debug_frame   0x00001ed4       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(lseek.o)
- .debug_frame   0x00001ef4       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(read.o)
- .debug_frame   0x00001f14       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(write.o)
+ .debug_frame   0x00000240       0xb4 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_bsp_kae8_sq1.o)
+ .debug_frame   0x000002f4       0x58 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_adc.o)
+ .debug_frame   0x0000034c       0x48 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_audio_pa.o)
+ .debug_frame   0x00000394       0xc0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_gpio.o)
+ .debug_frame   0x00000454       0xd8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_key.o)
+ .debug_frame   0x0000052c       0x48 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_hal_led.o)
+ .debug_frame   0x00000574      0x140 common/lib/ql_common_api.lib(ql_main.o)
+ .debug_frame   0x000006b4       0xe8 common/lib/ql_common_api.lib(ql_adc.o)
+ .debug_frame   0x0000079c      0x3b8 common/lib/ql_common_api.lib(ql_gpio.o)
+ .debug_frame   0x00000b54      0x1a0 common/lib/ql_common_api.lib(ql_log.o)
+ .debug_frame   0x00000cf4      0x91c common/lib/ql_common_api.lib(ql_rtos.o)
+ .debug_frame   0x00001610       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memmove.o)
+ .debug_frame   0x00001650       0x38 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memset.o)
+ .debug_frame   0x00001688       0x8c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-stdio.o)
+ .debug_frame   0x00001714       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strlen-stub.o)
+ .debug_frame   0x00001734       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-strncpy.o)
+ .debug_frame   0x00001770       0x88 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfiprintf.o)
+ .debug_frame   0x000017f8       0x7c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-svfprintf.o)
+ .debug_frame   0x00001874       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vprintf.o)
+ .debug_frame   0x000018b0       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vsnprintf.o)
+ .debug_frame   0x0000190c       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-writer.o)
+ .debug_frame   0x00001938       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-closer.o)
+ .debug_frame   0x00001964       0x7c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-dtoa.o)
+ .debug_frame   0x000019e0       0x54 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-locale.o)
+ .debug_frame   0x00001a34       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-localeconv.o)
+ .debug_frame   0x00001a74       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lseekr.o)
+ .debug_frame   0x00001aa0       0x48 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mbtowc_r.o)
+ .debug_frame   0x00001ae8       0x44 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-memchr-stub.o)
+ .debug_frame   0x00001b2c      0x258 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-mprec.o)
+ .debug_frame   0x00001d84       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-readr.o)
+ .debug_frame   0x00001db0       0x60 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-reent.o)
+ .debug_frame   0x00001e10       0x30 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-s_frexp.o)
+ .debug_frame   0x00001e40       0xd8 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfprintf.o)
+ .debug_frame   0x00001f18       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wctomb_r.o)
+ .debug_frame   0x00001f54       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wsetup.o)
+ .debug_frame   0x00001f80       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fflush.o)
+ .debug_frame   0x00001fdc      0x154 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-findfp.o)
+ .debug_frame   0x00002130       0x54 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fwalk.o)
+ .debug_frame   0x00002184       0xb0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-lock.o)
+ .debug_frame   0x00002234       0x6c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-makebuf.o)
+ .debug_frame   0x000022a0       0xd0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-vfiprintf.o)
+ .debug_frame   0x00002370       0x3c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fclose.o)
+ .debug_frame   0x000023ac       0xa0 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fputwc.o)
+ .debug_frame   0x0000244c       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fstatr.o)
+ .debug_frame   0x00002478       0x64 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-fvwrite.o)
+ .debug_frame   0x000024dc       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-isattyr.o)
+ .debug_frame   0x00002508       0x40 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wbuf.o)
+ .debug_frame   0x00002548       0x5c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libc.a(lib_a-wcrtomb.o)
+ .debug_frame   0x000025a4       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_udivsi3.o)
+ .debug_frame   0x000025c4       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_divsi3.o)
+ .debug_frame   0x000025e4       0x2c D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_aeabi_uldivmod.o)
+ .debug_frame   0x00002610       0x38 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\lib\gcc\arm-none-eabi\9.2.1\thumb\v7+fp\softfp\libgcc.a(_udivmoddi4.o)
+ .debug_frame   0x00002648       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(close.o)
+ .debug_frame   0x00002668       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(fstat.o)
+ .debug_frame   0x00002688       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(isatty.o)
+ .debug_frame   0x000026a8       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(lseek.o)
+ .debug_frame   0x000026c8       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(read.o)
+ .debug_frame   0x000026e8       0x20 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(write.o)
 
 .stab           0x00000000       0x9c
  .stab          0x00000000       0x24 D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx\/../..\ql-cross-tool\win32\owtoolchain\gcc-arm-none-eabi\arm-none-eabi\lib\thumb\v7+fp\softfp\libnosys.a(close.o)

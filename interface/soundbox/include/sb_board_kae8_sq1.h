@@ -3,7 +3,7 @@
  * Target: Quectel EG800AK-CN QuecOpen SDK
  * Source: KAE8_SQ1_260611_Sch_01 schematic, sheets 1-3
  *
- * This header records schematic-to-firmware constants for Phase 0.
+ * This header records schematic-to-firmware constants for the soundbox BSP.
  * It contains no runtime side effects.
  *================================================================*/
 #ifndef SB_BOARD_KAE8_SQ1_H
@@ -27,11 +27,15 @@ extern "C" {
 #define SB_KAE8_KEY_ACTIVE_LEVEL                 PIN_LEVEL_LOW
 #define SB_KAE8_KEY_IDLE_PULL                    PIN_PULL_PU
 
-/* User LED. Q5 transistor polarity must be validated on first board test. */
+/* User LED. Q5 is a low-side transistor, so GPIO high turns LD2 on. */
 #define SB_KAE8_STATUS_LED_GPIO                  GPIO_PIN_NO_83 /* USER_LED_1 -> U1C GPIO9, pin 83 */
+#define SB_KAE8_STATUS_LED_ON_LEVEL              PIN_LEVEL_HIGH
+#define SB_KAE8_STATUS_LED_OFF_LEVEL             PIN_LEVEL_LOW
 
-/* Speaker PA shutdown/control path. Net SPK_SHDN routes through Q1 to U7 8002A. */
+/* Speaker PA shutdown/control path. Signal name is SPK_SHDN; high asserts shutdown. */
 #define SB_KAE8_SPK_SHDN_GPIO                    GPIO_PIN_NO_22 /* SPK_SHDN -> U1A MAIN_CTS, pin 22 */
+#define SB_KAE8_SPK_SHDN_ASSERT_LEVEL            PIN_LEVEL_HIGH
+#define SB_KAE8_SPK_SHDN_DEASSERT_LEVEL          PIN_LEVEL_LOW
 
 /* External W25Q64JWSIQ schematic nets on U1C. Port macro is selected during SPI NOR read-ID bring-up. */
 #define SB_KAE8_FLASH_SYNC_GPIO                  GPIO_PIN_NO_74 /* FLASH_SYNC -> U1C KP_MKOUT[1] */

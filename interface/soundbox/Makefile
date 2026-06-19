@@ -15,6 +15,12 @@ SRC_FILES+= \
   src/sb_event_bus.c \
   src/sb_log.c \
   src/sb_supervisor.c \
+  src/sb_bsp_kae8_sq1.c \
+  src/sb_hal_adc.c \
+  src/sb_hal_audio_pa.c \
+  src/sb_hal_gpio.c \
+  src/sb_hal_key.c \
+  src/sb_hal_led.c \
 
 #-------------------------------------------------------------------------------
 # the include directories
@@ -42,7 +48,7 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=1 \
+  -DSB_PHASE_NUMBER=2 \
   -DSB_BUILD_TARGET_EG800AK=1 \
 
 #-------------------------------------------------------------------------------

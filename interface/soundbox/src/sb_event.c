@@ -60,12 +60,16 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "SYSTEM_BOOT";
     case SB_EVENT_SYSTEM_READY:
         return "SYSTEM_READY";
+    case SB_EVENT_BOARD_READY:
+        return "BOARD_READY";
     case SB_EVENT_SUPERVISOR_STARTED:
         return "SUPERVISOR_STARTED";
     case SB_EVENT_SUPERVISOR_HEARTBEAT:
         return "SUPERVISOR_HEARTBEAT";
     case SB_EVENT_SUPERVISOR_FAULT:
         return "SUPERVISOR_FAULT";
+    case SB_EVENT_KEY_EDGE:
+        return "KEY_EDGE";
     case SB_EVENT_KEY_SHORT_PRESS:
         return "KEY_SHORT_PRESS";
     case SB_EVENT_KEY_LONG_PRESS:
@@ -74,6 +78,8 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "CONNECTIVITY_STATE";
     case SB_EVENT_AUDIO_STATE:
         return "AUDIO_STATE";
+    case SB_EVENT_BATTERY_SAMPLE:
+        return "BATTERY_SAMPLE";
     case SB_EVENT_FACTORY_COMMAND:
         return "FACTORY_COMMAND";
     default:

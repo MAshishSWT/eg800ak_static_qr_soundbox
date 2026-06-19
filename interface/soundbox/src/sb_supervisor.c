@@ -3,6 +3,7 @@
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *================================================================*/
 #include "ql_rtos.h"
+#include "sb_bsp_kae8_sq1.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_log.h"
@@ -34,12 +35,25 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "boot event received");
         break;
 
+    case SB_EVENT_BOARD_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "board ready");
+        break;
+
     case SB_EVENT_SUPERVISOR_STARTED:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "started event received");
         break;
 
     case SB_EVENT_SUPERVISOR_HEARTBEAT:
+        (void)sb_bsp_board_toggle_status_led();
         SB_LOGD(SB_SUPERVISOR_MODULE_NAME, "heartbeat pending=%u", sb_event_pending_count());
+        break;
+
+    case SB_EVENT_KEY_EDGE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "key=%u pressed=%d", event->param_u32, event->param_s32);
+        break;
+
+    case SB_EVENT_BATTERY_SAMPLE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "battery=%umV percent=%d", event->param_u32, event->param_s32);
         break;
 
     case SB_EVENT_SUPERVISOR_FAULT:
