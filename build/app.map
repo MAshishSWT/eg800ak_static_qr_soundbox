@@ -30,6 +30,8 @@ D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/dri
                               (--whole-archive)
 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/driver//build/driver.lib(example_pwm.o)
                               (--whole-archive)
+D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+                              (--whole-archive)
 common/lib/ql_common_api.lib(ql_main.o)
                               (--whole-archive)
 common/lib/ql_common_api.lib(ql_adc.o)
@@ -657,6 +659,26 @@ Discarded input sections
  .comment       0x00000000       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/driver//build/driver.lib(example_pwm.o)
  .ARM.attributes
                 0x00000000       0x39 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/driver//build/driver.lib(example_pwm.o)
+ .text          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .data          0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .bss           0x00000000        0x0 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .rodata.sb_phase0_contract_version.str1.1
+                0x00000000       0x1a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .text.sb_phase0_contract_version
+                0x00000000        0x8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .text.sb_phase0_contract_magic
+                0x00000000        0x8 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .debug_info    0x00000000       0x6b D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .debug_abbrev  0x00000000       0x4b D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .debug_aranges
+                0x00000000       0x28 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .debug_ranges  0x00000000       0x18 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .debug_line    0x00000000       0x6d D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .debug_str     0x00000000      0x22c D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .comment       0x00000000       0x7a D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .debug_frame   0x00000000       0x30 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
+ .ARM.attributes
+                0x00000000       0x33 D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib(sb_phase0_build_anchor.o)
  .text          0x00000000        0x0 common/lib/ql_common_api.lib(ql_main.o)
  .data          0x00000000        0x0 common/lib/ql_common_api.lib(ql_main.o)
  .bss           0x00000000        0x0 common/lib/ql_common_api.lib(ql_main.o)
@@ -10262,6 +10284,7 @@ LOAD D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interfac
 LOAD D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/usbnet//build/usbnet.lib
 LOAD D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/fpu//build/fpu.lib
 LOAD D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/driver//build/driver.lib
+LOAD D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib
 LOAD common/lib/ql_common_api.lib
 LOAD common/lib/com_cell_locator.lib
 LOAD common/lib/com_ftp.lib
