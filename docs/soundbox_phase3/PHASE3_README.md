@@ -12,7 +12,7 @@ Implemented runtime items:
 - A/B configuration slot manager with magic, version, sequence, slot ID, payload CRC, and header CRC.
 - Configuration defaults with empty credential fields, SMS recovery disabled, English language, 70 percent volume, and secure MQTT default port.
 - Configuration sanitization for fixed-length strings and bounded numeric ranges.
-- External SPI NOR abstraction using EG800AK `ql_spi_nor_init`, `ql_spi_nor_read_id`, `ql_spi_nor_read`, `ql_spi_nor_write`, and `ql_spi_nor_erase_sector`.
+- External NOR abstraction using EG800AK `ql_spi_*` APIs with JEDEC NOR commands.
 - Storage-ready and config-ready events posted into the Phase 1 event bus.
 - Supervisor logs for storage and config startup events.
 
@@ -21,7 +21,7 @@ Implemented runtime items:
 The Phase 3 code was aligned to APIs and call style from the uploaded `ql_application_eg800ak.zip` package:
 
 - `common/include/fs/ql_fs.h`
-- `common/include/ql_spi_nor.h`
+- `common/include/ql_spi.h`
 - `common/include/ql_flash.h`
 - `common/include/ql_rtos.h`
 - `interface/fs/example_fs.c`
@@ -117,10 +117,10 @@ The uploaded build script treats `clean` specially and otherwise invokes the def
 
 - The `U:` disk is used for soundbox application files because the uploaded QuecOpen FS examples use `U:` for writable file storage.
 - Auto-format is not performed during normal boot to avoid destructive recovery behavior.
-- External SPI NOR probing scans SDK-supported NOR ports exposed by `ql_spi_nor.h` and records the first valid flash ID.
+- External NOR probing uses `ql_spi_*` on the KAE8 SPI1 FLASH_* pins and records the first valid JEDEC flash ID.
 - Audio asset indexing and transaction ledger storage are assigned to later storage-domain phases and will use the stable storage APIs added here.
 
 
 ## External NOR implementation update
 
-The package separates the Quectel `U:` user filesystem from the board-level W25Q64-class external NOR flash. `sb_storage_fs.*` is used for small config files under `U:/`. `sb_extnor.*` uses `ql_spi_nor_*` on the KAE8 FLASH_* route and probes only `EXTERNAL_NORFLASH_PORT4_7`; legacy multi-port scanning and `sb_storage_nor.*` were removed.
+The package separates the Quectel `U:` user filesystem from the board-level W25Q64-class external NOR flash. `sb_storage_fs.*` is used for small config files under `U:/`. `sb_extnor.*` uses `ql_spi_*` with JEDEC NOR commands on the KAE8 FLASH_* route and probes only the generic SPI GPIO4-GPIO7 candidates; legacy unsupported SPI NOR code was removed.

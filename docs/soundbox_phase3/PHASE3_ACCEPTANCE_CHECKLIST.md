@@ -6,7 +6,7 @@
 | Root build compiles only `interface/soundbox` | PASS |
 | Quectel common headers/libraries unmodified | PASS |
 | FS service uses verified EG800AK `ql_fs` APIs | PASS |
-| SPI NOR abstraction uses verified EG800AK `ql_spi_nor` APIs | PASS |
+| External NOR abstraction uses verified EG800AK `ql_spi` APIs and JEDEC commands | PASS |
 | A/B config slots implemented | PASS |
 | Config magic/version validation implemented | PASS |
 | Payload CRC implemented | PASS |

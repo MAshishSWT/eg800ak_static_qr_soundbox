@@ -48,7 +48,7 @@ extern "C" {
 #define SB_KAE8_SPK_SHDN_DEASSERT_LEVEL          PIN_LEVEL_LOW
 
 /* External W25Q64JWSIQ schematic nets on U1C.
- * These constants identify GPIO-mode equivalents only. The SPI NOR service uses ql_spi_nor_* port APIs.
+ * These constants identify GPIO-mode equivalents only. The external NOR service uses ql_spi_* with SPI1 pinmux and JEDEC NOR commands.
  */
 #define SB_KAE8_FLASH_SYNC_GPIO                  GPIO_PIN_NO_5  /* pin 74 KP_MKOUT[1] -> GPIO[5], SPI1_CS */
 #define SB_KAE8_FLASH_CLK_GPIO                   GPIO_PIN_NO_4  /* pin 75 KP_MKIN[1]  -> GPIO[4], SPI1_CLK */
