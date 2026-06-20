@@ -80,6 +80,10 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "AUDIO_STATE";
     case SB_EVENT_BATTERY_SAMPLE:
         return "BATTERY_SAMPLE";
+    case SB_EVENT_STORAGE_READY:
+        return "STORAGE_READY";
+    case SB_EVENT_CONFIG_READY:
+        return "CONFIG_READY";
     case SB_EVENT_FACTORY_COMMAND:
         return "FACTORY_COMMAND";
     default:

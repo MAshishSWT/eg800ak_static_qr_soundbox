@@ -20,7 +20,12 @@ typedef enum {
     SB_STATUS_TIMER_ERROR = -7,
     SB_STATUS_TASK_ERROR = -8,
     SB_STATUS_TIMEOUT = -9,
-    SB_STATUS_UNSUPPORTED = -10
+    SB_STATUS_UNSUPPORTED = -10,
+    SB_STATUS_CRC_ERROR = -11,
+    SB_STATUS_FILE_ERROR = -12,
+    SB_STATUS_FLASH_ERROR = -13,
+    SB_STATUS_NOT_FOUND = -14,
+    SB_STATUS_INVALID_STATE = -15
 } sb_status_t;
 
 const char *sb_status_to_string(sb_status_t status);

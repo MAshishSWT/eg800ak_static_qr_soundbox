@@ -56,6 +56,14 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "battery=%umV percent=%d", event->param_u32, event->param_s32);
         break;
 
+    case SB_EVENT_STORAGE_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "storage ready nor_status=%d", event->param_s32);
+        break;
+
+    case SB_EVENT_CONFIG_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "config ready seq=%u source=%d", event->param_u32, event->param_s32);
+        break;
+
     case SB_EVENT_SUPERVISOR_FAULT:
         SB_LOGE(SB_SUPERVISOR_MODULE_NAME, "fault event code=%d", event->param_s32);
         break;

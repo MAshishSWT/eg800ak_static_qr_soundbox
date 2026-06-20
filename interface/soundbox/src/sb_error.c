@@ -29,6 +29,16 @@ const char *sb_status_to_string(sb_status_t status)
         return "TIMEOUT";
     case SB_STATUS_UNSUPPORTED:
         return "UNSUPPORTED";
+    case SB_STATUS_CRC_ERROR:
+        return "CRC_ERROR";
+    case SB_STATUS_FILE_ERROR:
+        return "FILE_ERROR";
+    case SB_STATUS_FLASH_ERROR:
+        return "FLASH_ERROR";
+    case SB_STATUS_NOT_FOUND:
+        return "NOT_FOUND";
+    case SB_STATUS_INVALID_STATE:
+        return "INVALID_STATE";
     default:
         return "UNKNOWN";
     }

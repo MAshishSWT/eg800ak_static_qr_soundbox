@@ -21,6 +21,10 @@ SRC_FILES+= \
   src/sb_hal_gpio.c \
   src/sb_hal_key.c \
   src/sb_hal_led.c \
+  src/sb_crc32.c \
+  src/sb_storage_fs.c \
+  src/sb_storage_nor.c \
+  src/sb_config.c \
 
 #-------------------------------------------------------------------------------
 # the include directories
@@ -48,7 +52,7 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=2 \
+  -DSB_PHASE_NUMBER=3 \
   -DSB_BUILD_TARGET_EG800AK=1 \
 
 #-------------------------------------------------------------------------------
