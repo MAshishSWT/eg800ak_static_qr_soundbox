@@ -23,7 +23,7 @@ SRC_FILES+= \
   src/sb_hal_led.c \
   src/sb_crc32.c \
   src/sb_storage_fs.c \
-  src/sb_storage_nor.c \
+  src/sb_extnor.c \
   src/sb_config.c \
 
 #-------------------------------------------------------------------------------

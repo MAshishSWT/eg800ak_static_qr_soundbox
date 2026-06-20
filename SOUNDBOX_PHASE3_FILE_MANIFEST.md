@@ -5,3 +5,6 @@ This package extends the approved Phase 2 BSP/HAL package with file-system stora
 The Quectel SDK common headers and libraries are preserved. The root Makefile builds only the production soundbox application module under `interface/soundbox`.
 
 See `docs/soundbox_phase3/PHASE3_FILE_MANIFEST.md` for added and modified files.
+
+interface/soundbox/include/sb_extnor.h
+interface/soundbox/src/sb_extnor.c

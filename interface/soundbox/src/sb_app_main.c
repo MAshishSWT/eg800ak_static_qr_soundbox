@@ -9,6 +9,7 @@
 #include "sb_config.h"
 #include "sb_error.h"
 #include "sb_event_bus.h"
+#include "sb_extnor.h"
 #include "sb_log.h"
 #include "sb_supervisor.h"
 
@@ -42,6 +43,11 @@ static void sb_app_entry(void *argv)
         SB_LOGE(SB_APP_MODULE_NAME, "config service init failed status=%s", sb_status_to_string(status));
         ql_rtos_task_delete(NULL);
         return;
+    }
+
+    status = sb_extnor_init();
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "external nor init status=%s", sb_status_to_string(status));
     }
 
     status = sb_supervisor_start();

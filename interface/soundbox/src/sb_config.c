@@ -9,7 +9,6 @@
 #include "sb_event_bus.h"
 #include "sb_log.h"
 #include "sb_storage_fs.h"
-#include "sb_storage_nor.h"
 
 #define SB_CONFIG_MODULE_NAME "config"
 #define SB_CONFIG_OFFSET_OF(type, member) ((u32)((unsigned long)&(((type *)0)->member)))
@@ -304,12 +303,12 @@ static void sb_config_post_ready_event(int loaded_from_storage)
     (void)sb_event_post(&event, QL_NO_WAIT);
 }
 
-static void sb_storage_post_ready_event(sb_status_t nor_status)
+static void sb_storage_post_ready_event(sb_status_t storage_status)
 {
     sb_event_t event;
 
     sb_event_init(&event, SB_EVENT_STORAGE_READY, SB_EVENT_SOURCE_STORAGE);
-    event.param_s32 = (s32)nor_status;
+    event.param_s32 = (s32)storage_status;
     (void)sb_event_post(&event, QL_NO_WAIT);
 }
 
@@ -318,7 +317,6 @@ sb_status_t sb_config_service_init(void)
     sb_config_record_t active_record;
     sb_config_slot_t active_slot = SB_CONFIG_SLOT_A;
     sb_status_t status;
-    sb_status_t nor_status;
 
     status = sb_config_mutex_init();
     if (status != SB_STATUS_OK) {
@@ -342,11 +340,7 @@ sb_status_t sb_config_service_init(void)
         return status;
     }
 
-    nor_status = sb_storage_nor_init();
-    if ((nor_status != SB_STATUS_OK) && (nor_status != SB_STATUS_ALREADY_INITIALIZED)) {
-        SB_LOGW(SB_CONFIG_MODULE_NAME, "nor probe status=%s", sb_status_to_string(nor_status));
-    }
-    sb_storage_post_ready_event(nor_status);
+    sb_storage_post_ready_event(SB_STATUS_OK);
 
     status = sb_config_select_active(&active_record, &active_slot);
     if (status == SB_STATUS_OK) {
@@ -364,18 +358,24 @@ sb_status_t sb_config_service_init(void)
 
     sb_config_make_defaults(&s_config);
     status = sb_config_write_slot(SB_CONFIG_SLOT_A, &s_config, 1u);
-    if (status != SB_STATUS_OK) {
-        SB_LOGE(SB_CONFIG_MODULE_NAME, "default commit status=%s", sb_status_to_string(status));
-        sb_config_unlock();
-        return status;
-    }
 
-    s_state.active_sequence = 1u;
+    s_state.active_sequence = (status == SB_STATUS_OK) ? 1u : 0u;
     s_state.active_slot = SB_CONFIG_SLOT_A;
     s_state.loaded_from_storage = 0;
     s_config_ready = 1;
     sb_config_post_ready_event(0);
-    SB_LOGI(SB_CONFIG_MODULE_NAME, "defaults committed");
+
+    if (status == SB_STATUS_OK) {
+        SB_LOGI(SB_CONFIG_MODULE_NAME, "defaults committed");
+    } else {
+        /* Do not block BSP/key/ADC bring-up because persistent storage commit
+         * failed. The active defaults remain valid in RAM and later phases can
+         * continue booting while storage persistence is debugged separately.
+         */
+        SB_LOGE(SB_CONFIG_MODULE_NAME, "default commit status=%s", sb_status_to_string(status));
+        SB_LOGW(SB_CONFIG_MODULE_NAME, "running with RAM defaults");
+    }
+
     sb_config_unlock();
     return SB_STATUS_OK;
 }

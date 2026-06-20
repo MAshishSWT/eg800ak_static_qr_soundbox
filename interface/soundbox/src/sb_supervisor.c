@@ -15,6 +15,23 @@ static ql_task_t s_supervisor_task = 0;
 static ql_timer_t s_heartbeat_timer = 0;
 static int s_supervisor_started = 0;
 
+static void sb_supervisor_log_battery_sample(void)
+{
+    sb_battery_sample_t sample;
+    sb_status_t status;
+
+    status = sb_bsp_board_read_battery(&sample);
+    if (status == SB_STATUS_OK) {
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME,
+                "battery adc=%umV battery=%umV percent=%u",
+                sample.adc_mv, sample.battery_mv, sample.battery_percent);
+    } else {
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME,
+                "battery sample status=%s",
+                sb_status_to_string(status));
+    }
+}
+
 static void sb_supervisor_timer_cb(u32 timer_arg)
 {
     sb_event_t event;
@@ -45,6 +62,7 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_SUPERVISOR_HEARTBEAT:
         (void)sb_bsp_board_toggle_status_led();
+        sb_supervisor_log_battery_sample();
         SB_LOGD(SB_SUPERVISOR_MODULE_NAME, "heartbeat pending=%u", sb_event_pending_count());
         break;
 
@@ -57,7 +75,17 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         break;
 
     case SB_EVENT_STORAGE_READY:
-        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "storage ready nor_status=%d", event->param_s32);
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "userfs ready status=%d", event->param_s32);
+        break;
+
+    case SB_EVENT_EXTNOR_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "external nor ready capacity=%u status=%d",
+                event->param_u32, event->param_s32);
+        break;
+
+    case SB_EVENT_EXTNOR_FAULT:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "external nor fault capacity=%u status=%d",
+                event->param_u32, event->param_s32);
         break;
 
     case SB_EVENT_CONFIG_READY:

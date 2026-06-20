@@ -28,7 +28,7 @@ sed -n '1,140p' interface/soundbox/Makefile
 Expected result:
 
 - Root build uses only `interface/soundbox`.
-- Soundbox Makefile lists `sb_crc32.c`, `sb_storage_fs.c`, `sb_storage_nor.c`, and `sb_config.c`.
+- Soundbox Makefile lists `sb_crc32.c`, `sb_storage_fs.c`, `sb_extnor.c`, and `sb_config.c`.
 
 ## 3. Vendor build
 
@@ -99,7 +99,7 @@ Expected result:
 
 ## 8. SPI NOR abstraction test
 
-Call `sb_storage_nor_get_info()` after boot.
+Call `sb_extnor_get_info()` after boot.
 
 Expected result:
 

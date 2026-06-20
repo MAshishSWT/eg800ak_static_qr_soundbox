@@ -20,11 +20,11 @@ interface/soundbox/src/sb_supervisor.c
 interface/soundbox/include/sb_config.h
 interface/soundbox/include/sb_crc32.h
 interface/soundbox/include/sb_storage_fs.h
-interface/soundbox/include/sb_storage_nor.h
+interface/soundbox/include/sb_extnor.h
 interface/soundbox/src/sb_config.c
 interface/soundbox/src/sb_crc32.c
 interface/soundbox/src/sb_storage_fs.c
-interface/soundbox/src/sb_storage_nor.c
+interface/soundbox/src/sb_extnor.c
 docs/soundbox_phase3/PHASE3_README.md
 docs/soundbox_phase3/PHASE3_TEST_PROCEDURE.md
 docs/soundbox_phase3/PHASE3_ACCEPTANCE_CHECKLIST.md

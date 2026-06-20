@@ -119,3 +119,8 @@ The uploaded build script treats `clean` specially and otherwise invokes the def
 - Auto-format is not performed during normal boot to avoid destructive recovery behavior.
 - External SPI NOR probing scans SDK-supported NOR ports exposed by `ql_spi_nor.h` and records the first valid flash ID.
 - Audio asset indexing and transaction ledger storage are assigned to later storage-domain phases and will use the stable storage APIs added here.
+
+
+## External NOR implementation update
+
+The package separates the Quectel `U:` user filesystem from the board-level W25Q64-class external NOR flash. `sb_storage_fs.*` is used for small config files under `U:/`. `sb_extnor.*` uses `ql_spi_nor_*` on the KAE8 FLASH_* route and probes only `EXTERNAL_NORFLASH_PORT4_7`; legacy multi-port scanning and `sb_storage_nor.*` were removed.

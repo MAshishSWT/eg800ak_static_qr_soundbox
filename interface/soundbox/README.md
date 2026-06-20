@@ -13,3 +13,8 @@ Phase 3 provides the Phase 1/2 application skeleton and KAE8_SQ1 BSP/HAL plus st
 - Storage-ready and config-ready events for the supervisor.
 
 Payment MQTT, audio playback, data call, OTA, SMS, transaction ledger, and audio asset indexing are attached in later phase-specific service packages.
+
+
+## External NOR flash
+
+`U:` is the Quectel user filesystem partition. The board-level W25Q64-class external NOR is handled separately by `sb_extnor.*` using the EG800AK `ql_spi_nor_*` API on the KAE8 FLASH_* nets. Legacy multi-port SPI NOR scanning has been removed.

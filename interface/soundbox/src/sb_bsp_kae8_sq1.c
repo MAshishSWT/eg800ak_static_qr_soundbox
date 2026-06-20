@@ -16,6 +16,42 @@
 
 static int s_board_ready = 0;
 
+static void sb_bsp_log_key_state(sb_key_id_t key_id, const char *name)
+{
+    sb_key_state_t state;
+    sb_status_t status;
+
+    status = sb_hal_key_get_state(key_id, &state);
+    if (status == SB_STATUS_OK) {
+        SB_LOGI(SB_BSP_MODULE_NAME, "key %s gpio=%d level=%d pressed=%d",
+                name, (int)sb_hal_key_gpio(key_id), (int)state.level, state.pressed);
+    } else {
+        SB_LOGW(SB_BSP_MODULE_NAME, "key %s read status=%s", name, sb_status_to_string(status));
+    }
+}
+
+static void sb_bsp_log_battery_state(void)
+{
+    sb_battery_sample_t sample;
+    sb_status_t status;
+
+    status = sb_bsp_board_read_battery(&sample);
+    if (status == SB_STATUS_OK) {
+        SB_LOGI(SB_BSP_MODULE_NAME, "battery adc=%umV battery=%umV percent=%u",
+                sample.adc_mv, sample.battery_mv, sample.battery_percent);
+    } else {
+        SB_LOGW(SB_BSP_MODULE_NAME, "battery read status=%s", sb_status_to_string(status));
+    }
+}
+
+static void sb_bsp_log_initial_inputs(void)
+{
+    sb_bsp_log_key_state(SB_KEY_VOLUME_UP, "volume_up");
+    sb_bsp_log_key_state(SB_KEY_VOLUME_DOWN, "volume_down");
+    sb_bsp_log_key_state(SB_KEY_MODE, "mode");
+    sb_bsp_log_battery_state();
+}
+
 static sb_status_t sb_bsp_check_status(sb_status_t status, const char *name)
 {
     if (status != SB_STATUS_OK && status != SB_STATUS_ALREADY_INITIALIZED) {
@@ -55,6 +91,7 @@ sb_status_t sb_bsp_board_init(void)
     }
 
     s_board_ready = 1;
+    sb_bsp_log_initial_inputs();
     (void)sb_bsp_board_set_status_led(1);
     return SB_STATUS_OK;
 }
