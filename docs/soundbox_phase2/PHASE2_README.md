@@ -58,11 +58,11 @@ No EC200U platform API, MQTT API, NVM API, or monolithic global state was copied
 
 | Function | Firmware symbol | EG800AK mapping |
 |---|---|---|
-| Volume up key | `SB_KAE8_KEY_VOLUME_UP_GPIO` | SW1 -> U1B GPIO5 -> `GPIO_PIN_NO_54` |
-| Volume down key | `SB_KAE8_KEY_VOLUME_DOWN_GPIO` | SW2 -> U1B GPIO6 -> `GPIO_PIN_NO_55` |
-| Mode key | `SB_KAE8_KEY_MODE_GPIO` | SW3 -> U1C GPIO8 -> `GPIO_PIN_NO_81` |
-| Status LED | `SB_KAE8_STATUS_LED_GPIO` | USER_LED_1 -> U1C GPIO9 -> `GPIO_PIN_NO_83` |
-| Speaker PA shutdown | `SB_KAE8_SPK_SHDN_GPIO` | SPK_SHDN -> U1A MAIN_CTS -> `GPIO_PIN_NO_22` |
+| Volume up key | `SB_KAE8_KEY_VOLUME_UP_GPIO` | SW1 -> U1B pin 54 GPIO5 -> GPIO[57] -> `GPIO_PIN_NO_57` |
+| Volume down key | `SB_KAE8_KEY_VOLUME_DOWN_GPIO` | SW2 -> U1B pin 55 GPIO6 -> GPIO[87] -> `GPIO_PIN_NO_87` |
+| Mode key | `SB_KAE8_KEY_MODE_GPIO` | SW3 -> U1C pin 81 GPIO8 -> GPIO[8] -> `GPIO_PIN_NO_8` |
+| Status LED | `SB_KAE8_STATUS_LED_GPIO` | USER_LED_1 -> U1C pin 83 GPIO9 -> GPIO[69] -> `GPIO_PIN_NO_69` |
+| Speaker PA shutdown | `SB_KAE8_SPK_SHDN_GPIO` | SPK_SHDN -> U1A pin 22 MAIN_CTS -> GPIO[54] -> `GPIO_PIN_NO_54` |
 | Battery ADC | `SB_KAE8_ADC_BATTERY_CHANNEL` | BATT_VTG_SENS -> ADC0 |
 
 Battery conversion uses the schematic divider `R_HIGH = 120 kOhm`, `R_LOW = 47 kOhm`:

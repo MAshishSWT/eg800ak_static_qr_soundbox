@@ -101,4 +101,4 @@ The uploaded `build.bat` treats `clean` specially and otherwise invokes the defa
 - `printf()` and `vprintf()` are available in the EG800AK application runtime as demonstrated by SDK examples.
 - `application_init()` stack size is in KiB as defined in `ql_application.h`.
 - `ql_rtos_task_create()` stack size is in bytes as defined in `ql_rtos.h`.
-- `GPIO_PIN_NO_54`, `GPIO_PIN_NO_55`, `GPIO_PIN_NO_81`, `GPIO_PIN_NO_83`, and `GPIO_PIN_NO_22` are schematic-derived firmware symbols for KAE8_SQ1 and will be exercised by the BSP phase.
+- GPIO firmware symbols must use Quectel GPIO[x] numbers from the EG800AK GPIO Configuration sheet. KAE8_SQ1 mappings are SW1 GPIO[57], SW2 GPIO[87], SW3 GPIO[8], USER_LED_1 GPIO[69], and SPK_SHDN GPIO[54].

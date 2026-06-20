@@ -5,11 +5,26 @@
 #include "ql_fs.h"
 #include "sb_storage_fs.h"
 
+#define SB_STORAGE_ROOT_PATH "U:/"
+
 static int s_fs_ready = 0;
 
 int sb_storage_fs_is_ready(void)
 {
     return s_fs_ready;
+}
+
+static int sb_storage_disk_accessible(void)
+{
+    if (ql_fs_size(U_DISK_SYM) >= 0) {
+        return 1;
+    }
+
+    if (ql_access(SB_STORAGE_ROOT_PATH, 0u) == 0) {
+        return 1;
+    }
+
+    return 0;
 }
 
 static sb_status_t sb_storage_mkdir_if_needed(const char *path)
@@ -31,11 +46,14 @@ static sb_status_t sb_storage_mkdir_if_needed(const char *path)
 
 sb_status_t sb_storage_fs_init(void)
 {
+    int mount_ret;
+
     if (s_fs_ready != 0) {
         return SB_STATUS_ALREADY_INITIALIZED;
     }
 
-    if (ql_fs_mount(U_DISK_SYM) != 0) {
+    mount_ret = ql_fs_mount(U_DISK_SYM);
+    if ((mount_ret != 0) && (sb_storage_disk_accessible() == 0)) {
         return SB_STATUS_FILE_ERROR;
     }
 

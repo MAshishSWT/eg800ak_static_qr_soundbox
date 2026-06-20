@@ -140,7 +140,7 @@ static void ql_test_baudrate(void * argv)
 
 
 /*�������߻��Ѳ��Է�����ģ�����ߵ�ʱ�򣬴��ڹ��߷����ݸ�ģ�飬������������Դ����ģ�飬��ģ���յ�uart�����Ƿ�����*/
-// application_init(quec_main_uart_test, "quec_uart_test1", 20, 0);
+//application_init(quec_main_uart_test, "quec_uart_test1", 20, 0);
 //application_init(quec_usbcdc_test, "quec_usb", 10, 0);
 //application_init(ql_test_baudrate, "ql_test_baudrate", 10, 0);
 

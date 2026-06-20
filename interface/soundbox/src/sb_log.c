@@ -1,12 +1,14 @@
 /*================================================================
- * Static QR UPI Soundbox - Production Logging Skeleton
+ * Static QR UPI Soundbox - Production Logging
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *================================================================*/
 #include <stdarg.h>
 #include "sb_log.h"
 
+#define SB_LOG_LINE_LEN (192u)
+
 extern int printf(const char *format, ...);
-extern int vprintf(const char *format, va_list arg);
+extern int vsnprintf(char *str, unsigned int size, const char *format, va_list arg);
 
 static sb_log_level_t s_log_level = SB_LOG_LEVEL_INFO;
 
@@ -43,7 +45,9 @@ sb_log_level_t sb_log_get_level(void)
 
 void sb_log_write(sb_log_level_t level, const char *module, const char *fmt, ...)
 {
+    char line[SB_LOG_LINE_LEN];
     va_list args;
+    int ret;
 
     if (level > s_log_level) {
         return;
@@ -57,9 +61,15 @@ void sb_log_write(sb_log_level_t level, const char *module, const char *fmt, ...
         fmt = "";
     }
 
-    printf("[SB][%s][%s] ", sb_log_level_name(level), module);
+    line[0] = '\0';
     va_start(args, fmt);
-    vprintf(fmt, args);
+    ret = vsnprintf(line, (unsigned int)sizeof(line), fmt, args);
     va_end(args);
-    printf("\r\n");
+
+    if (ret < 0) {
+        line[0] = '\0';
+    }
+
+    line[sizeof(line) - 1u] = '\0';
+    printf("[SB][%s][%s] %s\r\n", sb_log_level_name(level), module, line);
 }
