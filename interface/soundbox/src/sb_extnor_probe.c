@@ -12,7 +12,6 @@
 #include "sb_log.h"
 
 #define SB_EXTNOR_MODULE_NAME             "extnor"
-#define SB_EXTNOR_SPI1_FUNC_SEL            (2u)
 #define SB_EXTNOR_PAGE_SIZE_BYTES         (256u)
 #define SB_EXTNOR_STATUS_BUSY_MASK        (0x01u)
 #define SB_EXTNOR_READY_POLL_DELAY_MS     (2u)
@@ -88,32 +87,6 @@ static u32 sb_extnor_capacity_from_jedec_id(const unsigned char *id)
 
     /* JEDEC density code is expressed in bits. Example: 0x17 = 64 Mbit = 8 MB. */
     return 1u << (density_code - 3u);
-}
-
-static sb_status_t sb_extnor_select_spi1_pinmux(void)
-{
-    if (ql_pin_set_func(SB_KAE8_FLASH_SYNC_GPIO, SB_EXTNOR_SPI1_FUNC_SEL) != 0) {
-        SB_LOGE(SB_EXTNOR_MODULE_NAME, "pinmux FLASH_SYNC/SPI1_CS failed");
-        return SB_STATUS_FLASH_ERROR;
-    }
-
-    if (ql_pin_set_func(SB_KAE8_FLASH_CLK_GPIO, SB_EXTNOR_SPI1_FUNC_SEL) != 0) {
-        SB_LOGE(SB_EXTNOR_MODULE_NAME, "pinmux FLASH_CLK/SPI1_CLK failed");
-        return SB_STATUS_FLASH_ERROR;
-    }
-
-    if (ql_pin_set_func(SB_KAE8_FLASH_DOUT_GPIO, SB_EXTNOR_SPI1_FUNC_SEL) != 0) {
-        SB_LOGE(SB_EXTNOR_MODULE_NAME, "pinmux FLASH_DOUT/SPI1_DOUT failed");
-        return SB_STATUS_FLASH_ERROR;
-    }
-
-    if (ql_pin_set_func(SB_KAE8_FLASH_DIN_GPIO, SB_EXTNOR_SPI1_FUNC_SEL) != 0) {
-        SB_LOGE(SB_EXTNOR_MODULE_NAME, "pinmux FLASH_DIN/SPI1_DIN failed");
-        return SB_STATUS_FLASH_ERROR;
-    }
-
-    SB_LOGI(SB_EXTNOR_MODULE_NAME, "spi1 pinmux selected on FLASH_* pins");
-    return SB_STATUS_OK;
 }
 
 static sb_status_t sb_extnor_prepare_control_pins(void)
@@ -290,12 +263,6 @@ sb_status_t sb_extnor_init(void)
     }
 
     status = sb_extnor_prepare_control_pins();
-    if (status != SB_STATUS_OK) {
-        (void)sb_extnor_post_status_event(status);
-        return status;
-    }
-
-    status = sb_extnor_select_spi1_pinmux();
     if (status != SB_STATUS_OK) {
         (void)sb_extnor_post_status_event(status);
         return status;
