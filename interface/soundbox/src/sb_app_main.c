@@ -5,6 +5,8 @@
 #include "ql_application.h"
 #include "ql_rtos.h"
 #include "sb_app.h"
+#include "sb_audio_service.h"
+#include "sb_audio_types.h"
 #include "sb_bsp_kae8_sq1.h"
 #include "sb_config.h"
 #include "sb_error.h"
@@ -18,6 +20,9 @@
 static void sb_app_entry(void *argv)
 {
     sb_status_t status;
+    sb_config_payload_t config;
+    sb_audio_language_t audio_language;
+    u32 audio_volume;
 
     (void)argv;
 
@@ -43,6 +48,18 @@ static void sb_app_entry(void *argv)
         SB_LOGE(SB_APP_MODULE_NAME, "config service init failed status=%s", sb_status_to_string(status));
         ql_rtos_task_delete(NULL);
         return;
+    }
+
+    sb_config_make_defaults(&config);
+    if (sb_config_get(&config) != SB_STATUS_OK) {
+        SB_LOGW(SB_APP_MODULE_NAME, "config get failed, using audio defaults");
+    }
+    audio_language = sb_audio_language_from_code(config.language);
+    audio_volume = config.volume_percent;
+
+    status = sb_audio_service_init(audio_language, audio_volume);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "audio service init status=%s", sb_status_to_string(status));
     }
 
     status = sb_extnor_init();

@@ -24,6 +24,13 @@ SRC_FILES+= \
   src/sb_crc32.c \
   src/sb_storage_fs.c \
   src/sb_extnor.c \
+  src/sb_audio_types.c \
+  src/sb_amount_tokenizer.c \
+  src/sb_audio_asset.c \
+  src/sb_audio_script.c \
+  src/sb_audio_codec_es8311.c \
+  src/sb_audio_hal.c \
+  src/sb_audio_service.c \
   src/sb_config.c \
 
 #-------------------------------------------------------------------------------
@@ -52,7 +59,7 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=3 \
+  -DSB_PHASE_NUMBER=4 \
   -DSB_BUILD_TARGET_EG800AK=1 \
 
 #-------------------------------------------------------------------------------

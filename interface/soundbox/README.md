@@ -1,20 +1,18 @@
-# Static QR UPI Soundbox - Phase 3 Storage and Configuration
+# Static QR UPI Soundbox Application
 
-This module is the EG800AK-CN QuecOpen application for the Static QR UPI Soundbox.
+Production application module for EG800AK-CN QuecOpen SDK.
 
-Phase 3 provides the Phase 1/2 application skeleton and KAE8_SQ1 BSP/HAL plus storage and configuration services:
+Current package phase: **Phase 4 - audio service**.
 
-- File-system mount and directory preparation for `U:/soundbox`.
-- Atomic file write helper using QuecOpen file APIs.
-- A/B configuration slots with magic, version, sequence, payload CRC, and header CRC.
-- Safe factory defaults with no production credentials.
-- Configuration load, validate, sanitize, and commit APIs.
-- External SPI NOR abstraction using EG800AK `ql_spi_*` APIs with JEDEC NOR commands.
-- Storage-ready and config-ready events for the supervisor.
+Implemented layers:
 
-Payment MQTT, audio playback, data call, OTA, SMS, transaction ledger, and audio asset indexing are attached in later phase-specific service packages.
+```text
+BSP/HAL                 GPIO, LED, keys, ADC battery, speaker PA
+OS/Event bus            Queue-backed event dispatch
+Platform services       Logging, error codes, U: filesystem, config, CRC, external NOR HW-SPI service
+Domain services         Config service, amount tokenizer, audio script builder
+Audio services          EG800AK audio HAL, ES8311 support, MP3 playback queue, asset validation
+Application supervisor  Startup, heartbeat, event monitoring
+```
 
-
-## External NOR flash
-
-`U:` is the Quectel user filesystem partition. The board-level W25Q64-class external NOR is handled separately by `sb_extnor.*` using the EG800AK `ql_spi_*` API with JEDEC NOR commands on the KAE8 FLASH_* nets. Legacy multi-port SPI NOR scanning has been removed.
+Build from the EG800AK SDK root with the Quectel build flow. Runtime MP3 playback requires the MP3 feature to be enabled in OpenEntry.

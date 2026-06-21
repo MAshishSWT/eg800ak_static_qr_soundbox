@@ -12,7 +12,7 @@ extern "C" {
 #define SB_APP_NAME                    "sb_app"
 #define SB_APP_ENTRY_STACK_KIB         (8u)
 #define SB_APP_ENTRY_STARTUP_PRIORITY  (10u)
-#define SB_APP_VERSION_STRING          "1.0.0-phase3-storage-config"
+#define SB_APP_VERSION_STRING          "1.0.0-phase4-audio-service"
 
 #ifdef __cplusplus
 }

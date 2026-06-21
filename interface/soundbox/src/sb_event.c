@@ -78,6 +78,14 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "CONNECTIVITY_STATE";
     case SB_EVENT_AUDIO_STATE:
         return "AUDIO_STATE";
+    case SB_EVENT_AUDIO_READY:
+        return "AUDIO_READY";
+    case SB_EVENT_AUDIO_PLAY_STARTED:
+        return "AUDIO_PLAY_STARTED";
+    case SB_EVENT_AUDIO_PLAY_DONE:
+        return "AUDIO_PLAY_DONE";
+    case SB_EVENT_AUDIO_FAULT:
+        return "AUDIO_FAULT";
     case SB_EVENT_BATTERY_SAMPLE:
         return "BATTERY_SAMPLE";
     case SB_EVENT_STORAGE_READY:
