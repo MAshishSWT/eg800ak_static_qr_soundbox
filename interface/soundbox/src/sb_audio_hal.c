@@ -105,11 +105,10 @@ sb_status_t sb_audio_hal_init(u32 volume_percent)
     ql_codec_choose(AUD_EXTERNAL_CODEC, &pcm_config);
     status = sb_audio_codec_es8311_open();
     if (status != SB_STATUS_OK) {
-        SB_LOGW(SB_AUDIO_HAL_MODULE_NAME,
-                "external codec status=%s, using internal codec path",
+        SB_LOGE(SB_AUDIO_HAL_MODULE_NAME,
+                "external codec required on KAE8, status=%s",
                 sb_status_to_string(status));
-        ql_codec_choose(AUD_INTERNAL_CODEC, NULL);
-        ql_set_audio_path_speaker();
+        return status;
     }
 
     status = sb_audio_hal_set_volume_percent(volume_percent);
@@ -118,8 +117,7 @@ sb_status_t sb_audio_hal_init(u32 volume_percent)
     }
 
     s_audio_ready = 1;
-    SB_LOGI(SB_AUDIO_HAL_MODULE_NAME, "ready volume=%u level=%d",
-            s_volume_percent, ql_get_volume());
+    SB_LOGI(SB_AUDIO_HAL_MODULE_NAME, "ready volume=%u", s_volume_percent);
     return SB_STATUS_OK;
 }
 

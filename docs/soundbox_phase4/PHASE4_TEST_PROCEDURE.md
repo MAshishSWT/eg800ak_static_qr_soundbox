@@ -20,7 +20,7 @@ Expected logs:
 [SB][I][supervisor] audio ready status=0
 ```
 
-If the external codec is not detected, the HAL must log a warning and continue with the internal codec path instead of aborting the application.
+If the external codec is not detected, the HAL must post an audio fault and must not report audio ready on KAE8 production hardware.
 
 ## Asset validation test
 

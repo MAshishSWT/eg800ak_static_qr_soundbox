@@ -109,5 +109,5 @@ For Phase 4 runtime audio playback, enable at least MP3 in OpenEntry. If TLS/MQT
 
 - `U:` is currently a small Quectel user filesystem partition and is adequate for config and a few test assets only.
 - Production multilingual MP3 packs should use the external NOR/audio-pack layer once the hardware route is finalized.
-- KAE8_SQ1 has ES8311 codec hardware. Phase 4 tries ES8311 first, then falls back to the internal codec path if the external codec is not detected.
+- KAE8_SQ1 has ES8311 codec hardware. Phase 4 requires ES8311 on KAE8 production hardware and reports an audio fault if the external codec is not detected.
 - Phase 4 does not implement MQTT transaction ingestion. That belongs to the connectivity/payment phases.

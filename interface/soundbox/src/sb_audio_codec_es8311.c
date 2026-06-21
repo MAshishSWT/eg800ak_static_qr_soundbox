@@ -12,7 +12,7 @@
 #include "sb_log.h"
 
 #define SB_ES8311_MODULE_NAME       "es8311"
-#define SB_ES8311_I2C_NO            (1u)
+#define SB_ES8311_I2C_NO            (0u)
 #define SB_ES8311_I2C_FAST_MODE     (0u)
 #define SB_ES8311_I2C_ADDR          (0x18u)
 #define SB_ES8311_REG_DEVICE_ID     (0xFDu)
