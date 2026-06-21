@@ -10,5 +10,4 @@ build/obj/src/sb_supervisor.o: src/sb_supervisor.c \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_event_bus.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_event.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_log.h \
- D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_led_status.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_supervisor.h

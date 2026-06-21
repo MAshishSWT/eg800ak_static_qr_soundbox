@@ -10,3 +10,7 @@ See:
 - `docs/soundbox_phase10/PHASE10_TEST_PROCEDURE.md`
 - `docs/soundbox_phase10/PHASE10_ACCEPTANCE_CHECKLIST.md`
 - `docs/soundbox_phase10/PHASE10_FILE_MANIFEST.md`
+
+## Review fix note
+
+- `SOUNDBOX_PHASE10_REVIEW_FIXES.md`

@@ -2,6 +2,7 @@
  * Static QR UPI Soundbox - Command Dispatcher
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *================================================================*/
+#include "ql_power.h"
 #include "ql_rtos.h"
 #include "sb_audio_service.h"
 #include "sb_audio_types.h"
@@ -190,6 +191,13 @@ static sb_status_t sb_command_execute(const sb_command_t *cmd)
             return SB_STATUS_OK;
         }
         return SB_STATUS_NOT_FOUND;
+    }
+
+    if (sb_cloud_text_equal(cmd->command, "power_down") != 0) {
+        (void)sb_audio_service_play_common("good_bye.mp3");
+        ql_rtos_task_sleep_ms(3000u);
+        ql_power_down(1u);
+        return SB_STATUS_OK;
     }
 
     return SB_STATUS_UNSUPPORTED;

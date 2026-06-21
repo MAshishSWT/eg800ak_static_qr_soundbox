@@ -3,7 +3,10 @@
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *================================================================*/
 #include "ql_rtos.h"
+#include "sb_audio_service.h"
+#include "sb_audio_types.h"
 #include "sb_bsp_kae8_sq1.h"
+#include "sb_config.h"
 #include "sb_business_service.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
@@ -16,6 +19,38 @@
 static ql_task_t s_supervisor_task = 0;
 static ql_timer_t s_heartbeat_timer = 0;
 static int s_supervisor_started = 0;
+static int s_alert_sim_fault_announced = 0;
+static int s_alert_internet_announced = 0;
+static int s_alert_no_internet_announced = 0;
+static int s_alert_no_mqtt_announced = 0;
+static u32 s_alert_last_battery_level = 0u;
+
+static sb_audio_language_t sb_supervisor_language(void)
+{
+    sb_config_payload_t config;
+
+    sb_config_make_defaults(&config);
+    (void)sb_config_get(&config);
+    return sb_audio_language_from_code(config.language);
+}
+
+static void sb_supervisor_play_alert_once(int *flag, sb_audio_prompt_id_t prompt)
+{
+    if (flag == 0) {
+        return;
+    }
+    if (*flag == 0) {
+        (void)sb_audio_service_play_prompt(sb_supervisor_language(), prompt);
+        *flag = 1;
+    }
+}
+
+static void sb_supervisor_reset_network_audio_flags(void)
+{
+    s_alert_internet_announced = 0;
+    s_alert_no_internet_announced = 0;
+    s_alert_no_mqtt_announced = 0;
+}
 
 static void sb_supervisor_log_battery_sample(void)
 {
@@ -93,6 +128,13 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "battery=%umV percent=%d", event->param_u32, event->param_s32);
         if ((event->param_s32 >= 0) && (event->param_s32 <= 15)) {
             (void)sb_led_status_set(SB_LED_STATUS_BATTERY_LOW);
+            if (((event->param_s32 <= 15) && (s_alert_last_battery_level > 15u)) ||
+                ((event->param_s32 <= 10) && (s_alert_last_battery_level > 10u))) {
+                (void)sb_audio_service_play_prompt(sb_supervisor_language(), SB_AUDIO_PROMPT_BATTERY_LOW);
+            }
+        }
+        if (event->param_s32 >= 0) {
+            s_alert_last_battery_level = (u32)event->param_s32;
         }
         break;
 
@@ -116,11 +158,13 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_SIM_READY:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "sim ready status=%d", event->param_s32);
+        s_alert_sim_fault_announced = 0;
         break;
 
     case SB_EVENT_SIM_FAULT:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "sim fault status=%d card=%u text=%s", event->param_s32, event->param_u32, event->text);
         (void)sb_led_status_set(SB_LED_STATUS_ERROR);
+        sb_supervisor_play_alert_once(&s_alert_sim_fault_announced, SB_AUDIO_PROMPT_NO_SIM);
         break;
 
     case SB_EVENT_NETWORK_REGISTERED:
@@ -130,16 +174,22 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
     case SB_EVENT_NETWORK_LOST:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "network lost status=%d text=%s", event->param_s32, event->text);
         (void)sb_led_status_set(SB_LED_STATUS_NO_INTERNET);
+        s_alert_internet_announced = 0;
+        sb_supervisor_play_alert_once(&s_alert_no_internet_announced, SB_AUDIO_PROMPT_NO_INTERNET);
         break;
 
     case SB_EVENT_DATACALL_READY:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "data call ready cid=%u status=%d", event->param_u32, event->param_s32);
         (void)sb_led_status_set(SB_LED_STATUS_INTERNET_OK);
+        s_alert_no_internet_announced = 0;
+        sb_supervisor_play_alert_once(&s_alert_internet_announced, SB_AUDIO_PROMPT_READY);
         break;
 
     case SB_EVENT_DATACALL_FAULT:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "data call fault status=%d text=%s", event->param_s32, event->text);
         (void)sb_led_status_set(SB_LED_STATUS_NO_INTERNET);
+        s_alert_internet_announced = 0;
+        sb_supervisor_play_alert_once(&s_alert_no_internet_announced, SB_AUDIO_PROMPT_NO_INTERNET);
         break;
 
     case SB_EVENT_CSQ_SAMPLE:
@@ -157,16 +207,19 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
     case SB_EVENT_MQTT_READY:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "mqtt ready port=%u status=%d", event->param_u32, event->param_s32);
         (void)sb_led_status_set(SB_LED_STATUS_INTERNET_OK);
+        s_alert_no_mqtt_announced = 0;
         break;
 
     case SB_EVENT_MQTT_FAULT:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "mqtt fault status=%d text=%s", event->param_s32, event->text);
         (void)sb_led_status_set(SB_LED_STATUS_NO_MQTT);
+        sb_supervisor_play_alert_once(&s_alert_no_mqtt_announced, SB_AUDIO_PROMPT_NO_MQTT);
         break;
 
     case SB_EVENT_MQTT_DISCONNECTED:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "mqtt disconnected status=%d text=%s", event->param_s32, event->text);
         (void)sb_led_status_set(SB_LED_STATUS_NO_MQTT);
+        sb_supervisor_play_alert_once(&s_alert_no_mqtt_announced, SB_AUDIO_PROMPT_NO_MQTT);
         break;
 
     case SB_EVENT_MQTT_PAYMENT_MESSAGE:
