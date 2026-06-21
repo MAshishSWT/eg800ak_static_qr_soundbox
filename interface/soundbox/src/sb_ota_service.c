@@ -434,10 +434,360 @@ static sb_status_t sb_ota_activate_firmware(sb_ota_download_ctx_t *ctx)
     return SB_STATUS_OK;
 }
 
+static int sb_ota_audio_target_allowed(const char *target)
+{
+    u32 i;
+
+    if ((target == 0) || (target[0] == '\0')) {
+        return 0;
+    }
+    if (sb_cloud_has_prefix(target, "U:/audio/") == 0) {
+        return 0;
+    }
+    for (i = 0u; target[i] != '\0'; i++) {
+        if ((target[i] == '.') && (target[i + 1u] == '.')) {
+            return 0;
+        }
+        if (target[i] == '\\') {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+static sb_status_t sb_ota_build_backup_path(char *out, u32 out_len, u32 index)
+{
+    if ((out == 0) || (out_len == 0u)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    out[0] = '\0';
+    if (sb_cloud_append_string(out, out_len, SB_OTA_AUDIO_BACKUP_BASE_PATH) != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (sb_cloud_append_u32(out, out_len, index) != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (sb_cloud_append_string(out, out_len, ".bin") != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_ota_make_parent_dirs(const char *path)
+{
+    char dir[SB_OTA_TARGET_PATH_LEN];
+    u32 i;
+
+    if (path == 0) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    dir[0] = '\0';
+    for (i = 0u; (path[i] != '\0') && (i + 1u < (u32)sizeof(dir)); i++) {
+        dir[i] = path[i];
+        dir[i + 1u] = '\0';
+        if ((i > 2u) && (path[i] == '/')) {
+            (void)ql_mkdir(dir, 0x777u);
+        }
+    }
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_ota_read_u32(QFILE *fp, u32 *value)
+{
+    u8 b[4];
+    int ret;
+
+    if ((fp == 0) || (value == 0)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    ret = ql_fread(b, (u32)sizeof(b), 1u, fp);
+    if (ret < 0) {
+        return SB_STATUS_FILE_ERROR;
+    }
+    *value = ((u32)b[0]) | ((u32)b[1] << 8u) | ((u32)b[2] << 16u) | ((u32)b[3] << 24u);
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_ota_write_file_from_pack(QFILE *pack, const char *temp_path, u32 data_len)
+{
+    QFILE *out;
+    u8 buf[SB_OTA_WRITE_BUF_LEN];
+    u32 remaining = data_len;
+    u32 chunk;
+    int ret;
+
+    if ((pack == 0) || (temp_path == 0)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+
+    out = ql_fopen(temp_path, "w+");
+    if (out == 0) {
+        return SB_STATUS_FILE_ERROR;
+    }
+
+    while (remaining > 0u) {
+        chunk = (remaining > SB_OTA_WRITE_BUF_LEN) ? SB_OTA_WRITE_BUF_LEN : remaining;
+        ret = ql_fread(buf, chunk, 1u, pack);
+        if (ret < 0) {
+            (void)ql_fclose(out);
+            (void)ql_remove(temp_path);
+            return SB_STATUS_FILE_ERROR;
+        }
+        ret = ql_fwrite(buf, chunk, 1u, out);
+        if (ret < 0) {
+            (void)ql_fclose(out);
+            (void)ql_remove(temp_path);
+            return SB_STATUS_FILE_ERROR;
+        }
+        remaining -= chunk;
+    }
+
+    (void)ql_fsync(out);
+    if (ql_fclose(out) != 0) {
+        (void)ql_remove(temp_path);
+        return SB_STATUS_FILE_ERROR;
+    }
+    return SB_STATUS_OK;
+}
+
+typedef struct {
+    char target[SB_OTA_TARGET_PATH_LEN];
+    char backup[SB_OTA_TARGET_PATH_LEN];
+    int had_backup;
+} sb_ota_audio_update_t;
+
+static void sb_ota_restore_audio_updates(sb_ota_audio_update_t *updates, u32 count)
+{
+    u32 i;
+
+    if (updates == 0) {
+        return;
+    }
+    for (i = 0u; i < count; i++) {
+        (void)ql_remove(updates[i].target);
+        if (updates[i].had_backup != 0) {
+            (void)ql_rename(updates[i].backup, updates[i].target);
+        }
+    }
+}
+
+static void sb_ota_commit_audio_updates(sb_ota_audio_update_t *updates, u32 count)
+{
+    u32 i;
+
+    if (updates == 0) {
+        return;
+    }
+    for (i = 0u; i < count; i++) {
+        if (updates[i].had_backup != 0) {
+            (void)ql_remove(updates[i].backup);
+        }
+    }
+}
+
+static sb_status_t sb_ota_activate_single_audio_file(const char *target, u32 index)
+{
+    char backup[SB_OTA_TARGET_PATH_LEN];
+    int had_backup = 0;
+
+    if ((target == 0) || (sb_ota_audio_target_allowed(target) == 0)) {
+        return SB_STATUS_SECURITY_ERROR;
+    }
+
+    if (sb_ota_build_backup_path(backup, (u32)sizeof(backup), index) != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+
+    (void)sb_ota_make_parent_dirs(target);
+    (void)ql_remove(backup);
+    if (ql_access(target, 0u) == 0) {
+        if (ql_rename(target, backup) != 0) {
+            return SB_STATUS_FILE_ERROR;
+        }
+        had_backup = 1;
+    }
+
+    if (ql_rename(SB_OTA_AUDIO_TEMP_PATH, target) != 0) {
+        if (had_backup != 0) {
+            (void)ql_rename(backup, target);
+        }
+        return SB_STATUS_FILE_ERROR;
+    }
+
+    if (had_backup != 0) {
+        (void)ql_remove(backup);
+    }
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_ota_install_audio_pack_file(const char *version, const char *pack_path, u32 *installed_count)
+{
+    QFILE *pack;
+    sb_ota_audio_update_t updates[SB_OTA_AUDIO_MAX_PACK_FILES];
+    char temp_path[SB_OTA_TARGET_PATH_LEN];
+    u32 magic;
+    u32 pack_version;
+    u32 file_count;
+    u32 i;
+    sb_status_t status;
+
+    (void)version;
+    if ((pack_path == 0) || (installed_count == 0)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    *installed_count = 0u;
+    sb_ota_zero(updates, (u32)sizeof(updates));
+
+    pack = ql_fopen(pack_path, "r");
+    if (pack == 0) {
+        return SB_STATUS_FILE_ERROR;
+    }
+
+    status = sb_ota_read_u32(pack, &magic);
+    if (status == SB_STATUS_OK) {
+        status = sb_ota_read_u32(pack, &pack_version);
+    }
+    if (status == SB_STATUS_OK) {
+        status = sb_ota_read_u32(pack, &file_count);
+    }
+    if ((status != SB_STATUS_OK) || (magic != SB_OTA_AUDIO_PACK_MAGIC) ||
+        (pack_version == 0u) || (file_count == 0u) ||
+        (file_count > SB_OTA_AUDIO_MAX_PACK_FILES)) {
+        (void)ql_fclose(pack);
+        return SB_STATUS_INVALID_PARAM;
+    }
+
+    for (i = 0u; i < file_count; i++) {
+        u32 path_len;
+        u32 data_len;
+        int ret;
+
+        status = sb_ota_read_u32(pack, &path_len);
+        if (status == SB_STATUS_OK) {
+            status = sb_ota_read_u32(pack, &data_len);
+        }
+        if ((status != SB_STATUS_OK) || (path_len == 0u) ||
+            (path_len >= SB_OTA_TARGET_PATH_LEN) || (data_len == 0u)) {
+            sb_ota_restore_audio_updates(updates, *installed_count);
+            (void)ql_fclose(pack);
+            return SB_STATUS_INVALID_PARAM;
+        }
+
+        ret = ql_fread(updates[i].target, path_len, 1u, pack);
+        if (ret < 0) {
+            sb_ota_restore_audio_updates(updates, *installed_count);
+            (void)ql_fclose(pack);
+            return SB_STATUS_FILE_ERROR;
+        }
+        updates[i].target[path_len] = '\0';
+        if (sb_ota_audio_target_allowed(updates[i].target) == 0) {
+            sb_ota_restore_audio_updates(updates, *installed_count);
+            (void)ql_fclose(pack);
+            return SB_STATUS_SECURITY_ERROR;
+        }
+
+        temp_path[0] = '\0';
+        if (sb_cloud_append_string(temp_path, (u32)sizeof(temp_path), "U:/sbap_tmp_") != SB_STATUS_OK) {
+            sb_ota_restore_audio_updates(updates, *installed_count);
+            (void)ql_fclose(pack);
+            return SB_STATUS_NO_MEMORY;
+        }
+        if (sb_cloud_append_u32(temp_path, (u32)sizeof(temp_path), i) != SB_STATUS_OK) {
+            sb_ota_restore_audio_updates(updates, *installed_count);
+            (void)ql_fclose(pack);
+            return SB_STATUS_NO_MEMORY;
+        }
+        if (sb_cloud_append_string(temp_path, (u32)sizeof(temp_path), ".bin") != SB_STATUS_OK) {
+            sb_ota_restore_audio_updates(updates, *installed_count);
+            (void)ql_fclose(pack);
+            return SB_STATUS_NO_MEMORY;
+        }
+
+        (void)ql_remove(temp_path);
+        status = sb_ota_write_file_from_pack(pack, temp_path, data_len);
+        if (status != SB_STATUS_OK) {
+            sb_ota_restore_audio_updates(updates, *installed_count);
+            (void)ql_fclose(pack);
+            return status;
+        }
+
+        status = sb_ota_build_backup_path(updates[i].backup, (u32)sizeof(updates[i].backup), i);
+        if (status != SB_STATUS_OK) {
+            (void)ql_remove(temp_path);
+            sb_ota_restore_audio_updates(updates, *installed_count);
+            (void)ql_fclose(pack);
+            return status;
+        }
+        (void)sb_ota_make_parent_dirs(updates[i].target);
+        (void)ql_remove(updates[i].backup);
+        if (ql_access(updates[i].target, 0u) == 0) {
+            if (ql_rename(updates[i].target, updates[i].backup) != 0) {
+                (void)ql_remove(temp_path);
+                sb_ota_restore_audio_updates(updates, *installed_count);
+                (void)ql_fclose(pack);
+                return SB_STATUS_FILE_ERROR;
+            }
+            updates[i].had_backup = 1;
+        }
+        if (ql_rename(temp_path, updates[i].target) != 0) {
+            (void)ql_remove(temp_path);
+            if (updates[i].had_backup != 0) {
+                (void)ql_rename(updates[i].backup, updates[i].target);
+            }
+            sb_ota_restore_audio_updates(updates, *installed_count);
+            (void)ql_fclose(pack);
+            return SB_STATUS_FILE_ERROR;
+        }
+        (*installed_count)++;
+    }
+
+    (void)ql_fclose(pack);
+    sb_ota_commit_audio_updates(updates, *installed_count);
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_ota_write_audio_state(const sb_ota_manifest_t *manifest, const char *target, u32 installed_count)
+{
+    char state[192];
+
+    if ((manifest == 0) || (target == 0)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+
+    state[0] = '\0';
+    if (sb_cloud_append_string(state, (u32)sizeof(state), "{\"version\":") != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (sb_cloud_append_json_string(state, (u32)sizeof(state), manifest->version) != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (sb_cloud_append_string(state, (u32)sizeof(state), ",\"target\":") != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (sb_cloud_append_json_string(state, (u32)sizeof(state), target) != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (sb_cloud_append_string(state, (u32)sizeof(state), ",\"files\":") != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (sb_cloud_append_u32(state, (u32)sizeof(state), installed_count) != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (sb_cloud_append_string(state, (u32)sizeof(state), "}") != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+
+    return sb_storage_fs_write_file_atomic(SB_OTA_AUDIO_STATE_PATH,
+                                           SB_OTA_AUDIO_STATE_TEMP_PATH,
+                                           state,
+                                           sb_cloud_str_len(state));
+}
+
 static sb_status_t sb_ota_activate_audio_pack(sb_ota_download_ctx_t *ctx)
 {
-    char state[160];
     const char *target;
+    u32 installed_count = 0u;
+    sb_status_t status;
 
     if (ctx == 0) {
         return SB_STATUS_INVALID_PARAM;
@@ -452,33 +802,26 @@ static sb_status_t sb_ota_activate_audio_pack(sb_ota_download_ctx_t *ctx)
         ctx->file = NULL;
     }
 
-    target = (ctx->manifest.target_path[0] != '\0') ? ctx->manifest.target_path : SB_OTA_AUDIO_ACTIVE_PATH;
-    (void)ql_remove(target);
-    if (ql_rename(SB_OTA_AUDIO_TEMP_PATH, target) != 0) {
-        return SB_STATUS_FILE_ERROR;
+    if (ctx->manifest.target_path[0] != '\0') {
+        target = ctx->manifest.target_path;
+        status = sb_ota_activate_single_audio_file(target, 0u);
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        installed_count = 1u;
+    } else {
+        target = SB_OTA_AUDIO_ACTIVE_PATH;
+        (void)ql_remove(target);
+        if (ql_rename(SB_OTA_AUDIO_TEMP_PATH, target) != 0) {
+            return SB_STATUS_FILE_ERROR;
+        }
+        status = sb_ota_install_audio_pack_file(ctx->manifest.version, target, &installed_count);
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
     }
 
-    state[0] = '\0';
-    if (sb_cloud_append_string(state, (u32)sizeof(state), "{\"version\":") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_json_string(state, (u32)sizeof(state), ctx->manifest.version) != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_string(state, (u32)sizeof(state), ",\"target\":") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_json_string(state, (u32)sizeof(state), target) != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_string(state, (u32)sizeof(state), "}") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-
-    return sb_storage_fs_write_file_atomic(SB_OTA_AUDIO_STATE_PATH,
-                                           "U:/sb_audio_state.tmp",
-                                           state,
-                                           sb_cloud_str_len(state));
+    return sb_ota_write_audio_state(&ctx->manifest, target, installed_count);
 }
 
 static sb_status_t sb_ota_process_manifest(const char *manifest_json)
@@ -497,6 +840,12 @@ static sb_status_t sb_ota_process_manifest(const char *manifest_json)
     status = sb_ota_manifest_parse(manifest_json, &manifest);
     if (status != SB_STATUS_OK) {
         return status;
+    }
+
+    if ((manifest.kind == SB_OTA_KIND_AUDIO_PACK) &&
+        (manifest.target_path[0] != '\0') &&
+        (sb_ota_audio_target_allowed(manifest.target_path) == 0)) {
+        return SB_STATUS_SECURITY_ERROR;
     }
 
     sb_ota_set_status(SB_OTA_STATE_VERIFY_MANIFEST, &manifest, 0u, 0);

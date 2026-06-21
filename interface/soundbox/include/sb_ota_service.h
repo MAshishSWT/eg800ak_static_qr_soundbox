@@ -24,6 +24,10 @@ extern "C" {
 #define SB_OTA_AUDIO_TEMP_PATH             "U:/sb_audio_pack.tmp"
 #define SB_OTA_AUDIO_ACTIVE_PATH           "U:/sb_audio_pack.bin"
 #define SB_OTA_AUDIO_STATE_PATH            "U:/sb_audio_state.json"
+#define SB_OTA_AUDIO_STATE_TEMP_PATH       "U:/sb_audio_state.tmp"
+#define SB_OTA_AUDIO_BACKUP_BASE_PATH      "U:/sbap_bak_"
+#define SB_OTA_AUDIO_MAX_PACK_FILES        (16u)
+#define SB_OTA_AUDIO_PACK_MAGIC            (0x50414253u)
 #define SB_OTA_FW_PACKAGE_PATH             "U:/FotaFile.bin"
 
 typedef enum {

@@ -79,3 +79,24 @@ Copy the package over the EG800AK `ql-application/threadx` tree and build using 
 - Firmware OTA package is a valid Quectel FOTA/DFOTA image accepted by `ql_fota_image_verify_without_setflag()`.
 - Audio-pack OTA activation stages a verified binary/asset file to the configured target path. Multi-file audio pack extraction can be added in a later asset-pack format phase.
 - External NOR remains a separate hardware issue; OTA staging uses internal `U:` filesystem and Quectel FOTA storage path.
+
+## Audio pack file format
+
+When `type=audio_pack` has no `target_path`, the downloaded file is treated as a complete Soundbox Audio Pack binary.
+
+Binary format, little-endian:
+
+```text
+u32 magic        0x50414253  // 'SBAP'
+u32 pack_version non-zero
+u32 file_count   1..16
+repeat file_count times:
+  u32 path_len
+  u32 data_len
+  char target_path[path_len]   // must start with U:/audio/
+  uint8 file_data[data_len]
+```
+
+The installer writes every asset to a temporary file, backs up the existing asset, renames the new file into place, and restores prior files if any later file fails. This gives rollback-safe activation for the pack within available U: filesystem space.
+
+If `target_path` is present, the manifest is treated as a single signed audio asset update. The target must still pass the same allowlist policy and start with `U:/audio/`.
