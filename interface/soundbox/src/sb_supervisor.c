@@ -230,6 +230,42 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "ota failed status=%d type=%s", event->param_s32, event->text);
         break;
 
+    case SB_EVENT_FACTORY_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "factory ready mode=%s", event->text);
+        break;
+
+    case SB_EVENT_FACTORY_COMMAND:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "factory command channel=%u", event->param_u32);
+        break;
+
+    case SB_EVENT_FACTORY_COMMAND_DONE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "factory command done channel=%s status=%d", event->text, event->param_s32);
+        break;
+
+    case SB_EVENT_FACTORY_COMMAND_REJECTED:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "factory command rejected channel=%s status=%d", event->text, event->param_s32);
+        break;
+
+    case SB_EVENT_SERIAL_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "serial ready text=%s", event->text);
+        break;
+
+    case SB_EVENT_SERIAL_COMMAND:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "serial command len=%u", event->param_u32);
+        break;
+
+    case SB_EVENT_SMS_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "sms ready text=%s", event->text);
+        break;
+
+    case SB_EVENT_SMS_COMMAND:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "sms command index=%u", event->param_u32);
+        break;
+
+    case SB_EVENT_SMS_FAULT:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "sms fault index=%u status=%d text=%s", event->param_u32, event->param_s32, event->text);
+        break;
+
     case SB_EVENT_SUPERVISOR_FAULT:
         SB_LOGE(SB_SUPERVISOR_MODULE_NAME, "fault event code=%d", event->param_s32);
         break;

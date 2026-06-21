@@ -156,8 +156,24 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "OTA_STAGED";
     case SB_EVENT_OTA_FAILED:
         return "OTA_FAILED";
+    case SB_EVENT_FACTORY_READY:
+        return "FACTORY_READY";
     case SB_EVENT_FACTORY_COMMAND:
         return "FACTORY_COMMAND";
+    case SB_EVENT_FACTORY_COMMAND_DONE:
+        return "FACTORY_COMMAND_DONE";
+    case SB_EVENT_FACTORY_COMMAND_REJECTED:
+        return "FACTORY_COMMAND_REJECTED";
+    case SB_EVENT_SERIAL_READY:
+        return "SERIAL_READY";
+    case SB_EVENT_SERIAL_COMMAND:
+        return "SERIAL_COMMAND";
+    case SB_EVENT_SMS_READY:
+        return "SMS_READY";
+    case SB_EVENT_SMS_COMMAND:
+        return "SMS_COMMAND";
+    case SB_EVENT_SMS_FAULT:
+        return "SMS_FAULT";
     default:
         return "UNKNOWN";
     }

@@ -76,8 +76,7 @@ Copy the package over the EG800AK `ql-application/threadx` tree and build using 
 
 ## Known assumptions
 
-- Firmware OTA package is a valid Quectel FOTA/DFOTA image accepted by `ql_fota_image_verify_without_setflag()`.
-- Audio-pack OTA activation stages a verified binary/asset file to the configured target path. Multi-file audio pack extraction can be added in a later asset-pack format phase.
+- Firmware OTA package is a valid Quectel FOTA/DFOTA image accepted by `ql_fota_image_verify()`.
 - External NOR remains a separate hardware issue; OTA staging uses internal `U:` filesystem and Quectel FOTA storage path.
 
 ## Audio pack file format

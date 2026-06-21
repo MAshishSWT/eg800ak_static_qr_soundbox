@@ -36,7 +36,10 @@ typedef enum {
     SB_STATUS_CONFIG_ERROR = -23,
     SB_STATUS_SECURITY_ERROR = -24,
     SB_STATUS_OTA_ERROR = -25,
-    SB_STATUS_HASH_ERROR = -26
+    SB_STATUS_HASH_ERROR = -26,
+    SB_STATUS_FACTORY_LOCKED = -27,
+    SB_STATUS_SMS_ERROR = -28,
+    SB_STATUS_SERIAL_ERROR = -29
 } sb_status_t;
 
 const char *sb_status_to_string(sb_status_t status);

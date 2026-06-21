@@ -61,6 +61,12 @@ const char *sb_status_to_string(sb_status_t status)
         return "OTA_ERROR";
     case SB_STATUS_HASH_ERROR:
         return "HASH_ERROR";
+    case SB_STATUS_FACTORY_LOCKED:
+        return "FACTORY_LOCKED";
+    case SB_STATUS_SMS_ERROR:
+        return "SMS_ERROR";
+    case SB_STATUS_SERIAL_ERROR:
+        return "SERIAL_ERROR";
     default:
         return "UNKNOWN";
     }

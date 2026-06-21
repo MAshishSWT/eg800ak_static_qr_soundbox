@@ -46,6 +46,10 @@ SRC_FILES+= \
   src/sb_ota_crypto.c \
   src/sb_ota_manifest.c \
   src/sb_ota_service.c \
+  src/sb_mode_service.c \
+  src/sb_factory_diag.c \
+  src/sb_serial_service.c \
+  src/sb_sms_service.c \
 
 #-------------------------------------------------------------------------------
 # the include directories
@@ -74,7 +78,7 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=8 \
+  -DSB_PHASE_NUMBER=9 \
   -DSB_BUILD_TARGET_EG800AK=1 \
 
 #-------------------------------------------------------------------------------

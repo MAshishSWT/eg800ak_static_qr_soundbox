@@ -14,10 +14,14 @@
 #include "sb_event_bus.h"
 #include "sb_extnor.h"
 #include "sb_http_service.h"
+#include "sb_factory_diag.h"
 #include "sb_log.h"
 #include "sb_mqtt_service.h"
+#include "sb_mode_service.h"
 #include "sb_network_service.h"
 #include "sb_ota_service.h"
+#include "sb_serial_service.h"
+#include "sb_sms_service.h"
 #include "sb_supervisor.h"
 
 #define SB_APP_MODULE_NAME "app"
@@ -59,6 +63,16 @@ static void sb_app_entry(void *argv)
     if (sb_config_get(&config) != SB_STATUS_OK) {
         SB_LOGW(SB_APP_MODULE_NAME, "config get failed, using audio defaults");
     }
+
+    status = sb_mode_service_init();
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "mode service init status=%s", sb_status_to_string(status));
+    }
+
+    status = sb_factory_diag_init();
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "factory diag init status=%s", sb_status_to_string(status));
+    }
     audio_language = sb_audio_language_from_code(config.language);
     audio_volume = config.volume_percent;
 
@@ -90,6 +104,16 @@ static void sb_app_entry(void *argv)
     status = sb_ota_service_init(&config);
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "ota service init status=%s", sb_status_to_string(status));
+    }
+
+    status = sb_serial_service_init(&config);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "serial service init status=%s", sb_status_to_string(status));
+    }
+
+    status = sb_sms_service_init(&config);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "sms service init status=%s", sb_status_to_string(status));
     }
 
     status = sb_business_service_init();
