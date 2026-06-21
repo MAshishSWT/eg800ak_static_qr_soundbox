@@ -410,8 +410,6 @@ static sb_status_t sb_ota_finish_hash(sb_ota_download_ctx_t *ctx)
 static sb_status_t sb_ota_activate_firmware(sb_ota_download_ctx_t *ctx)
 {
     int ret;
-    int file_size = 0;
-    int is_dfota = 0;
 
     if ((ctx == 0) || (ctx->fota_ctx == NULL)) {
         return SB_STATUS_INVALID_PARAM;
@@ -421,14 +419,18 @@ static sb_status_t sb_ota_activate_firmware(sb_ota_download_ctx_t *ctx)
     if (ret != 0) {
         return SB_STATUS_OTA_ERROR;
     }
-    ret = ql_fota_image_verify_without_setflag(ctx->fota_ctx, &file_size, &is_dfota);
+
+    /* EG800AK LTE01R07A16_C_SDK_A V03 declares verify_without_setflag and
+     * set_update_flag in ql_fota.h, but this SDK library does not export those
+     * symbols. The exported and example-verified activation path is
+     * ql_fota_image_verify(), called only after signed manifest verification,
+     * download size match, and SHA-256 hash match.
+     */
+    ret = ql_fota_image_verify(ctx->fota_ctx);
     if (ret != 0) {
         return SB_STATUS_OTA_ERROR;
     }
-    ret = ql_fota_set_update_flag(file_size, is_dfota);
-    if (ret != 0) {
-        return SB_STATUS_OTA_ERROR;
-    }
+
     return SB_STATUS_OK;
 }
 

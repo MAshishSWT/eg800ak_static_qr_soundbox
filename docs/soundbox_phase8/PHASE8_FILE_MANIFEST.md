@@ -20,3 +20,4 @@
 | `docs/soundbox_phase8/PHASE8_README.md` | Phase README |
 | `docs/soundbox_phase8/PHASE8_TEST_PROCEDURE.md` | Test procedure |
 | `docs/soundbox_phase8/PHASE8_ACCEPTANCE_CHECKLIST.md` | Acceptance checklist |
+| `SOUNDBOX_PHASE8_LINKFIX.md` | FOTA library link fix note |

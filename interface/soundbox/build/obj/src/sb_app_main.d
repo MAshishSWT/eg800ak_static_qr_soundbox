@@ -22,4 +22,6 @@ build/obj/src/sb_app_main.o: src/sb_app_main.c \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_log.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_mqtt_service.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_network_service.h \
+ D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_ota_service.h \
+ D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_ota_manifest.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_supervisor.h
