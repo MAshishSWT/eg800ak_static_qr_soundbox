@@ -35,6 +35,9 @@ SRC_FILES+= \
   src/sb_sim_service.c \
   src/sb_time_service.c \
   src/sb_network_service.c \
+  src/sb_cloud_utils.c \
+  src/sb_mqtt_service.c \
+  src/sb_http_service.c \
 
 #-------------------------------------------------------------------------------
 # the include directories
@@ -63,7 +66,7 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=5 \
+  -DSB_PHASE_NUMBER=6 \
   -DSB_BUILD_TARGET_EG800AK=1 \
 
 #-------------------------------------------------------------------------------

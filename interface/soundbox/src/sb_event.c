@@ -114,6 +114,26 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "TIME_SYNCED";
     case SB_EVENT_TIME_FAULT:
         return "TIME_FAULT";
+    case SB_EVENT_MQTT_READY:
+        return "MQTT_READY";
+    case SB_EVENT_MQTT_FAULT:
+        return "MQTT_FAULT";
+    case SB_EVENT_MQTT_DISCONNECTED:
+        return "MQTT_DISCONNECTED";
+    case SB_EVENT_MQTT_MESSAGE:
+        return "MQTT_MESSAGE";
+    case SB_EVENT_MQTT_PAYMENT_MESSAGE:
+        return "MQTT_PAYMENT_MESSAGE";
+    case SB_EVENT_MQTT_COMMAND_MESSAGE:
+        return "MQTT_COMMAND_MESSAGE";
+    case SB_EVENT_MQTT_PUBLISHED:
+        return "MQTT_PUBLISHED";
+    case SB_EVENT_HTTP_HEALTH_DONE:
+        return "HTTP_HEALTH_DONE";
+    case SB_EVENT_HTTP_COMMAND_RESPONSE_DONE:
+        return "HTTP_COMMAND_RESPONSE_DONE";
+    case SB_EVENT_HTTP_FAULT:
+        return "HTTP_FAULT";
     case SB_EVENT_FACTORY_COMMAND:
         return "FACTORY_COMMAND";
     default:

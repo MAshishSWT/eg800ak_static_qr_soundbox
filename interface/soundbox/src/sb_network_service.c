@@ -126,10 +126,12 @@ static void sb_network_status_update_online(int registered, int datacall_state, 
 static void sb_network_data_call_cb(int profile_idx, int state)
 {
     s_datacall_callback_state = state;
-    sb_network_post_event((state == 1) ? SB_EVENT_DATACALL_READY : SB_EVENT_DATACALL_FAULT,
-                          (s32)state,
-                          (u32)profile_idx,
-                          "data_call_cb");
+    if (state != 1) {
+        sb_network_post_event(SB_EVENT_DATACALL_FAULT,
+                              (s32)SB_STATUS_DATACALL_ERROR,
+                              (u32)profile_idx,
+                              "data_call_cb");
+    }
 }
 
 static void sb_network_sample_csq(void)

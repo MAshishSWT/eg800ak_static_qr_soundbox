@@ -47,6 +47,14 @@ const char *sb_status_to_string(sb_status_t status)
         return "DATACALL_ERROR";
     case SB_STATUS_TIME_ERROR:
         return "TIME_ERROR";
+    case SB_STATUS_MQTT_ERROR:
+        return "MQTT_ERROR";
+    case SB_STATUS_HTTP_ERROR:
+        return "HTTP_ERROR";
+    case SB_STATUS_SSL_ERROR:
+        return "SSL_ERROR";
+    case SB_STATUS_CONFIG_ERROR:
+        return "CONFIG_ERROR";
     default:
         return "UNKNOWN";
     }

@@ -137,11 +137,51 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         break;
 
     case SB_EVENT_TIME_SYNCED:
-        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "time synced status=%d server=%s", event->param_s32, event->text);
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "time synced status=%d text=%s", event->param_s32, event->text);
         break;
 
     case SB_EVENT_TIME_FAULT:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "time fault status=%d text=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_MQTT_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "mqtt ready port=%u status=%d", event->param_u32, event->param_s32);
+        break;
+
+    case SB_EVENT_MQTT_FAULT:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "mqtt fault status=%d text=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_MQTT_DISCONNECTED:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "mqtt disconnected status=%d text=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_MQTT_PAYMENT_MESSAGE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "mqtt payment message len=%u", event->param_u32);
+        break;
+
+    case SB_EVENT_MQTT_COMMAND_MESSAGE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "mqtt command message len=%u", event->param_u32);
+        break;
+
+    case SB_EVENT_MQTT_MESSAGE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "mqtt message len=%u text=%s", event->param_u32, event->text);
+        break;
+
+    case SB_EVENT_MQTT_PUBLISHED:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "mqtt published len=%u topic=%s", event->param_u32, event->text);
+        break;
+
+    case SB_EVENT_HTTP_HEALTH_DONE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "http health done code=%u", event->param_u32);
+        break;
+
+    case SB_EVENT_HTTP_COMMAND_RESPONSE_DONE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "http command response done code=%u", event->param_u32);
+        break;
+
+    case SB_EVENT_HTTP_FAULT:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "http fault status=%d text=%s", event->param_s32, event->text);
         break;
 
     case SB_EVENT_SUPERVISOR_FAULT:

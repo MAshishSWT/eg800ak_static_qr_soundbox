@@ -12,7 +12,9 @@
 #include "sb_error.h"
 #include "sb_event_bus.h"
 #include "sb_extnor.h"
+#include "sb_http_service.h"
 #include "sb_log.h"
+#include "sb_mqtt_service.h"
 #include "sb_network_service.h"
 #include "sb_supervisor.h"
 
@@ -71,6 +73,16 @@ static void sb_app_entry(void *argv)
     status = sb_network_service_init(&config);
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "network service init status=%s", sb_status_to_string(status));
+    }
+
+    status = sb_mqtt_service_init(&config);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "mqtt service init status=%s", sb_status_to_string(status));
+    }
+
+    status = sb_http_service_init(&config);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "http service init status=%s", sb_status_to_string(status));
     }
 
     status = sb_supervisor_start();
