@@ -12,7 +12,7 @@ Phase 5 adds the connectivity foundation for the EG800AK-CN Static QR UPI Soundb
 - Data call status polling through `ql_get_data_call_info()`.
 - RTC read using `ql_rtc_get_time()`.
 - NITZ enable using `ql_rtc_set_nitz_mode()`.
-- NTP initialization and sync using `ql_ntp_init()`, `ql_ntp_set_server()`, `ql_ntp_set_cid()` and `ql_ntp_sync_ex()`.
+- NTP sync using `ql_ntp_set_server()`, `ql_ntp_set_cid()` and `ql_ntp_sync_ex()`. The SDK header declares `ql_ntp_init()`, but the linked `ql_common_api.lib` in this EG800AK SDK does not export it, and Quectel `example_ntp.c` does not call it.
 - Network/time events integrated into the application event bus and supervisor.
 
 ## EG800AK SDK examples referenced

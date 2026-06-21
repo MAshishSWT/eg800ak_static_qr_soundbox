@@ -53,7 +53,6 @@ sb_status_t sb_time_service_init(int pdp_cid, const char *server)
     s_time_pdp_cid = pdp_cid;
     sb_time_copy_server(server);
     ql_rtc_set_nitz_mode(1u);
-    ql_ntp_init();
 
     SB_LOGI(SB_TIME_MODULE_NAME, "init cid=%d server=%s", s_time_pdp_cid, s_time_server);
     return SB_STATUS_OK;
