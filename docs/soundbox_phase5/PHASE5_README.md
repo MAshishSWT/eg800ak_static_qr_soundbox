@@ -12,7 +12,10 @@ Phase 5 adds the connectivity foundation for the EG800AK-CN Static QR UPI Soundb
 - Data call status polling through `ql_get_data_call_info()`.
 - RTC read using `ql_rtc_get_time()`.
 - NITZ enable using `ql_rtc_set_nitz_mode()`.
-- NTP sync using `ql_ntp_set_server()`, `ql_ntp_set_cid()` and `ql_ntp_sync_ex()`. The SDK header declares `ql_ntp_init()`, but the linked `ql_common_api.lib` in this EG800AK SDK does not export it, and Quectel `example_ntp.c` does not call it.
+- NTP sync using `ql_ntp_set_cid()`, `ql_ntp_set_server()` and `ql_ntp_sync_ex()`.
+- NTP server fallback list: configured server, `time.google.com`, `ntp.aliyun.com`, `time.windows.com`.
+- NITZ/RTC fallback: if NTP server setup fails but RTC already contains a valid network time, the service posts `SB_EVENT_TIME_SYNCED` with `rtc_nitz_*` text instead of blocking later MQTT/HTTP phases.
+- The SDK header declares `ql_ntp_init()`, but the linked `ql_common_api.lib` in this EG800AK SDK does not export it, and Quectel `example_ntp.c` does not call it.
 - Network/time events integrated into the application event bus and supervisor.
 
 ## EG800AK SDK examples referenced

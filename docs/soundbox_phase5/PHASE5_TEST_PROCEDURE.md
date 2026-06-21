@@ -36,12 +36,19 @@ Expected:
 
 ## 5. NTP/RTC test
 
-Expected:
+Expected, when NTP server setup succeeds:
 
 ```text
-[SB][I][time] ntp sync requested server=pool.ntp.org
-[SB][I][supervisor] time synced status=0 server=pool.ntp.org
+[SB][I][time] ntp sync requested server=<selected-server>
+[SB][I][supervisor] time synced status=0 server=<selected-server>
 [SB][I][network] rtc=YYYY-MM-DD HH:MM:SS
+```
+
+Acceptable fallback, when NTP server setup fails but NITZ/RTC is already valid:
+
+```text
+[SB][I][time] rtc fallback accepted reason=rtc_nitz_ntp_server time=YYYY-MM-DD HH:MM:SS
+[SB][I][supervisor] time synced status=0 server=rtc_nitz_ntp_server
 ```
 
 ## 6. Network loss/reconnect test
