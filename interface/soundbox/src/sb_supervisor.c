@@ -108,6 +108,42 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "config ready seq=%u source=%d", event->param_u32, event->param_s32);
         break;
 
+    case SB_EVENT_SIM_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "sim ready status=%d", event->param_s32);
+        break;
+
+    case SB_EVENT_SIM_FAULT:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "sim fault status=%d card=%u text=%s", event->param_s32, event->param_u32, event->text);
+        break;
+
+    case SB_EVENT_NETWORK_REGISTERED:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "network registered");
+        break;
+
+    case SB_EVENT_NETWORK_LOST:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "network lost status=%d text=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_DATACALL_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "data call ready cid=%u status=%d", event->param_u32, event->param_s32);
+        break;
+
+    case SB_EVENT_DATACALL_FAULT:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "data call fault status=%d text=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_CSQ_SAMPLE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "csq=%d", event->param_s32);
+        break;
+
+    case SB_EVENT_TIME_SYNCED:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "time synced status=%d server=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_TIME_FAULT:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "time fault status=%d text=%s", event->param_s32, event->text);
+        break;
+
     case SB_EVENT_SUPERVISOR_FAULT:
         SB_LOGE(SB_SUPERVISOR_MODULE_NAME, "fault event code=%d", event->param_s32);
         break;

@@ -32,6 +32,9 @@ SRC_FILES+= \
   src/sb_audio_hal.c \
   src/sb_audio_service.c \
   src/sb_config.c \
+  src/sb_sim_service.c \
+  src/sb_time_service.c \
+  src/sb_network_service.c \
 
 #-------------------------------------------------------------------------------
 # the include directories
@@ -41,6 +44,7 @@ INC_DIRS+= \
   -I${TOP_DIR}/common/include \
   -I${TOP_DIR}/common/include/fs \
   -I${TOP_DIR}/common/include/mqtt \
+  -I${TOP_DIR}/common/include/lwipv4v6 \
   -I${TOP_DIR}/interface/soundbox/include \
 
 #-------------------------------------------------------------------------------
@@ -59,7 +63,7 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=4 \
+  -DSB_PHASE_NUMBER=5 \
   -DSB_BUILD_TARGET_EG800AK=1 \
 
 #-------------------------------------------------------------------------------

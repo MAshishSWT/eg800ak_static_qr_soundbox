@@ -39,6 +39,14 @@ const char *sb_status_to_string(sb_status_t status)
         return "NOT_FOUND";
     case SB_STATUS_INVALID_STATE:
         return "INVALID_STATE";
+    case SB_STATUS_NETWORK_ERROR:
+        return "NETWORK_ERROR";
+    case SB_STATUS_SIM_ERROR:
+        return "SIM_ERROR";
+    case SB_STATUS_DATACALL_ERROR:
+        return "DATACALL_ERROR";
+    case SB_STATUS_TIME_ERROR:
+        return "TIME_ERROR";
     default:
         return "UNKNOWN";
     }
