@@ -8,6 +8,7 @@
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_log.h"
+#include "sb_led_status.h"
 #include "sb_supervisor.h"
 
 #define SB_SUPERVISOR_MODULE_NAME "supervisor"
@@ -62,7 +63,7 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         break;
 
     case SB_EVENT_SUPERVISOR_HEARTBEAT:
-        (void)sb_bsp_board_toggle_status_led();
+        (void)sb_led_status_on_heartbeat();
         sb_supervisor_log_battery_sample();
         SB_LOGD(SB_SUPERVISOR_MODULE_NAME, "heartbeat pending=%u", sb_event_pending_count());
         break;
@@ -90,6 +91,9 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_BATTERY_SAMPLE:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "battery=%umV percent=%d", event->param_u32, event->param_s32);
+        if ((event->param_s32 >= 0) && (event->param_s32 <= 15)) {
+            (void)sb_led_status_set(SB_LED_STATUS_BATTERY_LOW);
+        }
         break;
 
     case SB_EVENT_STORAGE_READY:
@@ -116,6 +120,7 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_SIM_FAULT:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "sim fault status=%d card=%u text=%s", event->param_s32, event->param_u32, event->text);
+        (void)sb_led_status_set(SB_LED_STATUS_ERROR);
         break;
 
     case SB_EVENT_NETWORK_REGISTERED:
@@ -124,14 +129,17 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_NETWORK_LOST:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "network lost status=%d text=%s", event->param_s32, event->text);
+        (void)sb_led_status_set(SB_LED_STATUS_NO_INTERNET);
         break;
 
     case SB_EVENT_DATACALL_READY:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "data call ready cid=%u status=%d", event->param_u32, event->param_s32);
+        (void)sb_led_status_set(SB_LED_STATUS_INTERNET_OK);
         break;
 
     case SB_EVENT_DATACALL_FAULT:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "data call fault status=%d text=%s", event->param_s32, event->text);
+        (void)sb_led_status_set(SB_LED_STATUS_NO_INTERNET);
         break;
 
     case SB_EVENT_CSQ_SAMPLE:
@@ -148,14 +156,17 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_MQTT_READY:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "mqtt ready port=%u status=%d", event->param_u32, event->param_s32);
+        (void)sb_led_status_set(SB_LED_STATUS_INTERNET_OK);
         break;
 
     case SB_EVENT_MQTT_FAULT:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "mqtt fault status=%d text=%s", event->param_s32, event->text);
+        (void)sb_led_status_set(SB_LED_STATUS_NO_MQTT);
         break;
 
     case SB_EVENT_MQTT_DISCONNECTED:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "mqtt disconnected status=%d text=%s", event->param_s32, event->text);
+        (void)sb_led_status_set(SB_LED_STATUS_NO_MQTT);
         break;
 
     case SB_EVENT_MQTT_PAYMENT_MESSAGE:

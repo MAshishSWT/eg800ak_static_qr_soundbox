@@ -1,0 +1,26 @@
+# Phase 10 Acceptance Checklist
+
+- [ ] Builds inside EG800AK QuecOpen SDK.
+- [ ] `SB_PHASE_NUMBER=10`.
+- [ ] One active `application_init()`.
+- [ ] No Quectel common headers/libraries modified.
+- [ ] Firmware boots without external NOR.
+- [ ] Firmware boots without audio assets.
+- [ ] Logical audio path root is `audio/`.
+- [ ] Language aliases `mr->ma` and `te->tl` work.
+- [ ] Alert folder is `alerts/`.
+- [ ] Exact `no_SIM.mp3` filename is used.
+- [ ] `advert.mp3` is optional and skipped if absent.
+- [ ] Missing Paytm/PhonePe/BHIM provider files fall back safely.
+- [ ] Marathi 100 uses `1.mp3 + hundred.mp3`.
+- [ ] Full library is not copied to `U:`.
+- [ ] Selected external NOR asset is staged only to `U:/sb_play.mp3`.
+- [ ] Transaction announcement supports with-paise and no-paise flows.
+- [ ] Last transaction flow works.
+- [ ] Daily summary flow works with single/multiple transaction grammar.
+- [ ] Health battery and signal prompts work.
+- [ ] One USER_LED_1 patterns are used, no RGB API added.
+- [ ] Phase 9 SMS/factory security fixes are preserved.
+- [ ] Phase 8 OTA still builds.
+- [ ] No unsafe string APIs.
+- [ ] No incomplete implementation markers.

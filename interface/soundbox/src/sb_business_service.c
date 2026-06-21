@@ -14,6 +14,7 @@
 #include "sb_event_bus.h"
 #include "sb_hal_key.h"
 #include "sb_log.h"
+#include "sb_led_status.h"
 #include "sb_mqtt_service.h"
 #include "sb_network_service.h"
 #include "sb_payment_processor.h"
@@ -102,20 +103,36 @@ static sb_status_t sb_business_save_volume(u32 volume)
 static void sb_business_handle_volume(int increase)
 {
     u32 volume;
+    u32 old_volume;
+    const char *action_text;
 
     (void)ql_rtos_mutex_lock(s_business_mutex, QL_WAIT_FOREVER);
-    volume = s_business_config.volume_percent;
+    old_volume = s_business_config.volume_percent;
+    volume = old_volume;
     (void)ql_rtos_mutex_unlock(s_business_mutex);
+
+    (void)sb_audio_service_play_common("ping.mp3");
+    (void)sb_led_status_set(SB_LED_STATUS_VOLUME_MODE);
 
     if (increase != 0) {
         volume = (volume + SB_BUSINESS_VOLUME_STEP_PERCENT > 100u) ? 100u : (volume + SB_BUSINESS_VOLUME_STEP_PERCENT);
-        (void)sb_business_save_volume(volume);
-        sb_business_post_event(SB_EVENT_KEY_ACTION, SB_STATUS_OK, volume, "volume_up");
+        action_text = "volume_up";
     } else {
         volume = (volume < SB_BUSINESS_VOLUME_STEP_PERCENT) ? 0u : (volume - SB_BUSINESS_VOLUME_STEP_PERCENT);
-        (void)sb_business_save_volume(volume);
-        sb_business_post_event(SB_EVENT_KEY_ACTION, SB_STATUS_OK, volume, "volume_down");
+        action_text = "volume_down";
     }
+
+    if (volume != old_volume) {
+        (void)sb_business_save_volume(volume);
+    }
+
+    if ((increase != 0) && (volume >= 100u)) {
+        (void)sb_audio_service_play_alert(sb_business_language(), "volume_max.mp3");
+    } else if ((increase == 0) && (volume == 0u)) {
+        (void)sb_audio_service_play_alert(sb_business_language(), "volume_min.mp3");
+    }
+
+    sb_business_post_event(SB_EVENT_KEY_ACTION, SB_STATUS_OK, volume, action_text);
 }
 
 static void sb_business_play_last_transaction(void)
@@ -123,12 +140,13 @@ static void sb_business_play_last_transaction(void)
     sb_transaction_record_t record;
     sb_status_t status;
 
+    (void)sb_led_status_set(SB_LED_STATUS_TRANSACTION_MODE);
     status = sb_transaction_ledger_get_last(&record);
     if (status == SB_STATUS_OK) {
-        (void)sb_audio_service_play_amount(sb_business_language(), record.provider, record.amount_paise);
+        (void)sb_audio_service_play_last_transaction(sb_business_language(), &record);
         sb_business_post_event(SB_EVENT_KEY_ACTION, SB_STATUS_OK, (u32)record.amount_paise, "last_transaction");
     } else {
-        (void)sb_audio_service_play_prompt(sb_business_language(), SB_AUDIO_PROMPT_READY);
+        (void)sb_audio_service_play_alert(sb_business_language(), "no_transactions.mp3");
         sb_business_post_event(SB_EVENT_KEY_ACTION, (s32)status, 0u, "last_transaction_empty");
     }
 }
@@ -140,10 +158,9 @@ static void sb_business_play_battery_status(void)
 
     status = sb_bsp_board_read_battery(&sample);
     if (status == SB_STATUS_OK) {
-        if (sample.battery_percent <= 20u) {
-            (void)sb_audio_service_play_prompt(sb_business_language(), SB_AUDIO_PROMPT_BATTERY_LOW);
-        } else {
-            (void)sb_audio_service_play_prompt(sb_business_language(), SB_AUDIO_PROMPT_READY);
+        (void)sb_audio_service_play_health(sb_business_language(), 1, sample.battery_percent);
+        if (sample.battery_percent <= 15u) {
+            (void)sb_led_status_set(SB_LED_STATUS_BATTERY_LOW);
         }
         sb_business_post_event(SB_EVENT_KEY_ACTION, SB_STATUS_OK, sample.battery_percent, "battery");
     } else {
@@ -155,14 +172,12 @@ static void sb_business_play_signal_status(void)
 {
     sb_network_status_t net;
     sb_status_t status;
+    u32 signal_percent;
 
     status = sb_network_get_status(&net);
     if (status == SB_STATUS_OK) {
-        if (net.csq >= 10) {
-            (void)sb_audio_service_play_prompt(sb_business_language(), SB_AUDIO_PROMPT_READY);
-        } else {
-            (void)sb_audio_service_play_prompt(sb_business_language(), SB_AUDIO_PROMPT_NO_NETWORK);
-        }
+        signal_percent = (net.csq <= 0) ? 0u : (u32)((net.csq >= 31) ? 100 : ((net.csq * 100) / 31));
+        (void)sb_audio_service_play_health(sb_business_language(), 0, signal_percent);
         sb_business_post_event(SB_EVENT_KEY_ACTION, SB_STATUS_OK, (u32)net.csq, "signal");
     } else {
         sb_business_post_event(SB_EVENT_KEY_ACTION, (s32)status, 0u, "signal");
@@ -177,9 +192,9 @@ static void sb_business_play_daily_summary(void)
     status = sb_transaction_ledger_get_daily(&summary);
     if (status == SB_STATUS_OK) {
         if (summary.count > 0u) {
-            (void)sb_audio_service_play_amount(sb_business_language(), SB_AUDIO_PROVIDER_OTHER, summary.total_paise);
+            (void)sb_audio_service_play_daily_summary(sb_business_language(), &summary);
         } else {
-            (void)sb_audio_service_play_prompt(sb_business_language(), SB_AUDIO_PROMPT_READY);
+            (void)sb_audio_service_play_alert(sb_business_language(), "no_transactions.mp3");
         }
         sb_business_post_event(SB_EVENT_DAILY_SUMMARY_READY, SB_STATUS_OK, summary.count, "daily_summary");
     } else {

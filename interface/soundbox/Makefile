@@ -21,12 +21,15 @@ SRC_FILES+= \
   src/sb_hal_gpio.c \
   src/sb_hal_key.c \
   src/sb_hal_led.c \
+  src/sb_led_status.c \
   src/sb_crc32.c \
   src/sb_storage_fs.c \
   src/sb_extnor.c \
   src/sb_audio_types.c \
   src/sb_amount_tokenizer.c \
   src/sb_audio_asset.c \
+  src/sb_audio_asset_store.c \
+  src/sb_audio_prompt_logic.c \
   src/sb_audio_script.c \
   src/sb_audio_codec_es8311.c \
   src/sb_audio_hal.c \
@@ -78,7 +81,7 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=9 \
+  -DSB_PHASE_NUMBER=10 \
   -DSB_BUILD_TARGET_EG800AK=1 \
 
 #-------------------------------------------------------------------------------

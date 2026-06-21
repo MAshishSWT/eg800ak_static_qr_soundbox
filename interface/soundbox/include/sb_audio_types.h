@@ -69,6 +69,7 @@ typedef struct {
 } sb_audio_script_t;
 
 const char *sb_audio_language_code(sb_audio_language_t language);
+const char *sb_audio_language_asset_code(sb_audio_language_t language);
 const char *sb_audio_provider_name(sb_audio_provider_t provider);
 const char *sb_audio_prompt_name(sb_audio_prompt_id_t prompt);
 sb_audio_language_t sb_audio_language_from_code(const char *code);

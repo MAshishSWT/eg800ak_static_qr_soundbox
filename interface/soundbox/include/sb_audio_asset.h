@@ -17,6 +17,9 @@ extern "C" {
 
 void sb_audio_script_init(sb_audio_script_t *script);
 sb_status_t sb_audio_script_append_path(sb_audio_script_t *script, const char *path);
+sb_status_t sb_audio_asset_build_common_path(const char *file, char *path, u32 path_len);
+sb_status_t sb_audio_asset_build_alert_path(sb_audio_language_t language, const char *file, char *path, u32 path_len);
+sb_status_t sb_audio_asset_build_audio_file_path(sb_audio_language_t language, const char *file, char *path, u32 path_len);
 sb_status_t sb_audio_asset_build_prompt_path(sb_audio_language_t language,
                                              sb_audio_prompt_id_t prompt,
                                              char *path,

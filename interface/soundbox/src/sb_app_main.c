@@ -5,6 +5,7 @@
 #include "ql_application.h"
 #include "ql_rtos.h"
 #include "sb_app.h"
+#include "sb_audio_asset_store.h"
 #include "sb_audio_service.h"
 #include "sb_audio_types.h"
 #include "sb_bsp_kae8_sq1.h"
@@ -16,6 +17,7 @@
 #include "sb_http_service.h"
 #include "sb_factory_diag.h"
 #include "sb_log.h"
+#include "sb_led_status.h"
 #include "sb_mqtt_service.h"
 #include "sb_mode_service.h"
 #include "sb_network_service.h"
@@ -73,6 +75,12 @@ static void sb_app_entry(void *argv)
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "factory diag init status=%s", sb_status_to_string(status));
     }
+
+    status = sb_led_status_init();
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "led status init status=%s", sb_status_to_string(status));
+    }
+
     audio_language = sb_audio_language_from_code(config.language);
     audio_volume = config.volume_percent;
 
@@ -85,6 +93,12 @@ static void sb_app_entry(void *argv)
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "external nor init status=%s", sb_status_to_string(status));
     }
+
+    status = sb_audio_asset_store_init();
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "audio asset store init status=%s", sb_status_to_string(status));
+    }
+    (void)sb_audio_service_play_common("start_tune.mp3");
 
     status = sb_network_service_init(&config);
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {

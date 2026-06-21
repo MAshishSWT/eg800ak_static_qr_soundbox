@@ -4,12 +4,15 @@
  *================================================================*/
 #include "ql_rtos.h"
 #include "sb_audio_asset.h"
+#include "sb_audio_asset_store.h"
 #include "sb_audio_hal.h"
+#include "sb_audio_prompt_logic.h"
 #include "sb_audio_script.h"
 #include "sb_audio_service.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_log.h"
+#include "sb_cloud_utils.h"
 
 #define SB_AUDIO_SERVICE_MODULE_NAME       "audio"
 #define SB_AUDIO_SCRIPT_ITEM_TIMEOUT_MS    (12000u)
@@ -17,7 +20,12 @@
 typedef enum {
     SB_AUDIO_REQ_PROMPT = 0,
     SB_AUDIO_REQ_AMOUNT,
-    SB_AUDIO_REQ_VOLUME
+    SB_AUDIO_REQ_VOLUME,
+    SB_AUDIO_REQ_COMMON,
+    SB_AUDIO_REQ_ALERT,
+    SB_AUDIO_REQ_HEALTH,
+    SB_AUDIO_REQ_LAST_TRANSACTION,
+    SB_AUDIO_REQ_DAILY_SUMMARY
 } sb_audio_request_type_t;
 
 typedef struct {
@@ -27,7 +35,13 @@ typedef struct {
     sb_audio_prompt_id_t prompt;
     u64 amount_paise;
     u32 volume_percent;
+    int health_battery;
+    char common_file[32];
+    sb_transaction_record_t record;
+    sb_daily_summary_t summary;
 } sb_audio_request_t;
+
+static void sb_audio_request_clear(sb_audio_request_t *request);
 
 static ql_task_t s_audio_task = 0;
 static ql_queue_t s_audio_queue = 0;
@@ -92,12 +106,20 @@ static sb_status_t sb_audio_play_script(const sb_audio_script_t *script)
     sb_audio_post_event(SB_EVENT_AUDIO_PLAY_STARTED, SB_STATUS_OK, script->items[0].path);
 
     for (i = 0u; i < script->count; i++) {
-        status = sb_audio_hal_play_mp3_file(script->items[i].path, SB_AUDIO_SCRIPT_ITEM_TIMEOUT_MS);
+        char play_path[SB_AUDIO_PATH_LEN];
+        status = sb_audio_asset_store_prepare_play_path(script->items[i].path, play_path, (u32)sizeof(play_path));
+        if (status != SB_STATUS_OK) {
+            SB_LOGW(SB_AUDIO_SERVICE_MODULE_NAME, "prepare play path status=%s logical=%s",
+                    sb_status_to_string(status), script->items[i].path);
+            sb_audio_post_event(SB_EVENT_AUDIO_FAULT, status, script->items[i].path);
+            return status;
+        }
+        status = sb_audio_hal_play_mp3_file(play_path, SB_AUDIO_SCRIPT_ITEM_TIMEOUT_MS);
         if (status != SB_STATUS_OK) {
             SB_LOGW(SB_AUDIO_SERVICE_MODULE_NAME,
                     "play status=%s path=%s",
                     sb_status_to_string(status),
-                    script->items[i].path);
+                    play_path);
             sb_audio_post_event(SB_EVENT_AUDIO_FAULT, status, script->items[i].path);
             return status;
         }
@@ -135,6 +157,19 @@ static void sb_audio_service_handle_request(const sb_audio_request_t *request)
                                                        request->provider,
                                                        request->amount_paise,
                                                        &script);
+    } else if (request->type == SB_AUDIO_REQ_COMMON) {
+        status = sb_audio_prompt_logic_build_common(request->common_file, &script);
+    } else if (request->type == SB_AUDIO_REQ_ALERT) {
+        status = sb_audio_prompt_logic_build_alert(request->language, request->common_file, &script);
+    } else if (request->type == SB_AUDIO_REQ_HEALTH) {
+        status = sb_audio_prompt_logic_build_health(request->language,
+                                                    (request->health_battery != 0) ? SB_AUDIO_HEALTH_BATTERY : SB_AUDIO_HEALTH_INTERNET,
+                                                    request->volume_percent,
+                                                    &script);
+    } else if (request->type == SB_AUDIO_REQ_LAST_TRANSACTION) {
+        status = sb_audio_prompt_logic_build_last_transaction(request->language, &request->record, &script);
+    } else if (request->type == SB_AUDIO_REQ_DAILY_SUMMARY) {
+        status = sb_audio_prompt_logic_build_daily_summary(request->language, &request->summary, &script);
     } else {
         status = SB_STATUS_INVALID_PARAM;
     }
@@ -238,6 +273,7 @@ sb_status_t sb_audio_service_play_prompt(sb_audio_language_t language, sb_audio_
         return SB_STATUS_INVALID_PARAM;
     }
 
+    sb_audio_request_clear(&request);
     request.type = SB_AUDIO_REQ_PROMPT;
     request.language = language;
     request.provider = SB_AUDIO_PROVIDER_OTHER;
@@ -257,6 +293,7 @@ sb_status_t sb_audio_service_play_amount(sb_audio_language_t language,
         provider = SB_AUDIO_PROVIDER_OTHER;
     }
 
+    sb_audio_request_clear(&request);
     request.type = SB_AUDIO_REQ_AMOUNT;
     request.language = language;
     request.provider = provider;
@@ -274,11 +311,98 @@ sb_status_t sb_audio_service_set_volume(u32 volume_percent)
         volume_percent = 100u;
     }
 
+    sb_audio_request_clear(&request);
     request.type = SB_AUDIO_REQ_VOLUME;
     request.language = s_default_language;
     request.provider = SB_AUDIO_PROVIDER_OTHER;
     request.prompt = SB_AUDIO_PROMPT_READY;
     request.amount_paise = 0ull;
     request.volume_percent = volume_percent;
+    return sb_audio_service_enqueue(&request);
+}
+
+static void sb_audio_request_clear(sb_audio_request_t *request)
+{
+    u32 i;
+    unsigned char *ptr;
+
+    if (request == 0) {
+        return;
+    }
+    ptr = (unsigned char *)request;
+    for (i = 0u; i < (u32)sizeof(*request); i++) {
+        ptr[i] = 0u;
+    }
+}
+
+sb_status_t sb_audio_service_play_common(const char *common_file)
+{
+    sb_audio_request_t request;
+
+    if ((common_file == 0) || (common_file[0] == '\0')) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    sb_audio_request_clear(&request);
+    request.type = SB_AUDIO_REQ_COMMON;
+    request.language = s_default_language;
+    sb_cloud_copy_string(request.common_file, (u32)sizeof(request.common_file), common_file);
+    return sb_audio_service_enqueue(&request);
+}
+
+
+sb_status_t sb_audio_service_play_alert(sb_audio_language_t language, const char *alert_file)
+{
+    sb_audio_request_t request;
+
+    if ((alert_file == 0) || (alert_file[0] == '\0')) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    sb_audio_request_clear(&request);
+    request.type = SB_AUDIO_REQ_ALERT;
+    request.language = language;
+    sb_cloud_copy_string(request.common_file, (u32)sizeof(request.common_file), alert_file);
+    return sb_audio_service_enqueue(&request);
+}
+
+sb_status_t sb_audio_service_play_health(sb_audio_language_t language, int battery, u32 percent)
+{
+    sb_audio_request_t request;
+
+    if (percent > 100u) {
+        percent = 100u;
+    }
+    sb_audio_request_clear(&request);
+    request.type = SB_AUDIO_REQ_HEALTH;
+    request.language = language;
+    request.health_battery = (battery != 0) ? 1 : 0;
+    request.volume_percent = percent;
+    return sb_audio_service_enqueue(&request);
+}
+
+sb_status_t sb_audio_service_play_last_transaction(sb_audio_language_t language, const sb_transaction_record_t *record)
+{
+    sb_audio_request_t request;
+
+    if (record == 0) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    sb_audio_request_clear(&request);
+    request.type = SB_AUDIO_REQ_LAST_TRANSACTION;
+    request.language = language;
+    request.record = *record;
+    return sb_audio_service_enqueue(&request);
+}
+
+sb_status_t sb_audio_service_play_daily_summary(sb_audio_language_t language, const sb_daily_summary_t *summary)
+{
+    sb_audio_request_t request;
+
+    if (summary == 0) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    sb_audio_request_clear(&request);
+    request.type = SB_AUDIO_REQ_DAILY_SUMMARY;
+    request.language = language;
+    request.summary = *summary;
     return sb_audio_service_enqueue(&request);
 }

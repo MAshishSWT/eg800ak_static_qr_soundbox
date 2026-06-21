@@ -13,15 +13,17 @@ extern "C" {
 #endif
 
 #define SB_AMOUNT_MAX_TOKENS       (48u)
-#define SB_AMOUNT_MAX_RUPEES       (9999999ull)
+#define SB_AMOUNT_MAX_RUPEES       (999999999ull)
 
 typedef enum {
     SB_AMOUNT_TOKEN_NUMBER = 0,
     SB_AMOUNT_TOKEN_HUNDRED,
     SB_AMOUNT_TOKEN_THOUSAND,
     SB_AMOUNT_TOKEN_LAKH,
+    SB_AMOUNT_TOKEN_CRORE,
     SB_AMOUNT_TOKEN_RUPEES,
     SB_AMOUNT_TOKEN_PAISE,
+    SB_AMOUNT_TOKEN_AND,
     SB_AMOUNT_TOKEN_ONLY
 } sb_amount_token_kind_t;
 

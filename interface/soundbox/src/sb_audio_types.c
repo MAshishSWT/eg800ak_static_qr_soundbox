@@ -12,6 +12,10 @@ static const char *const s_provider_names[SB_AUDIO_PROVIDER_COUNT] = {
     "other", "paytm", "phonepe", "gpay", "bhim"
 };
 
+static const char *const s_language_asset_codes[SB_AUDIO_LANG_COUNT] = {
+    "en", "hi", "ma", "gu", "bn", "kn", "ml", "ta", "tl", "pa"
+};
+
 static int sb_audio_code_equals(const char *a, const char *b)
 {
     u32 i;
@@ -53,6 +57,14 @@ const char *sb_audio_language_code(sb_audio_language_t language)
     return s_language_codes[language];
 }
 
+const char *sb_audio_language_asset_code(sb_audio_language_t language)
+{
+    if ((language < 0) || (language >= SB_AUDIO_LANG_COUNT)) {
+        return s_language_asset_codes[SB_AUDIO_LANG_EN];
+    }
+    return s_language_asset_codes[language];
+}
+
 const char *sb_audio_provider_name(sb_audio_provider_t provider)
 {
     if ((provider < 0) || (provider >= SB_AUDIO_PROVIDER_COUNT)) {
@@ -78,7 +90,8 @@ sb_audio_language_t sb_audio_language_from_code(const char *code)
     }
 
     for (i = 0; i < (int)SB_AUDIO_LANG_COUNT; i++) {
-        if (sb_audio_code_equals(code, s_language_codes[i]) != 0) {
+        if ((sb_audio_code_equals(code, s_language_codes[i]) != 0) ||
+            (sb_audio_code_equals(code, s_language_asset_codes[i]) != 0)) {
             return (sb_audio_language_t)i;
         }
     }

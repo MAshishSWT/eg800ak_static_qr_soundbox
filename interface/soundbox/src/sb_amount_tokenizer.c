@@ -89,6 +89,7 @@ static sb_status_t sb_amount_append_under_1000(sb_amount_token_list_t *list, u32
 static sb_status_t sb_amount_append_rupees(sb_amount_token_list_t *list, u64 rupees)
 {
     sb_status_t status;
+    u32 crore;
     u32 lakh;
     u32 thousand;
     u32 remainder;
@@ -101,10 +102,23 @@ static sb_status_t sb_amount_append_rupees(sb_amount_token_list_t *list, u64 rup
         return SB_STATUS_UNSUPPORTED;
     }
 
-    lakh = (u32)(rupees / 100000ull);
-    remainder = (u32)(rupees % 100000ull);
+    crore = (u32)(rupees / 10000000ull);
+    remainder = (u32)(rupees % 10000000ull);
+    lakh = remainder / 100000u;
+    remainder = remainder % 100000u;
     thousand = remainder / 1000u;
     remainder = remainder % 1000u;
+
+    if (crore != 0u) {
+        status = sb_amount_append_under_100(list, crore);
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        status = sb_amount_append(list, SB_AMOUNT_TOKEN_CRORE, 0u);
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+    }
 
     if (lakh != 0u) {
         status = sb_amount_append_under_100(list, lakh);
@@ -203,10 +217,14 @@ const char *sb_amount_token_kind_name(sb_amount_token_kind_t kind)
         return "thousand";
     case SB_AMOUNT_TOKEN_LAKH:
         return "lakh";
+    case SB_AMOUNT_TOKEN_CRORE:
+        return "crore";
     case SB_AMOUNT_TOKEN_RUPEES:
         return "rupees";
     case SB_AMOUNT_TOKEN_PAISE:
         return "paise";
+    case SB_AMOUNT_TOKEN_AND:
+        return "and";
     case SB_AMOUNT_TOKEN_ONLY:
         return "only";
     default:

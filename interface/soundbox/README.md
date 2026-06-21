@@ -42,3 +42,9 @@ For manufacturing-only images, define:
 ```
 
 Do not enable that macro in production firmware.
+
+## Phase 10 - Audio asset business logic
+
+Phase 10 adds logical audio asset paths, language aliasing for the supplied asset pack, transaction/summary/health prompt grammar, external-NOR-aware single-asset staging, and one-LED semantic status patterns for KAE8 USER_LED_1.
+
+The app version is `1.0.0-phase10-audio-assets-business-logic` and `SB_PHASE_NUMBER=10`.
