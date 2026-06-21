@@ -150,3 +150,22 @@ Copy the package over the EG800AK `ql-application/threadx` tree and build with t
 - Serial factory access is intentionally disabled in production unless a manufacturing build macro is set.
 - SMS payloads are expected to be short JSON commands fitting the Quectel text SMS buffer.
 - External NOR remains a separate hardware/SPI issue and is not used by Phase 9.
+
+## Review security fixes
+
+The review-fixed Phase 9 package adds two protections for SMS recovery:
+
+1. SMS commands are accepted only from the authorized sender number stored in secure data index 3.
+2. SMS provisioning commands remain blocked in production builds unless the explicit lab-only macro is enabled:
+
+```text
+-DSB_ENABLE_INSECURE_SMS_RECOVERY_PROVISIONING=1
+```
+
+Do not enable this macro in production firmware. Production recovery should use factory serial provisioning, or a future HMAC-signed SMS recovery command profile.
+
+Provision the authorized SMS sender number from factory serial:
+
+```json
+{"cmd":"set_sms_auth","phone":"+919999999999"}
+```

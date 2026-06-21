@@ -86,6 +86,69 @@ static sb_status_t sb_factory_hex_to_bytes(const char *hex, u8 *out, u32 out_len
     return SB_STATUS_OK;
 }
 
+
+static int sb_factory_text_all_zero(const char *text, u32 len)
+{
+    u32 i;
+
+    if (text == 0) {
+        return 1;
+    }
+    for (i = 0u; i < len; i++) {
+        if ((text[i] != '\0') && (text[i] != (char)0xff)) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+static sb_status_t sb_factory_store_secure_text(u8 index, const char *text, u32 max_len)
+{
+    char buffer[SB_FACTORY_SMS_NUMBER_LEN];
+    u32 i;
+
+    if ((text == 0) || (max_len == 0u) || (max_len > (u32)sizeof(buffer))) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    for (i = 0u; i < (u32)sizeof(buffer); i++) {
+        buffer[i] = '\0';
+    }
+    for (i = 0u; (i < (max_len - 1u)) && (text[i] != '\0'); i++) {
+        buffer[i] = text[i];
+    }
+    if (ql_securedata_store(index, (u8 *)buffer, max_len) < 0) {
+        return SB_STATUS_SECURITY_ERROR;
+    }
+    sb_factory_zero_buffer(buffer, (u32)sizeof(buffer));
+    return SB_STATUS_OK;
+}
+
+int sb_factory_diag_sms_sender_allowed(const char *sender)
+{
+    char allowed[SB_FACTORY_SMS_NUMBER_LEN];
+    u32 i;
+
+    if ((sender == 0) || (sender[0] == '\0')) {
+        return 0;
+    }
+    for (i = 0u; i < (u32)sizeof(allowed); i++) {
+        allowed[i] = '\0';
+    }
+    if (ql_securedata_read(SB_FACTORY_SMS_NUMBER_INDEX, (u8 *)allowed, (u32)sizeof(allowed)) < 0) {
+        return 0;
+    }
+    allowed[SB_FACTORY_SMS_NUMBER_LEN - 1u] = '\0';
+    if (sb_factory_text_all_zero(allowed, (u32)sizeof(allowed)) != 0) {
+        return 0;
+    }
+    if (sb_cloud_text_equal(sender, allowed) != 0) {
+        sb_factory_zero_buffer(allowed, (u32)sizeof(allowed));
+        return 1;
+    }
+    sb_factory_zero_buffer(allowed, (u32)sizeof(allowed));
+    return 0;
+}
+
 static sb_status_t sb_factory_reply_status(char *reply, u32 reply_len, const char *status, const char *detail)
 {
     if ((reply == 0) || (reply_len == 0u) || (status == 0)) {
@@ -192,9 +255,15 @@ static int sb_factory_can_provision(sb_factory_channel_t channel, const sb_confi
     if (sb_mode_factory_access_allowed() != 0) {
         return 1;
     }
+
     if ((channel == SB_FACTORY_CHANNEL_SMS) && (config != 0) && (config->sms_recovery_enabled != 0u)) {
+#ifdef SB_ENABLE_INSECURE_SMS_RECOVERY_PROVISIONING
         return 1;
+#else
+        return 0;
+#endif
     }
+
     return 0;
 }
 
@@ -280,6 +349,31 @@ static sb_status_t sb_factory_store_ota_key(const char *json,
     return sb_factory_reply_status(reply, reply_len, "ok", "ota_key_saved");
 }
 
+
+static sb_status_t sb_factory_store_sms_auth(const char *json,
+                                             sb_factory_channel_t channel,
+                                             char *reply,
+                                             u32 reply_len)
+{
+    char phone[SB_FACTORY_SMS_NUMBER_LEN];
+    sb_status_t status;
+
+    sb_factory_zero_buffer(phone, (u32)sizeof(phone));
+
+    if ((channel != SB_FACTORY_CHANNEL_SERIAL) || (sb_mode_factory_access_allowed() == 0)) {
+        (void)sb_factory_reply_status(reply, reply_len, "rejected", "locked");
+        return SB_STATUS_SECURITY_ERROR;
+    }
+    if (sb_json_get_string(json, "phone", phone, (u32)sizeof(phone)) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "phone");
+    }
+    status = sb_factory_store_secure_text(SB_FACTORY_SMS_NUMBER_INDEX, phone, SB_FACTORY_SMS_NUMBER_LEN);
+    if (status != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "phone_store");
+    }
+    return sb_factory_reply_status(reply, reply_len, "ok", "sms_auth_saved");
+}
+
 static sb_status_t sb_factory_set_mode(const char *json,
                                        sb_factory_channel_t channel,
                                        char *reply,
@@ -343,6 +437,9 @@ sb_status_t sb_factory_diag_dispatch_json(const char *json,
         status = sb_factory_commit_config_from_json(json, channel, reply, reply_len);
     } else if (sb_cloud_text_equal(cmd, "set_ota_key") != 0) {
         status = sb_factory_store_ota_key(json, channel, reply, reply_len);
+    } else if ((sb_cloud_text_equal(cmd, "set_sms_auth") != 0) ||
+               (sb_cloud_text_equal(cmd, "set_sms_recovery_auth") != 0)) {
+        status = sb_factory_store_sms_auth(json, channel, reply, reply_len);
     } else if (sb_cloud_text_equal(cmd, "set_mode") != 0) {
         status = sb_factory_set_mode(json, channel, reply, reply_len);
     } else {

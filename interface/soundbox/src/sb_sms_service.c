@@ -116,6 +116,12 @@ static void sb_sms_task(void *argv)
             continue;
         }
 
+        if (sb_factory_diag_sms_sender_allowed(message.num) == 0) {
+            sb_sms_post_event(SB_EVENT_FACTORY_COMMAND_REJECTED, SB_STATUS_SECURITY_ERROR, item.index, "sms_sender");
+            (void)ql_sms_delete_msg_ex(item.index, QL_SMS_DEL_INDEX);
+            continue;
+        }
+
         sb_sms_post_event(SB_EVENT_SMS_COMMAND, SB_STATUS_OK, item.index, "rx");
         status = sb_factory_diag_dispatch_json(message.buf,
                                                SB_FACTORY_CHANNEL_SMS,

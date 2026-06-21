@@ -231,7 +231,7 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         break;
 
     case SB_EVENT_FACTORY_READY:
-        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "factory ready mode=%s", event->text);
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "factory ready text=%s", event->text);
         break;
 
     case SB_EVENT_FACTORY_COMMAND:

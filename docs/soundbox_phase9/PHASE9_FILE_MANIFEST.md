@@ -16,6 +16,7 @@ docs/soundbox_phase9/PHASE9_TEST_PROCEDURE.md
 docs/soundbox_phase9/PHASE9_ACCEPTANCE_CHECKLIST.md
 docs/soundbox_phase9/PHASE9_FILE_MANIFEST.md
 SOUNDBOX_PHASE9_FILE_MANIFEST.md
+SOUNDBOX_PHASE9_REVIEW_FIXES.md
 ```
 
 ## Modified files

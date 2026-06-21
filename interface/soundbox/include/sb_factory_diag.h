@@ -16,6 +16,8 @@ extern "C" {
 #define SB_FACTORY_COMMAND_LEN     (512u)
 #define SB_FACTORY_KEY_HEX_LEN     (65u)
 #define SB_FACTORY_SECURE_KEY_LEN  (32u)
+#define SB_FACTORY_SMS_NUMBER_INDEX (3u)
+#define SB_FACTORY_SMS_NUMBER_LEN   (32u)
 
 typedef enum {
     SB_FACTORY_CHANNEL_SERIAL = 0,
@@ -24,6 +26,7 @@ typedef enum {
 } sb_factory_channel_t;
 
 sb_status_t sb_factory_diag_init(void);
+int sb_factory_diag_sms_sender_allowed(const char *sender);
 sb_status_t sb_factory_diag_dispatch_json(const char *json,
                                            sb_factory_channel_t channel,
                                            char *reply,
