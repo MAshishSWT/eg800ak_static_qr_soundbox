@@ -5,6 +5,7 @@
 #include "ql_http_client.h"
 #include "ql_rtos.h"
 #include "ql_ssl_hal.h"
+#include "sb_business_service.h"
 #include "sb_cloud_utils.h"
 #include "sb_config.h"
 #include "sb_event.h"
@@ -242,9 +243,15 @@ static int sb_http_response_cb(QL_HTTP_CLIENT_T *client,
 
     if ((event == QL_HTTP_CLIENT_EVENT_SEND_FAIL) ||
         (event == QL_HTTP_CLIENT_EVENT_RECV_HEADER_FAIL) ||
-        (event == QL_HTTP_CLIENT_EVENT_SOCK_RECV_FAIL) ||
-        (event == QL_HTTP_CLIENT_EVENT_DISCONNECTED)) {
+        (event == QL_HTTP_CLIENT_EVENT_SOCK_RECV_FAIL)) {
         ctx->failed = 1;
+        return 0;
+    }
+
+    if (event == QL_HTTP_CLIENT_EVENT_DISCONNECTED) {
+        if (ctx->completed == 0) {
+            ctx->failed = 1;
+        }
         return 0;
     }
 
@@ -264,32 +271,7 @@ static int sb_http_response_cb(QL_HTTP_CLIENT_T *client,
 
 static sb_status_t sb_http_build_health_payload(char *payload, u32 payload_len)
 {
-    sb_network_status_t net_status;
-
-    if ((payload == 0) || (payload_len == 0u)) {
-        return SB_STATUS_INVALID_PARAM;
-    }
-
-    payload[0] = '\0';
-    (void)sb_network_get_status(&net_status);
-
-    if (sb_cloud_append_string(payload, payload_len, "{\"type\":\"health\",\"device_id\":") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_json_string(payload, payload_len, s_http_config.device_id) != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_string(payload, payload_len, ",\"csq\":") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_u32(payload, payload_len, (u32)((net_status.csq < 0) ? 99 : net_status.csq)) != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_string(payload, payload_len, ",\"online\":1}") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-
-    return SB_STATUS_OK;
+    return sb_business_service_build_health_payload(payload, payload_len);
 }
 
 static sb_status_t sb_http_post_json(const char *path, const char *payload, u32 payload_len, sb_event_id_t success_event)

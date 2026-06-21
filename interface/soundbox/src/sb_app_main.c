@@ -8,6 +8,7 @@
 #include "sb_audio_service.h"
 #include "sb_audio_types.h"
 #include "sb_bsp_kae8_sq1.h"
+#include "sb_business_service.h"
 #include "sb_config.h"
 #include "sb_error.h"
 #include "sb_event_bus.h"
@@ -83,6 +84,11 @@ static void sb_app_entry(void *argv)
     status = sb_http_service_init(&config);
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "http service init status=%s", sb_status_to_string(status));
+    }
+
+    status = sb_business_service_init();
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "business service init status=%s", sb_status_to_string(status));
     }
 
     status = sb_supervisor_start();

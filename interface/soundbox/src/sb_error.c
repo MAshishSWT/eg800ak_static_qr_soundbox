@@ -55,6 +55,8 @@ const char *sb_status_to_string(sb_status_t status)
         return "SSL_ERROR";
     case SB_STATUS_CONFIG_ERROR:
         return "CONFIG_ERROR";
+    case SB_STATUS_SECURITY_ERROR:
+        return "SECURITY_ERROR";
     default:
         return "UNKNOWN";
     }

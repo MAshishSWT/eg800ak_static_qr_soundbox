@@ -5,6 +5,7 @@
 #include "MQTTClient.h"
 #include "ql_rtos.h"
 #include "ql_ssl_hal.h"
+#include "sb_business_service.h"
 #include "sb_cloud_utils.h"
 #include "sb_config.h"
 #include "sb_event.h"
@@ -421,38 +422,7 @@ static sb_status_t sb_mqtt_publish_now(const char *topic, const char *payload, u
 
 static sb_status_t sb_mqtt_build_health_payload(char *payload, u32 payload_len)
 {
-    sb_network_status_t net_status;
-
-    if ((payload == 0) || (payload_len == 0u)) {
-        return SB_STATUS_INVALID_PARAM;
-    }
-
-    payload[0] = '\0';
-    (void)sb_network_get_status(&net_status);
-
-    if (sb_cloud_append_string(payload, payload_len, "{\"type\":") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_json_string(payload, payload_len, SB_MQTT_HEALTH_TYPE) != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_string(payload, payload_len, ",\"device_id\":") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_json_string(payload, payload_len, s_mqtt_config.device_id) != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_string(payload, payload_len, ",\"csq\":") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_u32(payload, payload_len, (u32)((net_status.csq < 0) ? 99 : net_status.csq)) != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-    if (sb_cloud_append_string(payload, payload_len, ",\"online\":1}") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-
-    return SB_STATUS_OK;
+    return sb_business_service_build_health_payload(payload, payload_len);
 }
 
 static void sb_mqtt_publish_periodic_health(u32 *elapsed_ms)
@@ -547,6 +517,7 @@ static void sb_mqtt_connected_loop(void)
 static void sb_mqtt_task(void *argv)
 {
     sb_status_t status;
+    int config_fault_reported = 0;
 
     (void)argv;
     SB_LOGI(SB_MQTT_MODULE_NAME, "task started");
@@ -559,10 +530,14 @@ static void sb_mqtt_task(void *argv)
 
         sb_mqtt_status_set(SB_MQTT_STATE_CONFIG_CHECK, 0, 0);
         if (sb_mqtt_configured() == 0) {
-            sb_mqtt_post_event(SB_EVENT_MQTT_FAULT, (s32)SB_STATUS_CONFIG_ERROR, 0u, "not_configured");
+            if (config_fault_reported == 0) {
+                sb_mqtt_post_event(SB_EVENT_MQTT_FAULT, (s32)SB_STATUS_CONFIG_ERROR, 0u, "not_configured");
+                config_fault_reported = 1;
+            }
             ql_rtos_task_sleep_ms(SB_MQTT_RECONNECT_BACKOFF_MS);
             continue;
         }
+        config_fault_reported = 0;
 
         sb_mqtt_status_set(SB_MQTT_STATE_CONNECTING, 0, 0);
         status = sb_mqtt_connect();

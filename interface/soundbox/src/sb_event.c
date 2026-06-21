@@ -134,6 +134,20 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "HTTP_COMMAND_RESPONSE_DONE";
     case SB_EVENT_HTTP_FAULT:
         return "HTTP_FAULT";
+    case SB_EVENT_PAYMENT_ACCEPTED:
+        return "PAYMENT_ACCEPTED";
+    case SB_EVENT_PAYMENT_DUPLICATE:
+        return "PAYMENT_DUPLICATE";
+    case SB_EVENT_PAYMENT_FAULT:
+        return "PAYMENT_FAULT";
+    case SB_EVENT_COMMAND_ACCEPTED:
+        return "COMMAND_ACCEPTED";
+    case SB_EVENT_COMMAND_REJECTED:
+        return "COMMAND_REJECTED";
+    case SB_EVENT_KEY_ACTION:
+        return "KEY_ACTION";
+    case SB_EVENT_DAILY_SUMMARY_READY:
+        return "DAILY_SUMMARY_READY";
     case SB_EVENT_FACTORY_COMMAND:
         return "FACTORY_COMMAND";
     default:

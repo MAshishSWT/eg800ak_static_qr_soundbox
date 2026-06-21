@@ -4,6 +4,7 @@
  *================================================================*/
 #include "ql_rtos.h"
 #include "sb_bsp_kae8_sq1.h"
+#include "sb_business_service.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_log.h"
@@ -68,6 +69,7 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_KEY_EDGE:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "key=%u pressed=%d", event->param_u32, event->param_s32);
+        (void)sb_business_service_handle_key_edge(event->param_u32, event->param_s32, event->timestamp_ticks);
         break;
 
     case SB_EVENT_AUDIO_READY:
@@ -182,6 +184,34 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_HTTP_FAULT:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "http fault status=%d text=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_PAYMENT_ACCEPTED:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "payment accepted amount_paise=%u", event->param_u32);
+        break;
+
+    case SB_EVENT_PAYMENT_DUPLICATE:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "payment duplicate text=%s", event->text);
+        break;
+
+    case SB_EVENT_PAYMENT_FAULT:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "payment fault status=%d text=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_COMMAND_ACCEPTED:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "command accepted %s", event->text);
+        break;
+
+    case SB_EVENT_COMMAND_REJECTED:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "command rejected status=%d text=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_KEY_ACTION:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "key action=%s value=%u status=%d", event->text, event->param_u32, event->param_s32);
+        break;
+
+    case SB_EVENT_DAILY_SUMMARY_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "daily summary count=%u status=%d", event->param_u32, event->param_s32);
         break;
 
     case SB_EVENT_SUPERVISOR_FAULT:

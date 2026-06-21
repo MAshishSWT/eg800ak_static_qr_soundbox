@@ -38,6 +38,11 @@ SRC_FILES+= \
   src/sb_cloud_utils.c \
   src/sb_mqtt_service.c \
   src/sb_http_service.c \
+  src/sb_json.c \
+  src/sb_transaction_ledger.c \
+  src/sb_payment_processor.c \
+  src/sb_command_dispatcher.c \
+  src/sb_business_service.c \
 
 #-------------------------------------------------------------------------------
 # the include directories
@@ -66,7 +71,7 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=6 \
+  -DSB_PHASE_NUMBER=7 \
   -DSB_BUILD_TARGET_EG800AK=1 \
 
 #-------------------------------------------------------------------------------
