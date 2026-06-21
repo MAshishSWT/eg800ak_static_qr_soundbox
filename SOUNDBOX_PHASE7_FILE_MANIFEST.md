@@ -25,3 +25,4 @@
 | `docs/soundbox_phase7/PHASE7_README.md` | Phase README |
 | `docs/soundbox_phase7/PHASE7_TEST_PROCEDURE.md` | Test procedure |
 | `docs/soundbox_phase7/PHASE7_ACCEPTANCE_CHECKLIST.md` | Acceptance checklist |
+| `SOUNDBOX_PHASE7_REVIEW_FIXES.md` | Review fix summary |

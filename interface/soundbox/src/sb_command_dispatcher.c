@@ -165,6 +165,10 @@ static sb_status_t sb_command_execute(const sb_command_t *cmd)
         return SB_STATUS_OK;
     }
 
+#ifndef SB_ENABLE_INSECURE_CRC32_COMMAND_AUTH
+    return SB_STATUS_SECURITY_ERROR;
+#endif
+
     if (sb_command_signature_valid(cmd) == 0) {
         return SB_STATUS_SECURITY_ERROR;
     }

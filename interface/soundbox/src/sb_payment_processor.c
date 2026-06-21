@@ -70,6 +70,21 @@ static sb_status_t sb_payment_build_ack(char *payload, u32 payload_len, const ch
     return sb_cloud_append_string(payload, payload_len, "}");
 }
 
+static void sb_payment_zero_record(sb_transaction_record_t *record)
+{
+    u32 i;
+    unsigned char *ptr;
+
+    if (record == 0) {
+        return;
+    }
+
+    ptr = (unsigned char *)record;
+    for (i = 0u; i < (u32)sizeof(*record); i++) {
+        ptr[i] = 0u;
+    }
+}
+
 static void sb_payment_publish_ack(const char *tx_id, const char *status)
 {
     char payload[SB_PAYMENT_ACK_PAYLOAD_LEN];
@@ -92,6 +107,8 @@ static sb_status_t sb_payment_record_from_message(const sb_mqtt_inbound_message_
     if ((message == 0) || (record == 0)) {
         return SB_STATUS_INVALID_PARAM;
     }
+
+    sb_payment_zero_record(record);
 
     status = sb_json_get_string(message->payload, "tx_id", record->tx_id, SB_LEDGER_TX_ID_LEN);
     if (status != SB_STATUS_OK) {

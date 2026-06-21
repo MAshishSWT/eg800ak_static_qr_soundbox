@@ -258,6 +258,17 @@ static sb_status_t sb_business_reset_daily_by_rtc(void)
     return sb_transaction_ledger_reset_daily_if_needed(date);
 }
 
+static sb_status_t sb_business_append_checked(sb_status_t status)
+{
+    if (status == SB_STATUS_OK) {
+        return SB_STATUS_OK;
+    }
+    if (status == SB_STATUS_NO_MEMORY) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    return SB_STATUS_ERROR;
+}
+
 sb_status_t sb_business_service_build_health_payload(char *payload, u32 payload_len)
 {
     sb_network_status_t net;
@@ -270,34 +281,66 @@ sb_status_t sb_business_service_build_health_payload(char *payload, u32 payload_
     }
 
     payload[0] = '\0';
-    (void)sb_cloud_append_string(payload, payload_len, "{\"type\":\"health\",\"device_id\":");
-    (void)sb_cloud_append_json_string(payload, payload_len, s_business_config.device_id);
 
-    if (sb_network_get_status(&net) == SB_STATUS_OK) {
-        (void)sb_cloud_append_string(payload, payload_len, ",\"online\":");
-        (void)sb_cloud_append_u32(payload, payload_len, (u32)((net.online != 0) ? 1u : 0u));
-        (void)sb_cloud_append_string(payload, payload_len, ",\"csq\":");
-        (void)sb_cloud_append_u32(payload, payload_len, (net.csq < 0) ? 0u : (u32)net.csq);
+    status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, "{\"type\":\"health\",\"device_id\":"));
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+    status = sb_business_append_checked(sb_cloud_append_json_string(payload, payload_len, s_business_config.device_id));
+    if (status != SB_STATUS_OK) {
+        return status;
     }
 
-    status = sb_transaction_ledger_get_daily(&summary);
-    if (status == SB_STATUS_OK) {
-        (void)sb_cloud_append_string(payload, payload_len, ",\"daily_count\":");
-        (void)sb_cloud_append_u32(payload, payload_len, summary.count);
-        (void)sb_cloud_append_string(payload, payload_len, ",\"daily_total_paise\":");
-        (void)sb_cloud_append_u32(payload, payload_len, (u32)summary.total_paise);
+    if (sb_network_get_status(&net) == SB_STATUS_OK) {
+        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"online\":"));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, (u32)((net.online != 0) ? 1u : 0u)));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"csq\":"));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, (net.csq < 0) ? 0u : (u32)net.csq));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+    }
+
+    if (sb_transaction_ledger_get_daily(&summary) == SB_STATUS_OK) {
+        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"daily_count\":"));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, summary.count));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"daily_total_paise\":"));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, (u32)summary.total_paise));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
     }
 
     if (sb_bsp_board_read_battery(&battery) == SB_STATUS_OK) {
-        (void)sb_cloud_append_string(payload, payload_len, ",\"battery_percent\":");
-        (void)sb_cloud_append_u32(payload, payload_len, battery.battery_percent);
+        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"battery_percent\":"));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, battery.battery_percent));
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
     }
 
-    if (sb_cloud_append_string(payload, payload_len, "}") != SB_STATUS_OK) {
-        return SB_STATUS_NO_MEMORY;
-    }
-
-    return SB_STATUS_OK;
+    return sb_business_append_checked(sb_cloud_append_string(payload, payload_len, "}"));
 }
 
 static void sb_business_process_mqtt_message(const sb_mqtt_inbound_message_t *message)
