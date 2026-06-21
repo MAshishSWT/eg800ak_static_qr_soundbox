@@ -34,7 +34,9 @@ typedef enum {
     SB_STATUS_HTTP_ERROR = -21,
     SB_STATUS_SSL_ERROR = -22,
     SB_STATUS_CONFIG_ERROR = -23,
-    SB_STATUS_SECURITY_ERROR = -24
+    SB_STATUS_SECURITY_ERROR = -24,
+    SB_STATUS_OTA_ERROR = -25,
+    SB_STATUS_HASH_ERROR = -26
 } sb_status_t;
 
 const char *sb_status_to_string(sb_status_t status);

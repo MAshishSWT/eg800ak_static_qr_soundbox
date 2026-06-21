@@ -148,6 +148,14 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "KEY_ACTION";
     case SB_EVENT_DAILY_SUMMARY_READY:
         return "DAILY_SUMMARY_READY";
+    case SB_EVENT_OTA_STARTED:
+        return "OTA_STARTED";
+    case SB_EVENT_OTA_PROGRESS:
+        return "OTA_PROGRESS";
+    case SB_EVENT_OTA_STAGED:
+        return "OTA_STAGED";
+    case SB_EVENT_OTA_FAILED:
+        return "OTA_FAILED";
     case SB_EVENT_FACTORY_COMMAND:
         return "FACTORY_COMMAND";
     default:

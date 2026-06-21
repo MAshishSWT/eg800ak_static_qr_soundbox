@@ -57,6 +57,10 @@ const char *sb_status_to_string(sb_status_t status)
         return "CONFIG_ERROR";
     case SB_STATUS_SECURITY_ERROR:
         return "SECURITY_ERROR";
+    case SB_STATUS_OTA_ERROR:
+        return "OTA_ERROR";
+    case SB_STATUS_HASH_ERROR:
+        return "HASH_ERROR";
     default:
         return "UNKNOWN";
     }

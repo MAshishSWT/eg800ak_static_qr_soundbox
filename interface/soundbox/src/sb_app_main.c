@@ -17,6 +17,7 @@
 #include "sb_log.h"
 #include "sb_mqtt_service.h"
 #include "sb_network_service.h"
+#include "sb_ota_service.h"
 #include "sb_supervisor.h"
 
 #define SB_APP_MODULE_NAME "app"
@@ -84,6 +85,11 @@ static void sb_app_entry(void *argv)
     status = sb_http_service_init(&config);
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "http service init status=%s", sb_status_to_string(status));
+    }
+
+    status = sb_ota_service_init(&config);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "ota service init status=%s", sb_status_to_string(status));
     }
 
     status = sb_business_service_init();

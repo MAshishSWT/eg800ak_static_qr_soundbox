@@ -14,6 +14,7 @@
 #include "sb_http_service.h"
 #include "sb_json.h"
 #include "sb_log.h"
+#include "sb_ota_service.h"
 #include "sb_transaction_ledger.h"
 
 #define SB_COMMAND_MODULE_NAME       "command"
@@ -217,6 +218,20 @@ sb_status_t sb_command_dispatcher_handle_message(const sb_mqtt_inbound_message_t
     status = sb_command_parse(message, &cmd);
     if (status != SB_STATUS_OK) {
         sb_command_post_event(SB_EVENT_COMMAND_REJECTED, (s32)status, "parse");
+        return status;
+    }
+
+    if ((sb_cloud_text_equal(cmd.command, "ota_firmware") != 0) ||
+        (sb_cloud_text_equal(cmd.command, "ota_audio_pack") != 0) ||
+        (sb_cloud_text_equal(cmd.command, "ota_manifest") != 0)) {
+        status = sb_ota_service_start_from_manifest_json(message->payload);
+        if (status == SB_STATUS_OK) {
+            sb_command_send_response(&cmd, "accepted");
+            sb_command_post_event(SB_EVENT_COMMAND_ACCEPTED, SB_STATUS_OK, cmd.command);
+        } else {
+            sb_command_send_response(&cmd, "rejected");
+            sb_command_post_event(SB_EVENT_COMMAND_REJECTED, (s32)status, cmd.command);
+        }
         return status;
     }
 
