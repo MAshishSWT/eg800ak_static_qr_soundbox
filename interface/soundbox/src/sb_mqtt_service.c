@@ -31,6 +31,10 @@ static ql_task_t s_mqtt_task = 0;
 static ql_mutex_t s_mqtt_mutex = 0;
 static ql_queue_t s_mqtt_rx_queue = 0;
 static ql_queue_t s_mqtt_tx_queue = 0;
+static sb_mqtt_inbound_message_t s_mqtt_rx_pool[SB_MQTT_INBOUND_QUEUE_DEPTH];
+static u8 s_mqtt_rx_pool_used[SB_MQTT_INBOUND_QUEUE_DEPTH];
+static sb_mqtt_outbound_message_t s_mqtt_tx_pool[SB_MQTT_OUTBOUND_QUEUE_DEPTH];
+static u8 s_mqtt_tx_pool_used[SB_MQTT_OUTBOUND_QUEUE_DEPTH];
 static int s_mqtt_started = 0;
 static sb_config_payload_t s_mqtt_config;
 static char s_command_topic[SB_MQTT_COMMAND_TOPIC_LEN];
@@ -124,6 +128,51 @@ static void sb_mqtt_post_event(sb_event_id_t id, s32 status, u32 value, const ch
     (void)sb_event_post(&event, QL_NO_WAIT);
 }
 
+static int sb_mqtt_pool_alloc(u8 *used, u32 depth, u32 *slot)
+{
+    u32 i;
+
+    if ((used == 0) || (slot == 0)) {
+        return 0;
+    }
+
+    if (s_mqtt_mutex != 0) {
+        (void)ql_rtos_mutex_lock(s_mqtt_mutex, QL_WAIT_FOREVER);
+    }
+
+    for (i = 0u; i < depth; i++) {
+        if (used[i] == 0u) {
+            used[i] = 1u;
+            *slot = i;
+            if (s_mqtt_mutex != 0) {
+                (void)ql_rtos_mutex_unlock(s_mqtt_mutex);
+            }
+            return 1;
+        }
+    }
+
+    if (s_mqtt_mutex != 0) {
+        (void)ql_rtos_mutex_unlock(s_mqtt_mutex);
+    }
+
+    return 0;
+}
+
+static void sb_mqtt_pool_free(u8 *used, u32 depth, u32 slot)
+{
+    if ((used == 0) || (slot >= depth)) {
+        return;
+    }
+
+    if (s_mqtt_mutex != 0) {
+        (void)ql_rtos_mutex_lock(s_mqtt_mutex, QL_WAIT_FOREVER);
+    }
+    used[slot] = 0u;
+    if (s_mqtt_mutex != 0) {
+        (void)ql_rtos_mutex_unlock(s_mqtt_mutex);
+    }
+}
+
 static void sb_mqtt_build_command_topic(void)
 {
     s_command_topic[0] = '\0';
@@ -203,6 +252,7 @@ static void sb_mqtt_message_arrived(MessageData *data)
     sb_mqtt_inbound_message_t msg;
     u32 i;
     u32 payload_len;
+    u32 slot = 0u;
     const char *payload;
 
     if ((data == 0) || (data->message == 0) || (data->topicName == 0)) {
@@ -228,7 +278,14 @@ static void sb_mqtt_message_arrived(MessageData *data)
     msg.payload_len = payload_len;
 
     if (s_mqtt_rx_queue != 0) {
-        (void)ql_rtos_queue_release(s_mqtt_rx_queue, (u32)sizeof(msg), (u8 *)&msg, QL_NO_WAIT);
+        if (sb_mqtt_pool_alloc(s_mqtt_rx_pool_used, SB_MQTT_INBOUND_QUEUE_DEPTH, &slot) != 0) {
+            s_mqtt_rx_pool[slot] = msg;
+            if (ql_rtos_queue_release(s_mqtt_rx_queue, (u32)sizeof(slot), (u8 *)&slot, QL_NO_WAIT) != 0) {
+                sb_mqtt_pool_free(s_mqtt_rx_pool_used, SB_MQTT_INBOUND_QUEUE_DEPTH, slot);
+            }
+        } else {
+            sb_mqtt_post_event(SB_EVENT_MQTT_FAULT, (s32)SB_STATUS_QUEUE_ERROR, 0u, "rx_pool_full");
+        }
     }
 
     sb_mqtt_status_count_rx();
@@ -428,16 +485,22 @@ static sb_status_t sb_mqtt_drain_publish_queue(void)
     sb_mqtt_outbound_message_t msg;
     QlOSStatus ret;
     sb_status_t status = SB_STATUS_OK;
+    u32 slot = 0u;
 
     if (s_mqtt_tx_queue == 0) {
         return SB_STATUS_NOT_READY;
     }
 
     while (1) {
-        ret = ql_rtos_queue_wait(s_mqtt_tx_queue, (u8 *)&msg, (u32)sizeof(msg), QL_NO_WAIT);
+        ret = ql_rtos_queue_wait(s_mqtt_tx_queue, (u8 *)&slot, (u32)sizeof(slot), QL_NO_WAIT);
         if (ret != 0) {
             break;
         }
+        if (slot >= SB_MQTT_OUTBOUND_QUEUE_DEPTH) {
+            continue;
+        }
+        msg = s_mqtt_tx_pool[slot];
+        sb_mqtt_pool_free(s_mqtt_tx_pool_used, SB_MQTT_OUTBOUND_QUEUE_DEPTH, slot);
         status = sb_mqtt_publish_now(msg.topic, msg.payload, msg.payload_len, msg.qos, msg.retained);
         if (status != SB_STATUS_OK) {
             sb_mqtt_post_event(SB_EVENT_MQTT_FAULT, (s32)status, 0u, "publish");
@@ -537,12 +600,12 @@ sb_status_t sb_mqtt_service_init(const sb_config_payload_t *config)
         return SB_STATUS_NO_MEMORY;
     }
 
-    ret = ql_rtos_queue_create(&s_mqtt_rx_queue, (u32)sizeof(sb_mqtt_inbound_message_t), SB_MQTT_INBOUND_QUEUE_DEPTH);
+    ret = ql_rtos_queue_create(&s_mqtt_rx_queue, (u32)sizeof(u32), SB_MQTT_INBOUND_QUEUE_DEPTH);
     if (ret != 0) {
         return SB_STATUS_QUEUE_ERROR;
     }
 
-    ret = ql_rtos_queue_create(&s_mqtt_tx_queue, (u32)sizeof(sb_mqtt_outbound_message_t), SB_MQTT_OUTBOUND_QUEUE_DEPTH);
+    ret = ql_rtos_queue_create(&s_mqtt_tx_queue, (u32)sizeof(u32), SB_MQTT_OUTBOUND_QUEUE_DEPTH);
     if (ret != 0) {
         return SB_STATUS_QUEUE_ERROR;
     }
@@ -566,9 +629,14 @@ sb_status_t sb_mqtt_service_publish(const char *topic, const char *payload, u32 
     sb_mqtt_outbound_message_t msg;
     u32 copy_len;
     u32 i;
+    u32 slot = 0u;
 
     if ((topic == 0) || (topic[0] == '\0') || (payload == 0) || (s_mqtt_tx_queue == 0)) {
         return SB_STATUS_INVALID_PARAM;
+    }
+
+    if (sb_mqtt_pool_alloc(s_mqtt_tx_pool_used, SB_MQTT_OUTBOUND_QUEUE_DEPTH, &slot) == 0) {
+        return SB_STATUS_QUEUE_ERROR;
     }
 
     sb_mqtt_zero(&msg, (u32)sizeof(msg));
@@ -585,7 +653,9 @@ sb_status_t sb_mqtt_service_publish(const char *topic, const char *payload, u32 
     msg.qos = (qos == 0u) ? 0u : 1u;
     msg.retained = (retained != 0u) ? 1u : 0u;
 
-    if (ql_rtos_queue_release(s_mqtt_tx_queue, (u32)sizeof(msg), (u8 *)&msg, QL_NO_WAIT) != 0) {
+    s_mqtt_tx_pool[slot] = msg;
+    if (ql_rtos_queue_release(s_mqtt_tx_queue, (u32)sizeof(slot), (u8 *)&slot, QL_NO_WAIT) != 0) {
+        sb_mqtt_pool_free(s_mqtt_tx_pool_used, SB_MQTT_OUTBOUND_QUEUE_DEPTH, slot);
         return SB_STATUS_QUEUE_ERROR;
     }
 
@@ -594,14 +664,22 @@ sb_status_t sb_mqtt_service_publish(const char *topic, const char *payload, u32 
 
 sb_status_t sb_mqtt_service_receive(sb_mqtt_inbound_message_t *message, u32 timeout_ms)
 {
+    u32 slot = 0u;
+
     if ((message == 0) || (s_mqtt_rx_queue == 0)) {
         return SB_STATUS_INVALID_PARAM;
     }
 
-    if (ql_rtos_queue_wait(s_mqtt_rx_queue, (u8 *)message, (u32)sizeof(*message), timeout_ms) != 0) {
+    if (ql_rtos_queue_wait(s_mqtt_rx_queue, (u8 *)&slot, (u32)sizeof(slot), timeout_ms) != 0) {
         return SB_STATUS_TIMEOUT;
     }
 
+    if (slot >= SB_MQTT_INBOUND_QUEUE_DEPTH) {
+        return SB_STATUS_INVALID_STATE;
+    }
+
+    *message = s_mqtt_rx_pool[slot];
+    sb_mqtt_pool_free(s_mqtt_rx_pool_used, SB_MQTT_INBOUND_QUEUE_DEPTH, slot);
     return SB_STATUS_OK;
 }
 

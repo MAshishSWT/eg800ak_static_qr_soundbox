@@ -10,3 +10,9 @@ docs/soundbox_phase6/PHASE6_TEST_PROCEDURE.md
 docs/soundbox_phase6/PHASE6_ACCEPTANCE_CHECKLIST.md
 docs/soundbox_phase6/PHASE6_FILE_MANIFEST.md
 ```
+
+Runtime queue-size fix note:
+
+```text
+SOUNDBOX_PHASE6_QUEUEFIX.md
+```

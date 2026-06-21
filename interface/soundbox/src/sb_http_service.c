@@ -32,6 +32,8 @@ static char s_http_root_ca_path[] = "U:/certs/http_root_ca.pem";
 static ql_task_t s_http_task = 0;
 static ql_mutex_t s_http_mutex = 0;
 static ql_queue_t s_http_queue = 0;
+static sb_http_post_request_t s_http_request_pool[SB_HTTP_QUEUE_DEPTH];
+static u8 s_http_request_pool_used[SB_HTTP_QUEUE_DEPTH];
 static int s_http_started = 0;
 static sb_config_payload_t s_http_config;
 static sb_http_status_t s_http_status = {0, 0, 0, 0u, 0u};
@@ -83,6 +85,51 @@ static void sb_http_post_event(sb_event_id_t id, s32 status, u32 value, const ch
         (void)sb_event_set_text(&event, text);
     }
     (void)sb_event_post(&event, QL_NO_WAIT);
+}
+
+static int sb_http_pool_alloc(u32 *slot)
+{
+    u32 i;
+
+    if (slot == 0) {
+        return 0;
+    }
+
+    if (s_http_mutex != 0) {
+        (void)ql_rtos_mutex_lock(s_http_mutex, QL_WAIT_FOREVER);
+    }
+
+    for (i = 0u; i < SB_HTTP_QUEUE_DEPTH; i++) {
+        if (s_http_request_pool_used[i] == 0u) {
+            s_http_request_pool_used[i] = 1u;
+            *slot = i;
+            if (s_http_mutex != 0) {
+                (void)ql_rtos_mutex_unlock(s_http_mutex);
+            }
+            return 1;
+        }
+    }
+
+    if (s_http_mutex != 0) {
+        (void)ql_rtos_mutex_unlock(s_http_mutex);
+    }
+
+    return 0;
+}
+
+static void sb_http_pool_free(u32 slot)
+{
+    if (slot >= SB_HTTP_QUEUE_DEPTH) {
+        return;
+    }
+
+    if (s_http_mutex != 0) {
+        (void)ql_rtos_mutex_lock(s_http_mutex, QL_WAIT_FOREVER);
+    }
+    s_http_request_pool_used[slot] = 0u;
+    if (s_http_mutex != 0) {
+        (void)ql_rtos_mutex_unlock(s_http_mutex);
+    }
 }
 
 static int sb_http_network_ready(void)
@@ -323,16 +370,22 @@ static void sb_http_process_queue(void)
 {
     sb_http_post_request_t request;
     QlOSStatus ret;
+    u32 slot = 0u;
 
     if (s_http_queue == 0) {
         return;
     }
 
     while (1) {
-        ret = ql_rtos_queue_wait(s_http_queue, (u8 *)&request, (u32)sizeof(request), QL_NO_WAIT);
+        ret = ql_rtos_queue_wait(s_http_queue, (u8 *)&slot, (u32)sizeof(slot), QL_NO_WAIT);
         if (ret != 0) {
             break;
         }
+        if (slot >= SB_HTTP_QUEUE_DEPTH) {
+            continue;
+        }
+        request = s_http_request_pool[slot];
+        sb_http_pool_free(slot);
         if (request.type == SB_HTTP_POST_COMMAND_RESPONSE) {
             (void)sb_http_post_json(SB_HTTP_COMMAND_RESPONSE_PATH,
                                     request.payload,
@@ -401,7 +454,7 @@ sb_status_t sb_http_service_init(const sb_config_payload_t *config)
         return SB_STATUS_NO_MEMORY;
     }
 
-    ret = ql_rtos_queue_create(&s_http_queue, (u32)sizeof(sb_http_post_request_t), SB_HTTP_QUEUE_DEPTH);
+    ret = ql_rtos_queue_create(&s_http_queue, (u32)sizeof(u32), SB_HTTP_QUEUE_DEPTH);
     if (ret != 0) {
         return SB_STATUS_QUEUE_ERROR;
     }
@@ -425,9 +478,14 @@ sb_status_t sb_http_service_post_command_response(const char *payload, u32 paylo
     sb_http_post_request_t request;
     u32 i;
     u32 copy_len;
+    u32 slot = 0u;
 
     if ((payload == 0) || (s_http_queue == 0)) {
         return SB_STATUS_INVALID_PARAM;
+    }
+
+    if (sb_http_pool_alloc(&slot) == 0) {
+        return SB_STATUS_QUEUE_ERROR;
     }
 
     sb_http_zero(&request, (u32)sizeof(request));
@@ -442,7 +500,9 @@ sb_status_t sb_http_service_post_command_response(const char *payload, u32 paylo
     request.payload[copy_len] = '\0';
     request.payload_len = copy_len;
 
-    if (ql_rtos_queue_release(s_http_queue, (u32)sizeof(request), (u8 *)&request, QL_NO_WAIT) != 0) {
+    s_http_request_pool[slot] = request;
+    if (ql_rtos_queue_release(s_http_queue, (u32)sizeof(slot), (u8 *)&slot, QL_NO_WAIT) != 0) {
+        sb_http_pool_free(slot);
         return SB_STATUS_QUEUE_ERROR;
     }
 

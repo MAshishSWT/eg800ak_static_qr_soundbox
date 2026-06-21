@@ -11,6 +11,7 @@ Phase 6 adds cloud connectivity services on top of the Phase 5 network-ready sta
 - Command topic subscription derived as `<payment-topic>/cmd`.
 - MQTT inbound message queue for later transaction/command domain phases.
 - MQTT outbound publish queue.
+- Queue-safe static message pools: RTOS queues carry only `u32` slot indexes, not large payload buffers.
 - MQTT periodic health publish to `config.mqtt_pub_topic`.
 - HTTP service task using `ql_http_client_request()`.
 - HTTP JSON health POST to `<http_base_url>/health`.
