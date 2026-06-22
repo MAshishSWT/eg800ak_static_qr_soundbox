@@ -9,6 +9,8 @@
 #include "sb_hal_adc.h"
 #include "sb_hal_audio_pa.h"
 #include "sb_hal_key.h"
+#include "sb_hal_gpio.h"
+#include "sb_board_kae8_sq1.h"
 #include "sb_hal_led.h"
 #include "sb_log.h"
 
@@ -86,6 +88,16 @@ sb_status_t sb_bsp_board_init(void)
     }
 
     status = sb_bsp_check_status(sb_hal_key_init(), "keys");
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+
+    status = sb_bsp_check_status(sb_hal_gpio_output(SB_KAE8_FLASH_WP_GPIO, PIN_LEVEL_HIGH), "flash_wp_high");
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+
+    status = sb_bsp_check_status(sb_hal_gpio_output(SB_KAE8_FLASH_RST_GPIO, PIN_LEVEL_HIGH), "flash_rst_high");
     if (status != SB_STATUS_OK) {
         return status;
     }

@@ -14,3 +14,10 @@ See:
 ## Review fix note
 
 - `SOUNDBOX_PHASE10_REVIEW_FIXES.md`
+
+## External NOR SPI4 fix
+
+- `interface/soundbox/include/sb_board_kae8_sq1.h`
+- `interface/soundbox/src/sb_bsp_kae8_sq1.c`
+- `interface/soundbox/src/sb_extnor.c`
+- `SOUNDBOX_PHASE10_EXTNOR_SPI4_FIX.md`
