@@ -49,16 +49,35 @@ static int sb_extnor_id_is_valid(const unsigned char *id)
 
 static u32 sb_extnor_capacity_from_jedec_id(const unsigned char *id)
 {
-    u32 density_code;
+    u32 i;
+    u32 density_code = 0u;
 
     if (sb_extnor_id_is_valid(id) == 0) {
         return 0u;
     }
-    density_code = (u32)id[2];
-    if ((density_code < 0x14u) || (density_code > 0x1Du)) {
+
+    /* ql_spi_nor_read_id() on this EG800AK SDK can return the three ID bytes
+     * in controller/native order instead of conventional JEDEC order. Accept
+     * any byte in the known serial-NOR density-code range. Examples:
+     *   EF 40 17 -> W25Q64, 8 MB
+     *   17 60 EF -> same information returned in reversed/controller order
+     */
+    for (i = 0u; i < SB_EXTNOR_ID_LEN; i++) {
+        if (((u32)id[i] >= 0x14u) && ((u32)id[i] <= 0x1Du)) {
+            density_code = (u32)id[i];
+            break;
+        }
+    }
+
+    if (density_code == 0u) {
         return 0u;
     }
-    return 1u << (density_code - 3u);
+
+    if (density_code >= 31u) {
+        return 0u;
+    }
+
+    return 1u << density_code;
 }
 
 static sb_status_t sb_extnor_prepare_control_pins(void)

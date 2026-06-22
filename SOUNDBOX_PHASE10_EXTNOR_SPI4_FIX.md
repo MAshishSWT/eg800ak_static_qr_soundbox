@@ -26,3 +26,14 @@ Applied hardware bring-up changes requested for KAE8_SQ1 external W25Q64 NOR fla
 ```
 
 If the flash still returns invalid ID, the app remains non-blocking and continues boot.
+
+## Runtime capacity decode follow-up
+
+The first SPI4 boot returned `id=17 60 ef`, which is valid W25Q64-class information in controller/native byte order. Capacity decode now accepts any byte in the serial-NOR density-code range and reports 0x17 as 8 MB.
+
+Expected corrected log:
+
+```text
+[SB][I][extnor] probe spi_nor_port=4 id=17 60 ef
+[SB][I][extnor] ready spi_nor_port=4 clk=6 id=17 60 ef capacity=8388608 bytes
+```
