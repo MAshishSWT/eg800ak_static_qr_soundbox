@@ -195,11 +195,11 @@ sb_status_t sb_audio_prompt_logic_build_health(sb_audio_language_t language,
     }
     sb_audio_script_init(script);
     status = sb_logic_append_alert(script, language,
-                                   (kind == SB_AUDIO_HEALTH_BATTERY) ? "battery_prefix.mp3" : "internet_prefix.mp3");
+                                   (kind == SB_AUDIO_HEALTH_BATTERY) ? ((language == SB_AUDIO_LANG_EN) ? "battery.mp3" : "battery_charging.mp3") : "network_signal.mp3");
     if (status != SB_STATUS_OK) { return status; }
     status = sb_logic_append_number(script, language, (u64)percent);
     if (status != SB_STATUS_OK) { return status; }
-    return sb_logic_append_alert(script, language, "percent.mp3");
+    return sb_logic_append_audio_file(script, language, "percent.mp3");
 }
 
 static sb_status_t sb_logic_append_rupees_and_paise(sb_audio_script_t *script,
@@ -241,7 +241,7 @@ sb_status_t sb_audio_prompt_logic_build_transaction(sb_audio_language_t language
     sb_audio_script_init(script);
     with_paise = ((amount_paise % 100ull) != 0ull) ? 1 : 0;
 
-    status = sb_logic_append_audio_file(script, language, "transaction_prefix.mp3");
+    status = sb_logic_append_audio_file(script, language, "prefix.mp3");
     if (status != SB_STATUS_OK) { return status; }
 
     if (sb_lang_english(language) != 0) {
@@ -286,16 +286,12 @@ sb_status_t sb_audio_prompt_logic_build_last_transaction(sb_audio_language_t lan
 
     status = sb_logic_append_audio_file(script, language, "last_transaction_prefix.mp3");
     if (status != SB_STATUS_OK) { return status; }
-    status = sb_logic_append_number(script, language, 1ull);
-    if (status != SB_STATUS_OK) { return status; }
-    status = sb_logic_append_audio_file(script, language, "has.mp3");
-    if (status != SB_STATUS_OK) { return status; }
     status = sb_logic_append_rupees_and_paise(script, language, record->amount_paise, with_paise);
     if (status != SB_STATUS_OK) { return status; }
-    if (sb_lang_suffix_used(language) != 0) {
-        status = sb_logic_append_audio_file(script, language, "is.mp3");
+    if (with_paise != 0) {
+        return SB_STATUS_OK;
     }
-    return status;
+    return SB_STATUS_OK;
 }
 
 sb_status_t sb_audio_prompt_logic_build_daily_summary(sb_audio_language_t language,

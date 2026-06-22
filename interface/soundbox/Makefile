@@ -29,6 +29,7 @@ SRC_FILES+= \
   src/sb_amount_tokenizer.c \
   src/sb_audio_asset.c \
   src/sb_audio_asset_store.c \
+  src/sb_asset_pack_loader.c \
   src/sb_audio_prompt_logic.c \
   src/sb_audio_script.c \
   src/sb_audio_codec_es8311.c \

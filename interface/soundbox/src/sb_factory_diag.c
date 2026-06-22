@@ -5,6 +5,7 @@
 #include "ql_type.h"
 #include "ql_securedata.h"
 #include "ql_rtos.h"
+#include "sb_asset_pack_loader.h"
 #include "sb_audio_service.h"
 #include "sb_cloud_utils.h"
 #include "sb_config.h"
@@ -374,6 +375,164 @@ static sb_status_t sb_factory_store_sms_auth(const char *json,
     return sb_factory_reply_status(reply, reply_len, "ok", "sms_auth_saved");
 }
 
+
+static int sb_factory_asset_access_allowed(sb_factory_channel_t channel)
+{
+    if ((channel == SB_FACTORY_CHANNEL_SERIAL) && (sb_mode_factory_access_allowed() != 0)) {
+        return 1;
+    }
+    return 0;
+}
+
+static sb_status_t sb_factory_asset_begin_from_json(const char *json,
+                                                    sb_factory_channel_t channel,
+                                                    char *reply,
+                                                    u32 reply_len)
+{
+    u64 size = 0u;
+    u64 crc32 = 0u;
+    u64 erase = 1u;
+    sb_status_t status;
+
+    if (sb_factory_asset_access_allowed(channel) == 0) {
+        (void)sb_factory_reply_status(reply, reply_len, "rejected", "locked");
+        return SB_STATUS_SECURITY_ERROR;
+    }
+    if (sb_json_get_u64(json, "size", &size) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "size");
+    }
+    (void)sb_json_get_u64(json, "crc32", &crc32);
+    (void)sb_json_get_u64(json, "erase", &erase);
+    status = sb_asset_pack_loader_begin((u32)size, (u32)crc32, (erase != 0u) ? 1u : 0u);
+    if (status != SB_STATUS_OK) {
+        (void)sb_factory_reply_status(reply, reply_len, "error", sb_status_to_string(status));
+        return status;
+    }
+    return sb_factory_reply_status(reply, reply_len, "ok", "asset_begin");
+}
+
+static sb_status_t sb_factory_asset_chunk_from_json(const char *json,
+                                                    sb_factory_channel_t channel,
+                                                    char *reply,
+                                                    u32 reply_len)
+{
+    char data_hex[(SB_ASSET_PACK_UART_HEX_MAX_BYTES * 2u) + 1u];
+    u64 offset = 0u;
+    u32 written = 0u;
+    sb_status_t status;
+
+    if (sb_factory_asset_access_allowed(channel) == 0) {
+        (void)sb_factory_reply_status(reply, reply_len, "rejected", "locked");
+        return SB_STATUS_SECURITY_ERROR;
+    }
+    if (sb_json_get_u64(json, "offset", &offset) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "offset");
+    }
+    if (sb_json_get_string(json, "data_hex", data_hex, (u32)sizeof(data_hex)) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "data_hex");
+    }
+    status = sb_asset_pack_loader_write_hex((u32)offset, data_hex, &written);
+    if (status != SB_STATUS_OK) {
+        (void)sb_factory_reply_status(reply, reply_len, "error", sb_status_to_string(status));
+        return status;
+    }
+    reply[0] = '\0';
+    if (sb_cloud_append_string(reply, reply_len, "{\"status\":\"ok\",\"written\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, written) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, "}") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_factory_asset_end_from_json(sb_factory_channel_t channel,
+                                                  char *reply,
+                                                  u32 reply_len)
+{
+    sb_status_t status;
+
+    if (sb_factory_asset_access_allowed(channel) == 0) {
+        (void)sb_factory_reply_status(reply, reply_len, "rejected", "locked");
+        return SB_STATUS_SECURITY_ERROR;
+    }
+    status = sb_asset_pack_loader_end();
+    if (status != SB_STATUS_OK) {
+        (void)sb_factory_reply_status(reply, reply_len, "error", sb_status_to_string(status));
+        return status;
+    }
+    return sb_factory_reply_status(reply, reply_len, "ok", "asset_end");
+}
+
+static sb_status_t sb_factory_asset_status_reply(char *reply, u32 reply_len)
+{
+    sb_asset_pack_loader_status_t status;
+
+    if (sb_asset_pack_loader_status(&status) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "asset_status");
+    }
+    reply[0] = '\0';
+    if (sb_cloud_append_string(reply, reply_len, "{\"status\":\"ok\",\"active\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, (status.active != 0) ? 1u : 0u) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"expected_size\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, status.expected_size) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"received_size\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, status.received_size) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"crc32\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, status.finalized_crc32) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"last_error\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, status.last_error) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, "}") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_factory_asset_ftp_from_json(const char *json,
+                                                  sb_factory_channel_t channel,
+                                                  char *reply,
+                                                  u32 reply_len)
+{
+    char host[96];
+    char user[48];
+    char password[48];
+    char remote[160];
+    u64 cid = 1u;
+    u64 size = 0u;
+    u64 crc32 = 0u;
+    sb_status_t status;
+
+    sb_factory_zero_buffer(host, (u32)sizeof(host));
+    sb_factory_zero_buffer(user, (u32)sizeof(user));
+    sb_factory_zero_buffer(password, (u32)sizeof(password));
+    sb_factory_zero_buffer(remote, (u32)sizeof(remote));
+
+    if (sb_factory_asset_access_allowed(channel) == 0) {
+        (void)sb_factory_reply_status(reply, reply_len, "rejected", "locked");
+        return SB_STATUS_SECURITY_ERROR;
+    }
+    if (sb_json_get_string(json, "host", host, (u32)sizeof(host)) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "host");
+    }
+    if (sb_json_get_string(json, "user", user, (u32)sizeof(user)) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "user");
+    }
+    if (sb_json_get_string(json, "password", password, (u32)sizeof(password)) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "password");
+    }
+    if (sb_json_get_string(json, "remote", remote, (u32)sizeof(remote)) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "remote");
+    }
+    if (sb_json_get_u64(json, "size", &size) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "size");
+    }
+    (void)sb_json_get_u64(json, "cid", &cid);
+    (void)sb_json_get_u64(json, "crc32", &crc32);
+
+    status = sb_asset_pack_loader_ftp_get(host, user, password, remote, (u32)cid, (u32)size, (u32)crc32);
+    sb_factory_zero_buffer(password, (u32)sizeof(password));
+    if (status != SB_STATUS_OK) {
+        (void)sb_factory_reply_status(reply, reply_len, "error", sb_status_to_string(status));
+        return status;
+    }
+    return sb_factory_reply_status(reply, reply_len, "ok", "asset_ftp_get");
+}
+
 static sb_status_t sb_factory_set_mode(const char *json,
                                        sb_factory_channel_t channel,
                                        char *reply,
@@ -410,6 +569,7 @@ sb_status_t sb_factory_diag_init(void)
         return SB_STATUS_ALREADY_INITIALIZED;
     }
     s_factory_diag_ready = 1;
+    (void)sb_asset_pack_loader_init();
     sb_factory_post_event(SB_EVENT_FACTORY_READY, SB_STATUS_OK, "ready");
     return SB_STATUS_OK;
 }
@@ -442,6 +602,16 @@ sb_status_t sb_factory_diag_dispatch_json(const char *json,
         status = sb_factory_store_sms_auth(json, channel, reply, reply_len);
     } else if (sb_cloud_text_equal(cmd, "set_mode") != 0) {
         status = sb_factory_set_mode(json, channel, reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "asset_begin") != 0) {
+        status = sb_factory_asset_begin_from_json(json, channel, reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "asset_chunk") != 0) {
+        status = sb_factory_asset_chunk_from_json(json, channel, reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "asset_end") != 0) {
+        status = sb_factory_asset_end_from_json(channel, reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "asset_status") != 0) {
+        status = sb_factory_asset_status_reply(reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "asset_ftp_get") != 0) {
+        status = sb_factory_asset_ftp_from_json(json, channel, reply, reply_len);
     } else {
         (void)sb_factory_reply_status(reply, reply_len, "rejected", "unsupported");
         status = SB_STATUS_UNSUPPORTED;

@@ -21,3 +21,22 @@ See:
 - `interface/soundbox/src/sb_bsp_kae8_sq1.c`
 - `interface/soundbox/src/sb_extnor.c`
 - `SOUNDBOX_PHASE10_EXTNOR_SPI4_FIX.md`
+
+## Raw asset pack UART/FTP update
+
+Added:
+- interface/soundbox/include/sb_asset_pack_loader.h
+- interface/soundbox/src/sb_asset_pack_loader.c
+- tools/soundbox_asset_pack_builder.py
+- tools/soundbox_uart_asset_push.py
+- SOUNDBOX_PHASE10_RAWPACK_UART_FTP.md
+
+Modified:
+- interface/soundbox/Makefile
+- interface/soundbox/include/sb_app.h
+- interface/soundbox/src/sb_audio_asset.c
+- interface/soundbox/src/sb_audio_prompt_logic.c
+- interface/soundbox/src/sb_audio_asset_store.c
+- interface/soundbox/src/sb_factory_diag.c
+- docs/soundbox_phase10/PHASE10_README.md
+- docs/soundbox_phase10/PHASE10_TEST_PROCEDURE.md

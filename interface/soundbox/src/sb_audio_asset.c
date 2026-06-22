@@ -18,7 +18,7 @@ static const char *sb_audio_prompt_asset(sb_audio_prompt_id_t prompt, int *commo
     case SB_AUDIO_PROMPT_READY:
         return "internet.mp3";
     case SB_AUDIO_PROMPT_SETUP:
-        return "unregistered_device.mp3";
+        return "device_unregistered.mp3";
     case SB_AUDIO_PROMPT_NO_SIM:
         return "no_SIM.mp3";
     case SB_AUDIO_PROMPT_NO_NETWORK:
@@ -32,7 +32,7 @@ static const char *sb_audio_prompt_asset(sb_audio_prompt_id_t prompt, int *commo
         if (common != 0) { *common = 1; }
         return "transaction_error.mp3";
     case SB_AUDIO_PROMPT_PAYMENT_RECEIVED:
-        return "transaction_prefix.mp3";
+        return "prefix.mp3";
     default:
         return "no_transactions.mp3";
     }
@@ -43,10 +43,10 @@ static sb_status_t sb_path_append(char *path, u32 path_len, const char *text)
     return sb_cloud_append_string(path, path_len, text);
 }
 
-static sb_status_t sb_lang_audio_files_path(sb_audio_language_t language,
-                                            const char *file,
-                                            char *path,
-                                            u32 path_len)
+static sb_status_t sb_lang_flat_path(sb_audio_language_t language,
+                                        const char *file,
+                                        char *path,
+                                        u32 path_len)
 {
     if ((file == 0) || (path == 0) || (path_len == 0u)) {
         return SB_STATUS_INVALID_PARAM;
@@ -54,9 +54,17 @@ static sb_status_t sb_lang_audio_files_path(sb_audio_language_t language,
     path[0] = '\0';
     if (sb_path_append(path, path_len, "audio/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
     if (sb_path_append(path, path_len, sb_audio_language_asset_code(language)) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
-    if (sb_path_append(path, path_len, "/audio_files/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_path_append(path, path_len, "/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
     if (sb_path_append(path, path_len, file) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
     return SB_STATUS_OK;
+}
+
+static sb_status_t sb_lang_audio_files_path(sb_audio_language_t language,
+                                            const char *file,
+                                            char *path,
+                                            u32 path_len)
+{
+    return sb_lang_flat_path(language, file, path, path_len);
 }
 
 static sb_status_t sb_lang_alert_path(sb_audio_language_t language,
@@ -64,15 +72,7 @@ static sb_status_t sb_lang_alert_path(sb_audio_language_t language,
                                       char *path,
                                       u32 path_len)
 {
-    if ((file == 0) || (path == 0) || (path_len == 0u)) {
-        return SB_STATUS_INVALID_PARAM;
-    }
-    path[0] = '\0';
-    if (sb_path_append(path, path_len, "audio/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
-    if (sb_path_append(path, path_len, sb_audio_language_asset_code(language)) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
-    if (sb_path_append(path, path_len, "/alerts/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
-    if (sb_path_append(path, path_len, file) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
-    return SB_STATUS_OK;
+    return sb_lang_flat_path(language, file, path, path_len);
 }
 
 void sb_audio_script_init(sb_audio_script_t *script)
@@ -107,7 +107,7 @@ sb_status_t sb_audio_asset_build_common_path(const char *file, char *path, u32 p
         return SB_STATUS_INVALID_PARAM;
     }
     path[0] = '\0';
-    if (sb_path_append(path, path_len, "audio/common/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_path_append(path, path_len, "audio/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
     return sb_path_append(path, path_len, file);
 }
 
@@ -134,7 +134,7 @@ sb_status_t sb_audio_asset_build_prompt_path(sb_audio_language_t language,
     }
     path[0] = '\0';
     if (common != 0) {
-        if (sb_path_append(path, path_len, "audio/common/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+        if (sb_path_append(path, path_len, "audio/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
         return sb_path_append(path, path_len, asset);
     }
     return sb_lang_alert_path(language, asset, path, path_len);
@@ -155,11 +155,15 @@ sb_status_t sb_audio_asset_build_provider_path(sb_audio_language_t language,
         asset = "googlepay.mp3";
         break;
     case SB_AUDIO_PROVIDER_PAYTM:
+        asset = "paytm.mp3";
+        break;
     case SB_AUDIO_PROVIDER_PHONEPE:
+        asset = "phonepe.mp3";
+        break;
     case SB_AUDIO_PROVIDER_BHIM:
     case SB_AUDIO_PROVIDER_OTHER:
     default:
-        asset = "bank.mp3";
+        asset = "provider.mp3";
         break;
     }
     return sb_lang_audio_files_path(language, asset, path, path_len);
@@ -194,7 +198,11 @@ sb_status_t sb_audio_asset_build_amount_token_path(sb_audio_language_t language,
         sb_cloud_copy_string(name, (u32)sizeof(name), "crore.mp3");
         break;
     case SB_AMOUNT_TOKEN_RUPEES:
-        sb_cloud_copy_string(name, (u32)sizeof(name), "rupees.mp3");
+        if (language == SB_AUDIO_LANG_BN) {
+            sb_cloud_copy_string(name, (u32)sizeof(name), "ruppes.mp3");
+        } else {
+            sb_cloud_copy_string(name, (u32)sizeof(name), "rupees.mp3");
+        }
         break;
     case SB_AMOUNT_TOKEN_PAISE:
         sb_cloud_copy_string(name, (u32)sizeof(name), "paise.mp3");

@@ -31,6 +31,10 @@
 #define SB_AUDIO_STORE_EXTFS_DEFAULT_SIZE   (0x00800000u)
 #define SB_AUDIO_STORE_EXTFS_PORT           EXTERNAL_NORFLASH_PORT4_7
 
+#ifndef SB_AUDIO_STORE_ENABLE_NATIVE_EXTFS
+#define SB_AUDIO_STORE_ENABLE_NATIVE_EXTFS 0
+#endif
+
 #ifndef SB_AUDIO_STORE_EXTFS_FORMAT_ON_MOUNT
 #define SB_AUDIO_STORE_EXTFS_FORMAT_ON_MOUNT 0
 #endif
@@ -374,14 +378,21 @@ sb_status_t sb_audio_asset_store_init(void)
     status = sb_extnor_get_info(&extnor_info);
     if ((status == SB_STATUS_OK) && (extnor_info.ready != 0)) {
         s_store_status.extnor_available = 1;
+#if SB_AUDIO_STORE_ENABLE_NATIVE_EXTFS
         status = sb_store_try_extfs_mount(&extnor_info);
         if (status == SB_STATUS_OK) {
             return SB_STATUS_OK;
         }
-        s_store_status.backend = SB_AUDIO_STORE_BACKEND_EXTNOR;
         SB_LOGW(SB_AUDIO_STORE_MODULE_NAME,
                 "external fs unavailable, using raw extnor asset index capacity=%u",
                 extnor_info.capacity_bytes);
+#else
+        (void)status;
+        SB_LOGI(SB_AUDIO_STORE_MODULE_NAME,
+                "ready backend=extnor_raw capacity=%u",
+                extnor_info.capacity_bytes);
+#endif
+        s_store_status.backend = SB_AUDIO_STORE_BACKEND_EXTNOR;
     } else {
         SB_LOGW(SB_AUDIO_STORE_MODULE_NAME, "external nor unavailable, using U: debug fallback");
     }

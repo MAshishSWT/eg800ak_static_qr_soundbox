@@ -100,3 +100,8 @@ No Quectel common headers or libraries are modified.
 The audio asset store now attempts to mount the KAE8 external W25Q64 SPI NOR as a native QuecOpen filesystem drive `C:` using `qextfs_init()`. If the mount succeeds, logical audio paths resolve directly to `C:/audio/...`. If the mount fails because the active flash layout does not expose an external filesystem partition, the firmware remains boot-safe and falls back to `U:/audio/...` debug assets and the existing raw SBAS external-NOR asset index.
 
 Default builds do not format the external NOR. For a one-time lab format build only, define `SB_AUDIO_STORE_EXTFS_FORMAT_ON_MOUNT=1`, then rebuild without it after the first successful mount.
+
+
+## Raw audio asset pack UART/FTP update
+
+The updated Vi_mp3 package uses a flat folder structure. Runtime paths are now `audio/<file>.mp3` for common prompts and `audio/<lang>/<file>.mp3` for language prompts. The firmware keeps the folder-path strings inside an SBAS index stored in external NOR. UART factory commands and FTP download can write the full SBAS pack directly to external NOR. See `SOUNDBOX_PHASE10_RAWPACK_UART_FTP.md`.

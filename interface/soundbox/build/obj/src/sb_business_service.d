@@ -5,8 +5,6 @@ build/obj/src/sb_business_service.o: src/sb_business_service.c \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/common/include/ql_type.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_audio_types.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_error.h \
- D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_transaction_ledger.h \
- D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/common/include/ql_rtc.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_audio_types.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_bsp_kae8_sq1.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_hal_adc.h \
@@ -22,9 +20,10 @@ build/obj/src/sb_business_service.o: src/sb_business_service.c \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_hal_key.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/common/include/ql_gpio.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_log.h \
- D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_led_status.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_mqtt_service.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_network_service.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_payment_processor.h \
+ D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_transaction_ledger.h \
+ D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/common/include/ql_rtc.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_time_service.h \
  D:\GitHub\LTE01R07A16V03_C_SDK_A_SDK\ql-sdk\ql-application\threadx/interface/soundbox/include/sb_transaction_ledger.h

@@ -66,3 +66,8 @@ Confirm `googlepay.mp3`, `and.mp3`, and `paise.mp3` are used.
 3. Force low battery sample or simulate battery event: LED should move to battery-low pattern.
 4. Press volume key: one short blink.
 5. Press mode key: two short blinks.
+
+
+## Raw audio asset pack UART/FTP update
+
+The updated Vi_mp3 package uses a flat folder structure. Runtime paths are now `audio/<file>.mp3` for common prompts and `audio/<lang>/<file>.mp3` for language prompts. The firmware keeps the folder-path strings inside an SBAS index stored in external NOR. UART factory commands and FTP download can write the full SBAS pack directly to external NOR. See `SOUNDBOX_PHASE10_RAWPACK_UART_FTP.md`.
