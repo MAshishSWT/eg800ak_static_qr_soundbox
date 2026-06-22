@@ -15,17 +15,22 @@ extern "C" {
 
 #define SB_AUDIO_STORE_LOGICAL_ROOT       "audio"
 #define SB_AUDIO_STORE_UFS_ROOT           "U:/audio"
+#define SB_AUDIO_STORE_EXTFS_ROOT         "C:/audio"
+#define SB_AUDIO_STORE_EXTFS_DISK         'C'
 #define SB_AUDIO_STORE_STAGE_PATH         "U:/sb_play.mp3"
 #define SB_AUDIO_STORE_MAX_STAGE_BYTES    (64u * 1024u)
 
 typedef enum {
     SB_AUDIO_STORE_BACKEND_UFS = 0,
-    SB_AUDIO_STORE_BACKEND_EXTNOR
+    SB_AUDIO_STORE_BACKEND_EXTNOR,
+    SB_AUDIO_STORE_BACKEND_EXTFS
 } sb_audio_store_backend_t;
 
 typedef struct {
     int ready;
     int extnor_available;
+    int extfs_mounted;
+    u32 extfs_size_bytes;
     u32 missing_count;
     u32 staged_count;
     sb_audio_store_backend_t backend;
@@ -38,6 +43,7 @@ sb_status_t sb_audio_asset_store_prepare_play_path(const char *logical_path,
                                                     u32 play_path_len);
 int sb_audio_asset_store_exists(const char *logical_path);
 const char *sb_audio_asset_store_backend_name(sb_audio_store_backend_t backend);
+int sb_audio_asset_store_is_extfs_mounted(void);
 
 #ifdef __cplusplus
 }
