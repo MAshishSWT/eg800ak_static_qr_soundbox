@@ -40,3 +40,15 @@ Modified:
 - interface/soundbox/src/sb_factory_diag.c
 - docs/soundbox_phase10/PHASE10_README.md
 - docs/soundbox_phase10/PHASE10_TEST_PROCEDURE.md
+
+## MQTT demo default update
+
+- `interface/soundbox/include/sb_demo_profile.h`
+- `interface/soundbox/src/sb_demo_profile.c`
+- `interface/soundbox/src/sb_config.c`
+- `interface/soundbox/src/sb_mqtt_service.c`
+- `interface/soundbox/src/sb_http_service.c`
+- `interface/soundbox/src/sb_payment_processor.c`
+- `interface/soundbox/src/sb_business_service.c`
+- `interface/soundbox/src/sb_command_dispatcher.c`
+- `SOUNDBOX_PHASE10_MQTT_DEMO_DEFAULTS.md`

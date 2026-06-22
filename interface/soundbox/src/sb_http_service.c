@@ -8,6 +8,7 @@
 #include "sb_business_service.h"
 #include "sb_cloud_utils.h"
 #include "sb_config.h"
+#include "sb_demo_profile.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_http_service.h"
@@ -16,8 +17,8 @@
 
 #define SB_HTTP_MODULE_NAME              "http"
 #define SB_HTTP_CIPHER_LIST              "ALL"
-#define SB_HTTP_HEALTH_PATH              "/health"
-#define SB_HTTP_COMMAND_RESPONSE_PATH    "/command/response"
+#define SB_HTTP_HEALTH_PATH              "/healthpacket"
+#define SB_HTTP_COMMAND_RESPONSE_PATH    "/commandresponse"
 #define SB_HTTP_HEADER_JSON              "Content-Type: application/json\r\n"
 #define SB_HTTP_HEADER_CLOSE             "Connection: close\r\n"
 #define SB_HTTP_HOST_LEN                  (96u)
@@ -431,6 +432,7 @@ sb_status_t sb_http_service_init(const sb_config_payload_t *config)
     }
 
     s_http_config = *config;
+    sb_demo_expand_config_runtime(&s_http_config);
     ret = ql_rtos_mutex_create(&s_http_mutex);
     if (ret != 0) {
         return SB_STATUS_NO_MEMORY;

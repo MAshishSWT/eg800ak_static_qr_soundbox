@@ -10,6 +10,7 @@
 #include "sb_cloud_utils.h"
 #include "sb_command_dispatcher.h"
 #include "sb_config.h"
+#include "sb_demo_profile.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_hal_key.h"
@@ -284,12 +285,37 @@ static sb_status_t sb_business_append_checked(sb_status_t status)
     return SB_STATUS_ERROR;
 }
 
+static sb_status_t sb_business_append_amount_text(char *payload, u32 payload_len, u64 amount_paise)
+{
+    u32 rupees;
+    u32 paise;
+
+    rupees = (u32)(amount_paise / 100u);
+    paise = (u32)(amount_paise % 100u);
+
+    if (sb_cloud_append_u32(payload, payload_len, rupees) != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (sb_cloud_append_string(payload, payload_len, ".") != SB_STATUS_OK) {
+        return SB_STATUS_NO_MEMORY;
+    }
+    if (paise < 10u) {
+        if (sb_cloud_append_string(payload, payload_len, "0") != SB_STATUS_OK) {
+            return SB_STATUS_NO_MEMORY;
+        }
+    }
+    return sb_cloud_append_u32(payload, payload_len, paise);
+}
+
 sb_status_t sb_business_service_build_health_payload(char *payload, u32 payload_len)
 {
     sb_network_status_t net;
-    sb_daily_summary_t summary;
     sb_battery_sample_t battery;
+    sb_transaction_record_t last_record;
     sb_status_t status;
+    u32 csq = 0u;
+    u32 battery_percent = 0u;
+    u64 last_amount_paise = 0u;
 
     if ((payload == 0) || (payload_len == 0u)) {
         return SB_STATUS_INVALID_PARAM;
@@ -297,7 +323,17 @@ sb_status_t sb_business_service_build_health_payload(char *payload, u32 payload_
 
     payload[0] = '\0';
 
-    status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, "{\"type\":\"health\",\"device_id\":"));
+    if (sb_network_get_status(&net) == SB_STATUS_OK) {
+        csq = (net.csq < 0) ? 0u : (u32)net.csq;
+    }
+    if (sb_bsp_board_read_battery(&battery) == SB_STATUS_OK) {
+        battery_percent = battery.battery_percent;
+    }
+    if (sb_transaction_ledger_get_last(&last_record) == SB_STATUS_OK) {
+        last_amount_paise = last_record.amount_paise;
+    }
+
+    status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, "{\"soundboxSerial\":"));
     if (status != SB_STATUS_OK) {
         return status;
     }
@@ -305,57 +341,31 @@ sb_status_t sb_business_service_build_health_payload(char *payload, u32 payload_
     if (status != SB_STATUS_OK) {
         return status;
     }
-
-    if (sb_network_get_status(&net) == SB_STATUS_OK) {
-        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"online\":"));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
-        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, (u32)((net.online != 0) ? 1u : 0u)));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
-        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"csq\":"));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
-        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, (net.csq < 0) ? 0u : (u32)net.csq));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
+    status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"healthParams\":{\"networkStrength\":\""));
+    if (status != SB_STATUS_OK) {
+        return status;
     }
-
-    if (sb_transaction_ledger_get_daily(&summary) == SB_STATUS_OK) {
-        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"daily_count\":"));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
-        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, summary.count));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
-        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"daily_total_paise\":"));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
-        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, (u32)summary.total_paise));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
+    status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, csq));
+    if (status != SB_STATUS_OK) {
+        return status;
     }
-
-    if (sb_bsp_board_read_battery(&battery) == SB_STATUS_OK) {
-        status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, ",\"battery_percent\":"));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
-        status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, battery.battery_percent));
-        if (status != SB_STATUS_OK) {
-            return status;
-        }
+    status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, "\",\"batteryLevel\":\""));
+    if (status != SB_STATUS_OK) {
+        return status;
     }
-
-    return sb_business_append_checked(sb_cloud_append_string(payload, payload_len, "}"));
+    status = sb_business_append_checked(sb_cloud_append_u32(payload, payload_len, battery_percent));
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+    status = sb_business_append_checked(sb_cloud_append_string(payload, payload_len, "\",\"powerConnected\":true,\"lastTransactionAmount\":\""));
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+    status = sb_business_append_checked(sb_business_append_amount_text(payload, payload_len, last_amount_paise));
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+    return sb_business_append_checked(sb_cloud_append_string(payload, payload_len, "\"}}"));
 }
 
 static void sb_business_process_mqtt_message(const sb_mqtt_inbound_message_t *message)
@@ -407,6 +417,7 @@ sb_status_t sb_business_service_init(void)
 
     sb_config_make_defaults(&s_business_config);
     (void)sb_config_get(&s_business_config);
+    sb_demo_expand_config_runtime(&s_business_config);
 
     status = sb_transaction_ledger_init();
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {

@@ -8,6 +8,7 @@
 #include "sb_business_service.h"
 #include "sb_cloud_utils.h"
 #include "sb_config.h"
+#include "sb_demo_profile.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_log.h"
@@ -28,6 +29,8 @@ typedef struct {
 } sb_mqtt_outbound_message_t;
 
 static char s_mqtt_root_ca_path[] = "U:/certs/mqtt_root_ca.pem";
+static char s_mqtt_client_cert_path[] = SB_DEMO_MQTT_CLIENT_CERT_PATH;
+static char s_mqtt_client_key_path[] = SB_DEMO_MQTT_CLIENT_KEY_PATH;
 static ql_task_t s_mqtt_task = 0;
 static ql_mutex_t s_mqtt_mutex = 0;
 static ql_queue_t s_mqtt_rx_queue = 0;
@@ -314,8 +317,8 @@ static void sb_mqtt_configure_ssl(u32 port)
         s_mqtt_ssl_config.verify = SSL_VERIFY_MODE_REQUIRED;
         s_mqtt_ssl_config.cert.from = SSL_CERT_FROM_FS;
         s_mqtt_ssl_config.cert.path.rootCA = s_mqtt_root_ca_path;
-        s_mqtt_ssl_config.cert.path.clientKey = NULL;
-        s_mqtt_ssl_config.cert.path.clientCert = NULL;
+        s_mqtt_ssl_config.cert.path.clientKey = s_mqtt_client_key_path;
+        s_mqtt_ssl_config.cert.path.clientCert = s_mqtt_client_cert_path;
         s_mqtt_ssl_config.cert.clientKeyPwd.data = NULL;
         s_mqtt_ssl_config.cert.clientKeyPwd.len = 0;
         s_mqtt_ssl_config.cipherList = SB_MQTT_CIPHER_LIST;
@@ -568,7 +571,9 @@ sb_status_t sb_mqtt_service_init(const sb_config_payload_t *config)
     }
 
     s_mqtt_config = *config;
+    sb_demo_expand_config_runtime(&s_mqtt_config);
     sb_mqtt_build_command_topic();
+    SB_LOGI(SB_MQTT_MODULE_NAME, "demo mqtt host=%s sub=%s", s_mqtt_config.mqtt_host, s_mqtt_config.mqtt_sub_topic);
 
     ret = ql_rtos_mutex_create(&s_mqtt_mutex);
     if (ret != 0) {

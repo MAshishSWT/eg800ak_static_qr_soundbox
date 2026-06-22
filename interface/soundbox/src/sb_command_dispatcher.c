@@ -10,6 +10,7 @@
 #include "sb_command_dispatcher.h"
 #include "sb_config.h"
 #include "sb_crc32.h"
+#include "sb_demo_profile.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_http_service.h"
@@ -210,6 +211,7 @@ sb_status_t sb_command_dispatcher_init(void)
     }
     sb_config_make_defaults(&s_command_config);
     (void)sb_config_get(&s_command_config);
+    sb_demo_expand_config_runtime(&s_command_config);
     s_command_ready = 1;
     return SB_STATUS_OK;
 }

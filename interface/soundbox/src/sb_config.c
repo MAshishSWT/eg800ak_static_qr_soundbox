@@ -7,6 +7,7 @@
 #include "sb_crc32.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
+#include "sb_demo_profile.h"
 #include "sb_log.h"
 #include "sb_storage_fs.h"
 
@@ -148,6 +149,8 @@ static void sb_config_sanitize(sb_config_payload_t *config)
     if (config->mqtt_keepalive_sec < 30u) {
         config->mqtt_keepalive_sec = 30u;
     }
+
+    sb_demo_apply_config_defaults(config);
 }
 
 void sb_config_make_defaults(sb_config_payload_t *config)
@@ -158,12 +161,13 @@ void sb_config_make_defaults(sb_config_payload_t *config)
 
     sb_config_zero(config, (u32)sizeof(*config));
     sb_config_copy_string(config->language, SB_CONFIG_LANG_CODE_LEN, "en");
-    config->mqtt_port = 8883u;
+    config->mqtt_port = SB_DEMO_MQTT_PORT;
     config->volume_percent = 70u;
     config->sms_recovery_enabled = 0u;
     config->log_level = 2u;
     config->health_interval_sec = 300u;
     config->mqtt_keepalive_sec = 60u;
+    sb_demo_apply_config_defaults(config);
 }
 
 static void sb_config_prepare_record(sb_config_record_t *record, const sb_config_payload_t *payload,

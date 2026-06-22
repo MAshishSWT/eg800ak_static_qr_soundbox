@@ -105,3 +105,17 @@ Default builds do not format the external NOR. For a one-time lab format build o
 ## Raw audio asset pack UART/FTP update
 
 The updated Vi_mp3 package uses a flat folder structure. Runtime paths are now `audio/<file>.mp3` for common prompts and `audio/<lang>/<file>.mp3` for language prompts. The firmware keeps the folder-path strings inside an SBAS index stored in external NOR. UART factory commands and FTP download can write the full SBAS pack directly to external NOR. See `SOUNDBOX_PHASE10_RAWPACK_UART_FTP.md`.
+
+## EC200U MQTT demo defaults
+
+The firmware now applies EC200U demo defaults for a full functional MQTT/HTTP demo:
+
+- APN `m2misafe`
+- MQTT host `a3pzee9xiwvo6-ats.iot.us-east-1.amazonaws.com:8883`
+- Runtime client ID `device-{imei}`
+- Runtime subscribe topic `kiotel/client1/sb/{imei}`
+- HTTP base URL `https://103.75.249.183/dms-OMADM`
+- Health endpoint `/healthpacket`
+- Command-response endpoint `/commandresponse`
+
+The payment processor accepts EC200U legacy payment payloads of the form `<amount>#<language>#<provider>`. Private certificates and keys are not embedded; provision them under `U:/certs/`.

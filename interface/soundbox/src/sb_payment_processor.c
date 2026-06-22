@@ -7,6 +7,8 @@
 #include "sb_audio_types.h"
 #include "sb_cloud_utils.h"
 #include "sb_config.h"
+#include "sb_crc32.h"
+#include "sb_demo_profile.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_json.h"
@@ -97,15 +99,207 @@ static void sb_payment_publish_ack(const char *tx_id, const char *status)
     }
 }
 
+
+static int sb_payment_payload_is_legacy_hash(const char *payload)
+{
+    u32 i;
+
+    if ((payload == 0) || (payload[0] == '\0') || (payload[0] == '{')) {
+        return 0;
+    }
+
+    for (i = 0u; payload[i] != '\0'; i++) {
+        if (payload[i] == '#') {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+static sb_status_t sb_payment_read_legacy_token(const char *payload,
+                                                u32 *offset,
+                                                char *token,
+                                                u32 token_len)
+{
+    u32 i = 0u;
+    u32 pos;
+
+    if ((payload == 0) || (offset == 0) || (token == 0) || (token_len == 0u)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+
+    token[0] = '\0';
+    pos = *offset;
+    while ((payload[pos] != '\0') && (payload[pos] != '#')) {
+        if ((i + 1u) >= token_len) {
+            token[token_len - 1u] = '\0';
+            return SB_STATUS_NO_MEMORY;
+        }
+        token[i++] = payload[pos++];
+    }
+    token[i] = '\0';
+
+    if (payload[pos] == '#') {
+        pos++;
+    }
+    *offset = pos;
+
+    return (i > 0u) ? SB_STATUS_OK : SB_STATUS_INVALID_PARAM;
+}
+
+static sb_status_t sb_payment_parse_legacy_amount_paise(const char *amount_text, u64 *amount_paise)
+{
+    u32 i;
+    u64 rupees = 0u;
+    u32 paise = 0u;
+    u32 paise_digits = 0u;
+    int seen_dot = 0;
+
+    if ((amount_text == 0) || (amount_paise == 0) || (amount_text[0] == '\0')) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+
+    for (i = 0u; amount_text[i] != '\0'; i++) {
+        char c = amount_text[i];
+        if (c == '.') {
+            if (seen_dot != 0) {
+                return SB_STATUS_INVALID_PARAM;
+            }
+            seen_dot = 1;
+            continue;
+        }
+        if ((c < '0') || (c > '9')) {
+            return SB_STATUS_INVALID_PARAM;
+        }
+        if (seen_dot == 0) {
+            rupees = (rupees * 10u) + (u64)(c - '0');
+        } else if (paise_digits < 2u) {
+            paise = (paise * 10u) + (u32)(c - '0');
+            paise_digits++;
+        } else {
+            return SB_STATUS_INVALID_PARAM;
+        }
+    }
+
+    if ((seen_dot != 0) && (paise_digits == 1u)) {
+        paise *= 10u;
+    }
+
+    *amount_paise = (rupees * 100u) + (u64)paise;
+    return (*amount_paise > 0u) ? SB_STATUS_OK : SB_STATUS_INVALID_PARAM;
+}
+
+static char sb_payment_hex_digit(u32 value)
+{
+    value &= 0x0Fu;
+    return (value < 10u) ? (char)('0' + value) : (char)('a' + (value - 10u));
+}
+
+static void sb_payment_u32_to_hex(u32 value, char *out, u32 out_len)
+{
+    u32 i;
+
+    if ((out == 0) || (out_len < 9u)) {
+        return;
+    }
+
+    for (i = 0u; i < 8u; i++) {
+        out[i] = sb_payment_hex_digit(value >> ((7u - i) * 4u));
+    }
+    out[8] = '\0';
+}
+
+static void sb_payment_make_legacy_tx_id(const char *payload, char *tx_id, u32 tx_id_len)
+{
+    char crc_hex[9];
+    char tick_hex[9];
+    u32 crc;
+    u32 tick;
+
+    if ((payload == 0) || (tx_id == 0) || (tx_id_len == 0u)) {
+        return;
+    }
+
+    crc = sb_crc32_compute(payload, sb_cloud_str_len(payload));
+    tick = ql_rtos_get_systicks();
+    sb_payment_u32_to_hex(crc, crc_hex, (u32)sizeof(crc_hex));
+    sb_payment_u32_to_hex(tick, tick_hex, (u32)sizeof(tick_hex));
+
+    tx_id[0] = '\0';
+    (void)sb_cloud_append_string(tx_id, tx_id_len, "legacy-");
+    (void)sb_cloud_append_string(tx_id, tx_id_len, crc_hex);
+    (void)sb_cloud_append_string(tx_id, tx_id_len, "-");
+    (void)sb_cloud_append_string(tx_id, tx_id_len, tick_hex);
+}
+
+static sb_status_t sb_payment_record_from_legacy_message(const sb_mqtt_inbound_message_t *message,
+                                                         sb_transaction_record_t *record,
+                                                         sb_audio_language_t *play_language)
+{
+    char amount_text[24];
+    char language_text[SB_CONFIG_LANG_CODE_LEN];
+    char provider_text[SB_LEDGER_PROVIDER_LEN];
+    u32 offset = 0u;
+    sb_time_status_t time_status;
+    sb_status_t status;
+
+    if ((message == 0) || (record == 0) || (play_language == 0)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+
+    status = sb_payment_read_legacy_token(message->payload, &offset, amount_text, (u32)sizeof(amount_text));
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+
+    if ((sb_cloud_text_equal(amount_text, "conf") != 0) ||
+        (sb_cloud_text_equal(amount_text, "play") != 0)) {
+        return SB_STATUS_UNSUPPORTED;
+    }
+
+    status = sb_payment_read_legacy_token(message->payload, &offset, language_text, (u32)sizeof(language_text));
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+    status = sb_payment_read_legacy_token(message->payload, &offset, provider_text, (u32)sizeof(provider_text));
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+
+    sb_payment_zero_record(record);
+    status = sb_payment_parse_legacy_amount_paise(amount_text, &record->amount_paise);
+    if (status != SB_STATUS_OK) {
+        return status;
+    }
+
+    sb_payment_make_legacy_tx_id(message->payload, record->tx_id, SB_LEDGER_TX_ID_LEN);
+    record->provider = sb_payment_provider_from_text(provider_text);
+    *play_language = sb_audio_language_from_code(language_text);
+
+    if (sb_time_get_rtc(&time_status) == SB_STATUS_OK) {
+        record->date_yyyymmdd = sb_transaction_date_from_rtc(&time_status.rtc);
+        record->time_hhmmss = sb_transaction_time_from_rtc(&time_status.rtc);
+    }
+
+    return SB_STATUS_OK;
+}
+
 static sb_status_t sb_payment_record_from_message(const sb_mqtt_inbound_message_t *message,
-                                                  sb_transaction_record_t *record)
+                                                  sb_transaction_record_t *record,
+                                                  sb_audio_language_t *play_language)
 {
     char provider_text[SB_LEDGER_PROVIDER_LEN];
     sb_time_status_t time_status;
     sb_status_t status;
 
-    if ((message == 0) || (record == 0)) {
+    if ((message == 0) || (record == 0) || (play_language == 0)) {
         return SB_STATUS_INVALID_PARAM;
+    }
+
+    *play_language = sb_audio_language_from_code(s_payment_config.language);
+    if (sb_payment_payload_is_legacy_hash(message->payload) != 0) {
+        return sb_payment_record_from_legacy_message(message, record, play_language);
     }
 
     sb_payment_zero_record(record);
@@ -147,6 +341,7 @@ sb_status_t sb_payment_processor_init(void)
     }
     sb_config_make_defaults(&s_payment_config);
     (void)sb_config_get(&s_payment_config);
+    sb_demo_expand_config_runtime(&s_payment_config);
     s_payment_ready = 1;
     return SB_STATUS_OK;
 }
@@ -154,6 +349,7 @@ sb_status_t sb_payment_processor_init(void)
 sb_status_t sb_payment_processor_handle_message(const sb_mqtt_inbound_message_t *message)
 {
     sb_transaction_record_t record;
+    sb_audio_language_t play_language;
     sb_status_t status;
     int duplicate = 0;
 
@@ -161,7 +357,12 @@ sb_status_t sb_payment_processor_handle_message(const sb_mqtt_inbound_message_t 
         return SB_STATUS_INVALID_PARAM;
     }
 
-    status = sb_payment_record_from_message(message, &record);
+    status = sb_payment_record_from_message(message, &record, &play_language);
+    if (status == SB_STATUS_UNSUPPORTED) {
+        SB_LOGW(SB_PAYMENT_MODULE_NAME, "legacy non-payment payload ignored");
+        sb_payment_post_event(SB_EVENT_PAYMENT_FAULT, (s32)status, 0u, "legacy_command");
+        return status;
+    }
     if (status != SB_STATUS_OK) {
         SB_LOGW(SB_PAYMENT_MODULE_NAME, "invalid payment payload");
         sb_payment_post_event(SB_EVENT_PAYMENT_FAULT, (s32)status, 0u, "parse");
@@ -185,6 +386,6 @@ sb_status_t sb_payment_processor_handle_message(const sb_mqtt_inbound_message_t 
     SB_LOGI(SB_PAYMENT_MODULE_NAME, "payment accepted amount_paise=%u", (u32)record.amount_paise);
     sb_payment_publish_ack(record.tx_id, "accepted");
     sb_payment_post_event(SB_EVENT_PAYMENT_ACCEPTED, SB_STATUS_OK, (u32)record.amount_paise, "accepted");
-    (void)sb_audio_service_play_amount(sb_audio_language_from_code(s_payment_config.language), record.provider, record.amount_paise);
+    (void)sb_audio_service_play_amount(play_language, record.provider, record.amount_paise);
     return SB_STATUS_OK;
 }

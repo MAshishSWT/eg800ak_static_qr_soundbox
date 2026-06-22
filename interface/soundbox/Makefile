@@ -40,6 +40,7 @@ SRC_FILES+= \
   src/sb_time_service.c \
   src/sb_network_service.c \
   src/sb_cloud_utils.c \
+  src/sb_demo_profile.c \
   src/sb_mqtt_service.c \
   src/sb_http_service.c \
   src/sb_json.c \

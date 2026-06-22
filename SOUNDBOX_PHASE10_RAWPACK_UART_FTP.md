@@ -64,7 +64,7 @@ UART import is available only in factory serial mode.
 Begin:
 
 ```json
-{"cmd":"asset_begin","size":6459110,"crc32":1666800468,"erase":1}
+{"cmd":"asset_begin","size":6459110,"crc32":1666792276,"erase":1}
 ```
 
 Chunk, using sequential offsets and hex data up to 160 raw bytes per command:
@@ -98,18 +98,10 @@ FTP import downloads the complete `.sbas` file and streams it directly into exte
   "remote":"/soundbox/Vi_mp3.sbas",
   "cid":1,
   "size":6459110,
-  "crc32":1666800468
+  "crc32":1666792276
 }
 ```
 
 ## Playback path
 
 At runtime the audio service resolves folder-style logical paths through the SBAS index. The selected MP3 is staged to `U:/sb_play.mp3` and played using the QuecOpen MP3 API.
-
-## UART PC transfer helper
-
-```bash
-python tools/soundbox_uart_asset_push.py COM12 Vi_mp3.sbas --chunk 128
-```
-
-The script sends `asset_begin`, sequential `asset_chunk`, `asset_end`, and `asset_status` commands.
