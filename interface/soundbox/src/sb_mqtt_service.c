@@ -3,6 +3,7 @@
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *================================================================*/
 #include "MQTTClient.h"
+#include "ql_fs.h"
 #include "ql_rtos.h"
 #include "ql_ssl_hal.h"
 #include "sb_business_service.h"
@@ -209,6 +210,36 @@ static int sb_mqtt_network_ready(void)
     }
 
     return (net_status.online != 0) ? 1 : 0;
+}
+
+static int sb_mqtt_cert_file_exists(const char *path)
+{
+    if ((path == 0) || (path[0] == '\0')) {
+        return 0;
+    }
+    return (ql_access(path, 0u) == 0) ? 1 : 0;
+}
+
+static int sb_mqtt_tls_assets_ready(void)
+{
+    if (s_mqtt_config.mqtt_port != SB_MQTT_TLS_PORT) {
+        return 1;
+    }
+
+    if (sb_mqtt_cert_file_exists(s_mqtt_root_ca_path) == 0) {
+        SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_root_ca_path);
+        return 0;
+    }
+    if (sb_mqtt_cert_file_exists(s_mqtt_client_cert_path) == 0) {
+        SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_client_cert_path);
+        return 0;
+    }
+    if (sb_mqtt_cert_file_exists(s_mqtt_client_key_path) == 0) {
+        SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_client_key_path);
+        return 0;
+    }
+
+    return 1;
 }
 
 static sb_mqtt_message_type_t sb_mqtt_classify_topic(const char *topic)
@@ -521,6 +552,7 @@ static void sb_mqtt_task(void *argv)
 {
     sb_status_t status;
     int config_fault_reported = 0;
+    int cert_fault_reported = 0;
 
     (void)argv;
     SB_LOGI(SB_MQTT_MODULE_NAME, "task started");
@@ -541,6 +573,17 @@ static void sb_mqtt_task(void *argv)
             continue;
         }
         config_fault_reported = 0;
+
+        if (sb_mqtt_tls_assets_ready() == 0) {
+            if (cert_fault_reported == 0) {
+                sb_mqtt_post_event(SB_EVENT_MQTT_FAULT, (s32)SB_STATUS_CONFIG_ERROR, 0u, "cert_missing");
+                cert_fault_reported = 1;
+            }
+            sb_mqtt_status_set(SB_MQTT_STATE_BACKOFF, 0, SB_STATUS_CONFIG_ERROR);
+            ql_rtos_task_sleep_ms(SB_MQTT_RECONNECT_BACKOFF_MS);
+            continue;
+        }
+        cert_fault_reported = 0;
 
         sb_mqtt_status_set(SB_MQTT_STATE_CONNECTING, 0, 0);
         status = sb_mqtt_connect();

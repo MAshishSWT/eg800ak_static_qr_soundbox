@@ -3,6 +3,7 @@
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *================================================================*/
 #include "ql_http_client.h"
+#include "ql_fs.h"
 #include "ql_rtos.h"
 #include "ql_ssl_hal.h"
 #include "sb_business_service.h"
@@ -150,6 +151,20 @@ static int sb_http_configured(void)
     return (s_http_config.http_base_url[0] != '\0') ? 1 : 0;
 }
 
+static int sb_http_tls_assets_ready(void)
+{
+    if (sb_cloud_url_is_https(s_http_config.http_base_url) == 0) {
+        return 1;
+    }
+
+    if (ql_access(s_http_root_ca_path, 0u) != 0) {
+        SB_LOGE(SB_HTTP_MODULE_NAME, "missing cert %s", s_http_root_ca_path);
+        return 0;
+    }
+
+    return 1;
+}
+
 static sb_status_t sb_http_build_url(char *url, u32 url_len, const char *path)
 {
     if ((url == 0) || (url_len == 0u) || (path == 0)) {
@@ -289,6 +304,12 @@ static sb_status_t sb_http_post_json(const char *path, const char *payload, u32 
         return SB_STATUS_INVALID_PARAM;
     }
 
+    if (sb_http_tls_assets_ready() == 0) {
+        sb_http_status_update(1, 0, SB_STATUS_CONFIG_ERROR, 0, 1);
+        sb_http_post_event(SB_EVENT_HTTP_FAULT, (s32)SB_STATUS_CONFIG_ERROR, 0u, "cert_missing");
+        return SB_STATUS_CONFIG_ERROR;
+    }
+
     if (sb_http_build_url(url, (u32)sizeof(url), path) != SB_STATUS_OK) {
         return SB_STATUS_NO_MEMORY;
     }
@@ -394,6 +415,12 @@ static void sb_http_task(void *argv)
 
         if (sb_http_configured() == 0) {
             sb_http_status_update(0, 0, SB_STATUS_CONFIG_ERROR, 0, 0);
+            ql_rtos_task_sleep_ms(SB_HTTP_NETWORK_WAIT_MS);
+            continue;
+        }
+
+        if (sb_http_tls_assets_ready() == 0) {
+            sb_http_status_update(1, 0, SB_STATUS_CONFIG_ERROR, 0, 0);
             ql_rtos_task_sleep_ms(SB_HTTP_NETWORK_WAIT_MS);
             continue;
         }
