@@ -43,6 +43,11 @@ def send_line(port: serial.Serial, obj: dict[str, object], wait_s: float, retrie
             return reply
         if attempt < retries:
             time.sleep(0.20 + (0.10 * attempt))
+    if last_reply == "":
+        raise RuntimeError(
+            "no reply from device. Check that firmware is built with serial asset provisioning enabled, "
+            "the correct COM port is selected, and USB CDC is not held by another terminal"
+        )
     raise RuntimeError(f"command failed after {retries + 1} attempt(s): {last_reply!r}")
 
 

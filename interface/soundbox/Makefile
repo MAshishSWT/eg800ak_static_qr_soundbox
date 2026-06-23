@@ -85,6 +85,7 @@ DFLAGS+= \
   -D__TM_GMTOFF=tm_gmtoff \
   -DSB_PHASE_NUMBER=10 \
   -DSB_BUILD_TARGET_EG800AK=1 \
+  -DSB_SERIAL_ASSET_PROVISIONING_ENABLED=1 \
 
 #-------------------------------------------------------------------------------
 # Configure link library

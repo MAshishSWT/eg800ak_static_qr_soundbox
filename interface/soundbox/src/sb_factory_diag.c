@@ -378,10 +378,17 @@ static sb_status_t sb_factory_store_sms_auth(const char *json,
 
 static int sb_factory_asset_access_allowed(sb_factory_channel_t channel)
 {
-    if ((channel == SB_FACTORY_CHANNEL_SERIAL) && (sb_mode_factory_access_allowed() != 0)) {
+    if (channel != SB_FACTORY_CHANNEL_SERIAL) {
+        return 0;
+    }
+    if (sb_mode_factory_access_allowed() != 0) {
         return 1;
     }
+#ifdef SB_SERIAL_ASSET_PROVISIONING_ENABLED
+    return 1;
+#else
     return 0;
+#endif
 }
 
 static sb_status_t sb_factory_asset_begin_from_json(const char *json,

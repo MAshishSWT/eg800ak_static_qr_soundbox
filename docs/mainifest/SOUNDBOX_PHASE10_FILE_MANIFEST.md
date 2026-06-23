@@ -68,3 +68,12 @@ Modified:
 - `interface/soundbox/src/sb_http_service.c`
 - `interface/soundbox/include/sb_app.h`
 - `SOUNDBOX_PHASE10_ROOT_CERT_PATH_FIX.md`
+
+## UART asset provisioning enablement
+
+- `interface/soundbox/Makefile`
+- `interface/soundbox/src/sb_serial_service.c`
+- `interface/soundbox/src/sb_factory_diag.c`
+- `interface/soundbox/include/sb_app.h`
+- `tools/soundbox_uart_asset_push.py`
+- `SOUNDBOX_PHASE10_UART_ASSET_PROVISION.md`

@@ -194,9 +194,13 @@ sb_status_t sb_serial_service_init(const sb_config_payload_t *config)
     }
 
     if (sb_mode_factory_access_allowed() == 0) {
+#ifndef SB_SERIAL_ASSET_PROVISIONING_ENABLED
         s_serial_enabled = 0;
         SB_LOGI(SB_SERIAL_MODULE_NAME, "disabled in production mode");
         return SB_STATUS_OK;
+#else
+        SB_LOGI(SB_SERIAL_MODULE_NAME, "enabled for asset provisioning");
+#endif
     }
 
     if (ql_rtos_mutex_create(&s_serial_mutex) != 0) {
