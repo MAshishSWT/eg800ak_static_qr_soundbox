@@ -7,7 +7,13 @@
  * through SSL_CERT_FROM_BUF. No certificate files are created.
  *================================================================*/
 #include "sb_default_certs.h"
+#include "ql_fs.h"
+#include "sb_log.h"
 
+#define SB_DEFAULT_CERTS_MODULE_NAME "cert_defaults"
+#define SB_MQTT_ROOT_CA_PATH         "U:/mqtt_root_ca.pem"
+#define SB_MQTT_CLIENT_CRT_PATH      "U:/mqtt_client.crt"
+#define SB_MQTT_CLIENT_KEY_PATH      "U:/mqtt_client.key"
 
 static const char s_default_root_ca_pem[] =
     "-----BEGIN CERTIFICATE-----\n"
@@ -95,4 +101,65 @@ const char *sb_default_certs_mqtt_client_crt(void)
 const char *sb_default_certs_mqtt_client_key(void)
 {
     return s_default_client_key_pem;
+}
+
+
+static sb_status_t sb_default_cert_write_file(const char *path, const char *data)
+{
+    QFILE *fp;
+    u32 len;
+    int written;
+
+    if ((path == 0) || (data == 0) || (data[0] == '\0')) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    if (ql_access(path, 0u) == 0) {
+        return SB_STATUS_ALREADY_INITIALIZED;
+    }
+
+    fp = ql_fopen(path, "w+");
+    if (fp == 0) {
+        return SB_STATUS_FILE_ERROR;
+    }
+    len = 0u;
+    while (data[len] != '\0') {
+        len++;
+    }
+    written = ql_fwrite((void *)data, 1u, len, fp);
+    (void)ql_fsync(fp);
+    (void)ql_fclose(fp);
+    if (written != (int)len) {
+        (void)ql_remove(path);
+        return SB_STATUS_FILE_ERROR;
+    }
+    SB_LOGI(SB_DEFAULT_CERTS_MODULE_NAME, "created %s bytes=%u", path, len);
+    return SB_STATUS_OK;
+}
+
+static void sb_default_cert_log_status(const char *name, sb_status_t status)
+{
+    if ((status == SB_STATUS_OK) || (status == SB_STATUS_ALREADY_INITIALIZED)) {
+        return;
+    }
+    SB_LOGW(SB_DEFAULT_CERTS_MODULE_NAME, "%s create status=%s", name, sb_status_to_string(status));
+}
+
+sb_status_t sb_default_certs_ensure_mqtt_files(void)
+{
+    sb_status_t status;
+    sb_status_t final_status = SB_STATUS_OK;
+
+    status = sb_default_cert_write_file(SB_MQTT_ROOT_CA_PATH, s_default_root_ca_pem);
+    sb_default_cert_log_status("mqtt_root_ca", status);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) { final_status = status; }
+
+    status = sb_default_cert_write_file(SB_MQTT_CLIENT_CRT_PATH, s_default_client_crt_pem);
+    sb_default_cert_log_status("mqtt_client_crt", status);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) { final_status = status; }
+
+    status = sb_default_cert_write_file(SB_MQTT_CLIENT_KEY_PATH, s_default_client_key_pem);
+    sb_default_cert_log_status("mqtt_client_key", status);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) { final_status = status; }
+
+    return final_status;
 }

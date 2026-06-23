@@ -8,3 +8,7 @@ This build disables external NOR, HTTP health update, and OTA code paths. Audio 
 
 
 Phase 19 normalizes embedded MQTT PEM buffers to LF-only line endings to match Quectel SDK MQTT examples and avoid mbedtls_pk_parse_key failures on the module.
+
+Phase 20 adds MAIN UART file provisioning for audio files into `U:/audio/...` using `tools/soundbox_uart_ufs_push.py`.
+
+Phase 21 changes the UART tool to transfer only essential demo prompts by default and switches MQTT TLS to root-level UFS certificate-file mode because buffer mode failed with `mbedtls_pk_parse_key` on the module.

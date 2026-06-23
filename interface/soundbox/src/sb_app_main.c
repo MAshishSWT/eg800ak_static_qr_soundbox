@@ -11,6 +11,7 @@
 #include "sb_bsp_kae8_sq1.h"
 #include "sb_business_service.h"
 #include "sb_config.h"
+#include "sb_default_certs.h"
 #include "sb_error.h"
 #include "sb_event_bus.h"
 #include "sb_factory_diag.h"
@@ -56,6 +57,11 @@ static void sb_app_entry(void *argv)
         SB_LOGE(SB_APP_MODULE_NAME, "config service init failed status=%s", sb_status_to_string(status));
         ql_rtos_task_delete(NULL);
         return;
+    }
+
+    status = sb_default_certs_ensure_mqtt_files();
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "default MQTT cert file creation status=%s", sb_status_to_string(status));
     }
 
     sb_config_make_defaults(&config);

@@ -83,8 +83,9 @@ DFLAGS+= \
   -DSB_EXTERNAL_NOR_DISABLED=1 \
   -DSB_HTTP_SERVICE_DISABLED=1 \
   -DSB_OTA_SERVICE_DISABLED=1 \
-  -DSB_MQTT_CERT_FROM_BUFFER=1 \
+  -DSB_MQTT_CERT_FROM_FS=1 \
   -DSB_SERIAL_USE_MAIN_UART=1 \
+  -DSB_SERIAL_FILE_PROVISIONING_ENABLED=1 \
 
 #-------------------------------------------------------------------------------
 # Configure link library

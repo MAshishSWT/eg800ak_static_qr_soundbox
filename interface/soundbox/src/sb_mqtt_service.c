@@ -4,6 +4,7 @@
  *================================================================*/
 #include "MQTTClient.h"
 #include "ql_rtos.h"
+#include "ql_fs.h"
 #include "ql_ssl_hal.h"
 #include "sb_business_service.h"
 #include "sb_cloud_utils.h"
@@ -17,6 +18,9 @@
 #include "sb_network_service.h"
 
 #define SB_MQTT_MODULE_NAME              "mqtt"
+#define SB_MQTT_ROOT_CA_PATH              "U:/mqtt_root_ca.pem"
+#define SB_MQTT_CLIENT_CRT_PATH           "U:/mqtt_client.crt"
+#define SB_MQTT_CLIENT_KEY_PATH           "U:/mqtt_client.key"
 #define SB_MQTT_CIPHER_LIST              "ALL"
 #define SB_MQTT_COMMAND_SUFFIX           "/cmd"
 #define SB_MQTT_HEALTH_TYPE              "health"
@@ -329,10 +333,10 @@ static void sb_mqtt_configure_ssl(u32 port)
         s_mqtt_ssl_config.sessionReuseEn = 0u;
         s_mqtt_ssl_config.vsn = SSL_VSN_ALL;
         s_mqtt_ssl_config.verify = SSL_VERIFY_MODE_REQUIRED;
-        s_mqtt_ssl_config.cert.from = SSL_CERT_FROM_BUF;
-        s_mqtt_ssl_config.cert.path.rootCA = (char *)sb_default_certs_mqtt_root_ca();
-        s_mqtt_ssl_config.cert.path.clientKey = (char *)sb_default_certs_mqtt_client_key();
-        s_mqtt_ssl_config.cert.path.clientCert = (char *)sb_default_certs_mqtt_client_crt();
+        s_mqtt_ssl_config.cert.from = SSL_CERT_FROM_FS;
+        s_mqtt_ssl_config.cert.path.rootCA = SB_MQTT_ROOT_CA_PATH;
+        s_mqtt_ssl_config.cert.path.clientKey = SB_MQTT_CLIENT_KEY_PATH;
+        s_mqtt_ssl_config.cert.path.clientCert = SB_MQTT_CLIENT_CRT_PATH;
         s_mqtt_ssl_config.cert.clientKeyPwd.data = NULL;
         s_mqtt_ssl_config.cert.clientKeyPwd.len = 0;
         s_mqtt_ssl_config.cipherList = SB_MQTT_CIPHER_LIST;
@@ -613,7 +617,7 @@ sb_status_t sb_mqtt_service_init(const sb_config_payload_t *config)
     s_mqtt_config = *config;
     sb_demo_expand_config_runtime(&s_mqtt_config);
     sb_mqtt_build_command_topic();
-    SB_LOGI(SB_MQTT_MODULE_NAME, "demo mqtt host=%s sub=%s cert=buffer", s_mqtt_config.mqtt_host, s_mqtt_config.mqtt_sub_topic);
+    SB_LOGI(SB_MQTT_MODULE_NAME, "demo mqtt host=%s sub=%s cert=fs", s_mqtt_config.mqtt_host, s_mqtt_config.mqtt_sub_topic);
 
     ret = ql_rtos_mutex_create(&s_mqtt_mutex);
     if (ret != 0) {

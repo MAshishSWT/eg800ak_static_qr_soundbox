@@ -5,9 +5,11 @@
 #include "ql_type.h"
 #include "ql_securedata.h"
 #include "ql_rtos.h"
+#include "ql_fs.h"
 #include "sb_audio_service.h"
 #include "sb_cloud_utils.h"
 #include "sb_config.h"
+#include "sb_crc32.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
 #include "sb_factory_diag.h"
@@ -19,8 +21,21 @@
 #include "sb_transaction_ledger.h"
 
 #define SB_FACTORY_MODULE_NAME "factory"
+#define SB_FACTORY_FILE_PATH_LEN (128u)
+#define SB_FACTORY_FILE_HEX_MAX  (2048u)
+
+typedef struct {
+    int active;
+    QFILE *fp;
+    char path[SB_FACTORY_FILE_PATH_LEN];
+    u32 expected_size;
+    u32 expected_crc32;
+    u32 received_size;
+    u32 crc_state;
+} sb_factory_file_upload_t;
 
 static int s_factory_diag_ready = 0;
+static sb_factory_file_upload_t s_file_upload;
 
 static void sb_factory_zero_buffer(void *buffer, u32 len)
 {
@@ -254,6 +269,259 @@ static sb_status_t sb_factory_commit_config_from_json(const char *json,
     return sb_factory_reply_status(reply, reply_len, "ok", "config_saved");
 }
 
+
+static int sb_factory_hex_value(char c)
+{
+    if ((c >= '0') && (c <= '9')) {
+        return (int)(c - '0');
+    }
+    if ((c >= 'a') && (c <= 'f')) {
+        return (int)(c - 'a' + 10);
+    }
+    if ((c >= 'A') && (c <= 'F')) {
+        return (int)(c - 'A' + 10);
+    }
+    return -1;
+}
+
+static sb_status_t sb_factory_hex_to_bytes_partial(const char *hex, u8 *out, u32 out_max, u32 *out_len)
+{
+    u32 hex_len;
+    u32 i;
+
+    if ((hex == 0) || (out == 0) || (out_len == 0)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    hex_len = sb_cloud_str_len(hex);
+    if (((hex_len & 1u) != 0u) || ((hex_len / 2u) > out_max)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    for (i = 0u; i < (hex_len / 2u); i++) {
+        int hi = sb_factory_hex_value(hex[i * 2u]);
+        int lo = sb_factory_hex_value(hex[(i * 2u) + 1u]);
+        if ((hi < 0) || (lo < 0)) {
+            return SB_STATUS_INVALID_PARAM;
+        }
+        out[i] = (u8)(((u32)hi << 4u) | (u32)lo);
+    }
+    *out_len = hex_len / 2u;
+    return SB_STATUS_OK;
+}
+
+static int sb_factory_file_access_allowed(sb_factory_channel_t channel)
+{
+    if (channel != SB_FACTORY_CHANNEL_SERIAL) {
+        return 0;
+    }
+    if (sb_mode_factory_access_allowed() != 0) {
+        return 1;
+    }
+#ifdef SB_SERIAL_FILE_PROVISIONING_ENABLED
+    return 1;
+#else
+    return 0;
+#endif
+}
+
+static sb_status_t sb_factory_file_to_ufs_path(const char *input, char *out, u32 out_len)
+{
+    if ((input == 0) || (out == 0) || (out_len == 0u)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    out[0] = '\0';
+    if (sb_cloud_has_prefix(input, "U:/") != 0) {
+        if ((sb_cloud_has_prefix(input, "U:/audio/") == 0) && (sb_cloud_text_equal(input, "U:/audio") == 0)) {
+            return SB_STATUS_SECURITY_ERROR;
+        }
+        sb_cloud_copy_string(out, out_len, input);
+        return SB_STATUS_OK;
+    }
+    if (sb_cloud_has_prefix(input, "audio/") != 0) {
+        if (sb_cloud_append_string(out, out_len, "U:/") != SB_STATUS_OK) {
+            return SB_STATUS_NO_MEMORY;
+        }
+        return sb_cloud_append_string(out, out_len, input);
+    }
+    return SB_STATUS_INVALID_PARAM;
+}
+
+static void sb_factory_file_make_parent_dirs(const char *path)
+{
+    char dir[SB_FACTORY_FILE_PATH_LEN];
+    u32 i;
+    u32 len;
+
+    if (path == 0) {
+        return;
+    }
+    len = sb_cloud_str_len(path);
+    if (len >= (u32)sizeof(dir)) {
+        return;
+    }
+    dir[0] = '\0';
+    for (i = 0u; i < len; i++) {
+        dir[i] = path[i];
+        dir[i + 1u] = '\0';
+        if ((i > 2u) && (path[i] == '/')) {
+            dir[i] = '\0';
+            (void)ql_mkdir(dir, 0u);
+            dir[i] = '/';
+        }
+    }
+}
+
+static void sb_factory_file_close_upload(void)
+{
+    if (s_file_upload.fp != 0) {
+        (void)ql_fsync(s_file_upload.fp);
+        (void)ql_fclose(s_file_upload.fp);
+    }
+    s_file_upload.fp = 0;
+    s_file_upload.active = 0;
+}
+
+static sb_status_t sb_factory_file_begin_from_json(const char *json,
+                                                   sb_factory_channel_t channel,
+                                                   char *reply,
+                                                   u32 reply_len)
+{
+    char path_in[SB_FACTORY_FILE_PATH_LEN];
+    char path[SB_FACTORY_FILE_PATH_LEN];
+    u64 size = 0u;
+    u64 crc32 = 0u;
+
+    if (sb_factory_file_access_allowed(channel) == 0) {
+        (void)sb_factory_reply_status(reply, reply_len, "rejected", "locked");
+        return SB_STATUS_SECURITY_ERROR;
+    }
+    sb_factory_zero_buffer(path_in, (u32)sizeof(path_in));
+    sb_factory_zero_buffer(path, (u32)sizeof(path));
+    if (sb_json_get_string(json, "path", path_in, (u32)sizeof(path_in)) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "path");
+    }
+    if ((sb_json_get_u64(json, "size", &size) != SB_STATUS_OK) || (size == 0u)) {
+        return sb_factory_reply_status(reply, reply_len, "error", "size");
+    }
+    (void)sb_json_get_u64(json, "crc32", &crc32);
+    if (sb_factory_file_to_ufs_path(path_in, path, (u32)sizeof(path)) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "path");
+    }
+
+    sb_factory_file_close_upload();
+    sb_factory_file_make_parent_dirs(path);
+    (void)ql_remove(path);
+    s_file_upload.fp = ql_fopen(path, "w+");
+    if (s_file_upload.fp == 0) {
+        return sb_factory_reply_status(reply, reply_len, "error", "open");
+    }
+    sb_cloud_copy_string(s_file_upload.path, (u32)sizeof(s_file_upload.path), path);
+    s_file_upload.expected_size = (u32)size;
+    s_file_upload.expected_crc32 = (u32)crc32;
+    s_file_upload.received_size = 0u;
+    s_file_upload.crc_state = SB_CRC32_INITIAL_VALUE;
+    s_file_upload.active = 1;
+    SB_LOGI(SB_FACTORY_MODULE_NAME, "file_begin path=%s size=%u crc32=%08x", path, s_file_upload.expected_size, s_file_upload.expected_crc32);
+    return sb_factory_reply_status(reply, reply_len, "ok", "file_begin");
+}
+
+static sb_status_t sb_factory_file_chunk_from_json(const char *json,
+                                                   sb_factory_channel_t channel,
+                                                   char *reply,
+                                                   u32 reply_len)
+{
+    static u8 data[1024];
+    char data_hex[SB_FACTORY_FILE_HEX_MAX + 1u];
+    u64 offset = 0u;
+    u32 data_len = 0u;
+    int written;
+
+    if (sb_factory_file_access_allowed(channel) == 0) {
+        (void)sb_factory_reply_status(reply, reply_len, "rejected", "locked");
+        return SB_STATUS_SECURITY_ERROR;
+    }
+    if ((s_file_upload.active == 0) || (s_file_upload.fp == 0)) {
+        return sb_factory_reply_status(reply, reply_len, "error", "inactive");
+    }
+    if (sb_json_get_u64(json, "offset", &offset) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "offset");
+    }
+    if ((u32)offset != s_file_upload.received_size) {
+        return sb_factory_reply_status(reply, reply_len, "error", "offset");
+    }
+    data_hex[0] = '\0';
+    if (sb_json_get_string(json, "data_hex", data_hex, (u32)sizeof(data_hex)) != SB_STATUS_OK) {
+        if (sb_json_get_string(json, "data", data_hex, (u32)sizeof(data_hex)) != SB_STATUS_OK) {
+            return sb_factory_reply_status(reply, reply_len, "error", "data");
+        }
+    }
+    if (sb_factory_hex_to_bytes_partial(data_hex, data, (u32)sizeof(data), &data_len) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "data");
+    }
+    if ((s_file_upload.received_size + data_len) > s_file_upload.expected_size) {
+        return sb_factory_reply_status(reply, reply_len, "error", "size");
+    }
+    written = ql_fwrite(data, 1u, data_len, s_file_upload.fp);
+    if (written != (int)data_len) {
+        sb_factory_file_close_upload();
+        return sb_factory_reply_status(reply, reply_len, "error", "write");
+    }
+    s_file_upload.crc_state = sb_crc32_update(s_file_upload.crc_state, data, data_len);
+    s_file_upload.received_size += data_len;
+
+    reply[0] = '\0';
+    if (sb_cloud_append_string(reply, reply_len, "{\"status\":\"ok\",\"written\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, data_len) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"received\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, s_file_upload.received_size) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, "}") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_factory_file_end_from_json(sb_factory_channel_t channel,
+                                                 char *reply,
+                                                 u32 reply_len)
+{
+    u32 crc_final;
+
+    if (sb_factory_file_access_allowed(channel) == 0) {
+        (void)sb_factory_reply_status(reply, reply_len, "rejected", "locked");
+        return SB_STATUS_SECURITY_ERROR;
+    }
+    if ((s_file_upload.active == 0) || (s_file_upload.fp == 0)) {
+        return sb_factory_reply_status(reply, reply_len, "error", "inactive");
+    }
+    if (s_file_upload.received_size != s_file_upload.expected_size) {
+        sb_factory_file_close_upload();
+        return sb_factory_reply_status(reply, reply_len, "error", "size");
+    }
+    crc_final = s_file_upload.crc_state ^ 0xFFFFFFFFu;
+    if ((s_file_upload.expected_crc32 != 0u) && (crc_final != s_file_upload.expected_crc32)) {
+        sb_factory_file_close_upload();
+        return sb_factory_reply_status(reply, reply_len, "error", "crc");
+    }
+    (void)ql_fsync(s_file_upload.fp);
+    (void)ql_fclose(s_file_upload.fp);
+    s_file_upload.fp = 0;
+    s_file_upload.active = 0;
+    SB_LOGI(SB_FACTORY_MODULE_NAME, "file_end path=%s size=%u crc32=%08x", s_file_upload.path, s_file_upload.received_size, crc_final);
+    return sb_factory_reply_status(reply, reply_len, "ok", "file_end");
+}
+
+static sb_status_t sb_factory_file_status_reply(char *reply, u32 reply_len)
+{
+    reply[0] = '\0';
+    if (sb_cloud_append_string(reply, reply_len, "{\"status\":\"ok\",\"active\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, (s_file_upload.active != 0) ? 1u : 0u) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"path\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_json_string(reply, reply_len, s_file_upload.path) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"expected_size\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, s_file_upload.expected_size) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"received_size\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, s_file_upload.received_size) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, "}") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    return SB_STATUS_OK;
+}
+
 static sb_status_t sb_factory_store_sms_auth(const char *json,
                                              sb_factory_channel_t channel,
                                              char *reply,
@@ -338,6 +606,14 @@ sb_status_t sb_factory_diag_dispatch_json(const char *json,
         status = sb_factory_reply_diag(reply, reply_len);
     } else if ((sb_cloud_text_equal(cmd, "set_config") != 0) || (sb_cloud_text_equal(cmd, "provision") != 0)) {
         status = sb_factory_commit_config_from_json(json, channel, reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "file_begin") != 0) {
+        status = sb_factory_file_begin_from_json(json, channel, reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "file_chunk") != 0) {
+        status = sb_factory_file_chunk_from_json(json, channel, reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "file_end") != 0) {
+        status = sb_factory_file_end_from_json(channel, reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "file_status") != 0) {
+        status = sb_factory_file_status_reply(reply, reply_len);
     } else if ((sb_cloud_text_equal(cmd, "set_sms_auth") != 0) ||
                (sb_cloud_text_equal(cmd, "set_sms_recovery_auth") != 0)) {
         status = sb_factory_store_sms_auth(json, channel, reply, reply_len);
