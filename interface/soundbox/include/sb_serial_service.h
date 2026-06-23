@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#define SB_SERIAL_TASK_STACK_SIZE_BYTES   (8u * 1024u)
+#define SB_SERIAL_TASK_STACK_SIZE_BYTES   (10u * 1024u)
 #define SB_SERIAL_TASK_PRIORITY           (21u)
 #define SB_SERIAL_QUEUE_DEPTH             (4u)
 #define SB_SERIAL_LINE_LEN                (2304u)

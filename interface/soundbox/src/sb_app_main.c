@@ -11,6 +11,7 @@
 #include "sb_bsp_kae8_sq1.h"
 #include "sb_business_service.h"
 #include "sb_config.h"
+#include "sb_default_certs.h"
 #include "sb_error.h"
 #include "sb_event_bus.h"
 #include "sb_extnor.h"
@@ -64,6 +65,11 @@ static void sb_app_entry(void *argv)
     sb_config_make_defaults(&config);
     if (sb_config_get(&config) != SB_STATUS_OK) {
         SB_LOGW(SB_APP_MODULE_NAME, "config get failed, using audio defaults");
+    }
+
+    status = sb_default_certs_ensure();
+    if (status != SB_STATUS_OK) {
+        SB_LOGW(SB_APP_MODULE_NAME, "default cert ensure status=%s", sb_status_to_string(status));
     }
 
     status = sb_mode_service_init();

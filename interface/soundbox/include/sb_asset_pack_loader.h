@@ -17,6 +17,7 @@ extern "C" {
 #define SB_ASSET_PACK_INDEX_ENTRY_BYTES  (112u)
 #define SB_ASSET_PACK_MAX_BYTES          (8u * 1024u * 1024u)
 #define SB_ASSET_PACK_UART_HEX_MAX_BYTES (1024u)
+#define SB_ASSET_PACK_VERIFY_CHUNK_BYTES (1024u)
 
 typedef struct {
     int active;
@@ -25,6 +26,8 @@ typedef struct {
     u32 received_size;
     u32 running_crc32;
     u32 finalized_crc32;
+    u32 header_magic;
+    u8 header_bytes[4];
     u32 last_error;
 } sb_asset_pack_loader_status_t;
 

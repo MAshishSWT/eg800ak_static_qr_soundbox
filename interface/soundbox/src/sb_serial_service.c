@@ -14,7 +14,14 @@
 #include "sb_serial_service.h"
 
 #define SB_SERIAL_MODULE_NAME "serial"
+#ifdef SB_SERIAL_USE_MAIN_UART
+#define SB_SERIAL_PORT        QL_MAIN_UART_PORT
+#define SB_SERIAL_PORT_NAME   "main_uart"
+#else
 #define SB_SERIAL_PORT        QL_USB_CDC_PORT
+#define SB_SERIAL_PORT_NAME   "usb_cdc"
+#endif
+#define SB_SERIAL_BAUD        QL_UART_BAUD_921600
 
 typedef struct {
     char line[SB_SERIAL_LINE_LEN];
@@ -26,6 +33,8 @@ static ql_task_t s_serial_task = 0;
 static ql_queue_t s_serial_queue = 0;
 static ql_mutex_t s_serial_mutex = 0;
 static sb_serial_line_slot_t s_serial_pool[SB_SERIAL_POOL_DEPTH];
+static char s_serial_rx_line[SB_SERIAL_LINE_LEN];
+static u32 s_serial_rx_len = 0u;
 static int s_serial_started = 0;
 static int s_serial_enabled = 0;
 
@@ -45,6 +54,11 @@ static void sb_serial_zero_pool(void)
 {
     u32 i;
     u32 j;
+
+    s_serial_rx_len = 0u;
+    for (i = 0u; i < SB_SERIAL_LINE_LEN; i++) {
+        s_serial_rx_line[i] = '\0';
+    }
 
     for (i = 0u; i < SB_SERIAL_POOL_DEPTH; i++) {
         s_serial_pool[i].len = 0u;
@@ -124,25 +138,57 @@ static int sb_serial_pool_get(u32 slot, char *out, u32 out_len)
     return ok;
 }
 
+static void sb_serial_reset_rx_line(void)
+{
+    s_serial_rx_len = 0u;
+    s_serial_rx_line[0] = '\0';
+}
+
+static void sb_serial_submit_rx_line(void)
+{
+    u32 slot;
+
+    if (s_serial_rx_len == 0u) {
+        return;
+    }
+    s_serial_rx_line[s_serial_rx_len] = '\0';
+    if (sb_serial_pool_alloc((const unsigned char *)s_serial_rx_line, s_serial_rx_len, &slot) != 0) {
+        (void)ql_rtos_queue_release(s_serial_queue, sizeof(slot), (u8 *)&slot, QL_NO_WAIT);
+    }
+    sb_serial_reset_rx_line();
+}
+
 static void sb_serial_uart_cb(QL_UART_PORT_NUMBER_E port, void *para)
 {
-    unsigned char rx[SB_SERIAL_LINE_LEN];
+    unsigned char rx[512];
     int read_len;
-    u32 slot;
+    int i;
 
     (void)para;
     if ((s_serial_queue == 0) || (port != SB_SERIAL_PORT)) {
         return;
     }
 
-    read_len = ql_uart_read(port, rx, (int)sizeof(rx));
-    if (read_len <= 0) {
-        return;
+    while (1) {
+        read_len = ql_uart_read(port, rx, (int)sizeof(rx));
+        if (read_len <= 0) {
+            break;
+        }
+        for (i = 0; i < read_len; i++) {
+            char c = (char)rx[i];
+            if ((c == '\r') || (c == '\n')) {
+                sb_serial_submit_rx_line();
+            } else if ((unsigned char)c >= 0x20u) {
+                if ((s_serial_rx_len + 1u) < SB_SERIAL_LINE_LEN) {
+                    s_serial_rx_line[s_serial_rx_len++] = c;
+                    s_serial_rx_line[s_serial_rx_len] = '\0';
+                } else {
+                    sb_serial_reset_rx_line();
+                    SB_LOGW(SB_SERIAL_MODULE_NAME, "rx line overflow");
+                }
+            }
+        }
     }
-    if (sb_serial_pool_alloc(rx, (u32)read_len, &slot) == 0) {
-        return;
-    }
-    (void)ql_rtos_queue_release(s_serial_queue, sizeof(slot), (u8 *)&slot, QL_NO_WAIT);
 }
 
 static void sb_serial_task(void *argv)
@@ -153,8 +199,8 @@ static void sb_serial_task(void *argv)
     sb_status_t status;
 
     (void)argv;
-    SB_LOGI(SB_SERIAL_MODULE_NAME, "task started");
-    sb_serial_post_event(SB_EVENT_SERIAL_READY, SB_STATUS_OK, "usb_cdc");
+    SB_LOGI(SB_SERIAL_MODULE_NAME, "task started port=%s baud=%u", SB_SERIAL_PORT_NAME, (u32)SB_SERIAL_BAUD);
+    sb_serial_post_event(SB_EVENT_SERIAL_READY, SB_STATUS_OK, SB_SERIAL_PORT_NAME);
 
     while (1) {
         if (ql_rtos_queue_wait(s_serial_queue, (u8 *)&slot, sizeof(slot), QL_WAIT_FOREVER) != 0) {
@@ -213,7 +259,7 @@ sb_status_t sb_serial_service_init(const sb_config_payload_t *config)
         return SB_STATUS_QUEUE_ERROR;
     }
 
-    ret = ql_uart_open(SB_SERIAL_PORT, QL_UART_BAUD_115200, QL_FC_NONE);
+    ret = ql_uart_open(SB_SERIAL_PORT, SB_SERIAL_BAUD, QL_FC_NONE);
     if (ret != 0) {
         s_serial_queue = 0;
         return SB_STATUS_SERIAL_ERROR;

@@ -40,6 +40,7 @@ SRC_FILES+= \
   src/sb_time_service.c \
   src/sb_network_service.c \
   src/sb_cloud_utils.c \
+  src/sb_default_certs.c \
   src/sb_demo_profile.c \
   src/sb_mqtt_service.c \
   src/sb_http_service.c \
@@ -86,6 +87,7 @@ DFLAGS+= \
   -DSB_PHASE_NUMBER=10 \
   -DSB_BUILD_TARGET_EG800AK=1 \
   -DSB_SERIAL_ASSET_PROVISIONING_ENABLED=1 \
+  -DSB_SERIAL_USE_MAIN_UART=1 \
 
 #-------------------------------------------------------------------------------
 # Configure link library

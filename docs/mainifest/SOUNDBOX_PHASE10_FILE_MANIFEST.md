@@ -77,3 +77,31 @@ Modified:
 - `interface/soundbox/include/sb_app.h`
 - `tools/soundbox_uart_asset_push.py`
 - `SOUNDBOX_PHASE10_UART_ASSET_PROVISION.md`
+
+## UART RX line accumulation update
+
+- `interface/soundbox/src/sb_serial_service.c`
+- `interface/soundbox/include/sb_serial_service.h`
+- `interface/soundbox/include/sb_app.h`
+- `SOUNDBOX_PHASE10_UART_RXLINE_FIX.md`
+
+## Main UART asset provisioning update
+
+- `interface/soundbox/Makefile`
+- `interface/soundbox/src/sb_serial_service.c`
+- `interface/soundbox/include/sb_app.h`
+- `SOUNDBOX_PHASE10_MAIN_UART_ASSET_PROVISION.md`
+
+## Phase 10 Default Certificate Creation
+
+Added in this package:
+
+- interface/soundbox/include/sb_default_certs.h
+- interface/soundbox/src/sb_default_certs.c
+- SOUNDBOX_PHASE10_DEFAULT_CERTS.md
+
+Updated in this package:
+
+- interface/soundbox/Makefile
+- interface/soundbox/include/sb_app.h
+- interface/soundbox/src/sb_app_main.c

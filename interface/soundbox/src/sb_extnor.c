@@ -253,6 +253,7 @@ sb_status_t sb_extnor_write(u32 address, const void *buffer, u32 length)
     const unsigned char *src;
     u32 remaining;
     u32 offset;
+    u32 page_room;
     u32 chunk;
     unsigned int ret;
     sb_status_t status;
@@ -269,7 +270,11 @@ sb_status_t sb_extnor_write(u32 address, const void *buffer, u32 length)
     remaining = length;
     offset = 0u;
     while (remaining != 0u) {
-        chunk = (remaining > SB_EXTNOR_MAX_CHUNK_BYTES) ? SB_EXTNOR_MAX_CHUNK_BYTES : remaining;
+        page_room = SB_EXTNOR_PAGE_SIZE_BYTES - ((address + offset) % SB_EXTNOR_PAGE_SIZE_BYTES);
+        chunk = (remaining > page_room) ? page_room : remaining;
+        if (chunk > SB_EXTNOR_MAX_CHUNK_BYTES) {
+            chunk = SB_EXTNOR_MAX_CHUNK_BYTES;
+        }
         ret = ql_spi_nor_write(SB_EXTNOR_PORT, (unsigned char *)&src[offset], address + offset, (unsigned short)chunk);
         if (ret != 0u) {
             SB_LOGW(SB_EXTNOR_MODULE_NAME, "write addr=%u len=%u ret=%u", address + offset, chunk, ret);

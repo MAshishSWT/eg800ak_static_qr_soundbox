@@ -84,6 +84,11 @@ sb_status_t sb_asset_pack_loader_init(void)
     s_loader.received_size = 0u;
     s_loader.running_crc32 = SB_CRC32_INITIAL_VALUE;
     s_loader.finalized_crc32 = 0u;
+    s_loader.header_magic = 0u;
+    s_loader.header_bytes[0] = 0u;
+    s_loader.header_bytes[1] = 0u;
+    s_loader.header_bytes[2] = 0u;
+    s_loader.header_bytes[3] = 0u;
     s_loader.last_error = 0u;
     return SB_STATUS_OK;
 }
@@ -120,6 +125,11 @@ sb_status_t sb_asset_pack_loader_begin(u32 expected_size, u32 expected_crc32, u3
     s_loader.received_size = 0u;
     s_loader.running_crc32 = SB_CRC32_INITIAL_VALUE;
     s_loader.finalized_crc32 = 0u;
+    s_loader.header_magic = 0u;
+    s_loader.header_bytes[0] = 0u;
+    s_loader.header_bytes[1] = 0u;
+    s_loader.header_bytes[2] = 0u;
+    s_loader.header_bytes[3] = 0u;
     s_loader.last_error = 0u;
     SB_LOGI(SB_ASSET_PACK_MODULE_NAME, "begin size=%u crc32=%08x erase=%u", expected_size, expected_crc32, erase);
     return SB_STATUS_OK;
@@ -156,10 +166,58 @@ sb_status_t sb_asset_pack_loader_write(u32 offset, const u8 *data, u32 length)
     return SB_STATUS_OK;
 }
 
+static sb_status_t sb_asset_pack_loader_crc_from_nor(u32 bytes, u32 *crc32_out)
+{
+    u8 buffer[SB_ASSET_PACK_VERIFY_CHUNK_BYTES];
+    u32 remaining;
+    u32 offset;
+    u32 chunk;
+    u32 crc;
+    sb_status_t status;
+
+    if ((bytes == 0u) || (crc32_out == 0)) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+
+    remaining = bytes;
+    offset = 0u;
+    crc = SB_CRC32_INITIAL_VALUE;
+    while (remaining != 0u) {
+        chunk = (remaining > (u32)sizeof(buffer)) ? (u32)sizeof(buffer) : remaining;
+        status = sb_extnor_read(offset, buffer, chunk);
+        if (status != SB_STATUS_OK) {
+            return status;
+        }
+        crc = sb_crc32_update(crc, buffer, chunk);
+        offset += chunk;
+        remaining -= chunk;
+    }
+
+    *crc32_out = crc ^ 0xFFFFFFFFu;
+    return SB_STATUS_OK;
+}
+
+static void sb_asset_pack_loader_save_header(const u8 *header)
+{
+    if (header == 0) {
+        s_loader.header_magic = 0u;
+        s_loader.header_bytes[0] = 0u;
+        s_loader.header_bytes[1] = 0u;
+        s_loader.header_bytes[2] = 0u;
+        s_loader.header_bytes[3] = 0u;
+        return;
+    }
+    s_loader.header_bytes[0] = header[0];
+    s_loader.header_bytes[1] = header[1];
+    s_loader.header_bytes[2] = header[2];
+    s_loader.header_bytes[3] = header[3];
+    s_loader.header_magic = ((u32)header[0]) | (((u32)header[1]) << 8) | (((u32)header[2]) << 16) | (((u32)header[3]) << 24);
+}
+
 sb_status_t sb_asset_pack_loader_end(void)
 {
-    u32 magic;
     u8 header[SB_ASSET_PACK_HEADER_BYTES];
+    u32 transfer_crc32;
     sb_status_t status;
 
     if (s_loader.active == 0) {
@@ -168,14 +226,11 @@ sb_status_t sb_asset_pack_loader_end(void)
     }
     if (s_loader.received_size != s_loader.expected_size) {
         sb_asset_loader_set_error(SB_STATUS_INVALID_STATE);
+        SB_LOGW(SB_ASSET_PACK_MODULE_NAME,
+                "end rejected received=%u expected=%u",
+                s_loader.received_size,
+                s_loader.expected_size);
         return SB_STATUS_INVALID_STATE;
-    }
-
-    s_loader.finalized_crc32 = s_loader.running_crc32 ^ 0xFFFFFFFFu;
-    if ((s_loader.expected_crc32 != 0u) && (s_loader.finalized_crc32 != s_loader.expected_crc32)) {
-        s_loader.active = 0;
-        sb_asset_loader_set_error(SB_STATUS_CRC_ERROR);
-        return SB_STATUS_CRC_ERROR;
     }
 
     status = sb_extnor_read(0u, header, (u32)sizeof(header));
@@ -184,16 +239,48 @@ sb_status_t sb_asset_pack_loader_end(void)
         sb_asset_loader_set_error(status);
         return status;
     }
-    magic = ((u32)header[0]) | (((u32)header[1]) << 8) | (((u32)header[2]) << 16) | (((u32)header[3]) << 24);
-    if (magic != SB_ASSET_PACK_MAGIC) {
+    sb_asset_pack_loader_save_header(header);
+    if (s_loader.header_magic != SB_ASSET_PACK_MAGIC) {
         s_loader.active = 0;
         sb_asset_loader_set_error(SB_STATUS_INVALID_PARAM);
+        SB_LOGW(SB_ASSET_PACK_MODULE_NAME,
+                "invalid pack magic bytes=%02x %02x %02x %02x value=%08x expected=%08x",
+                s_loader.header_bytes[0],
+                s_loader.header_bytes[1],
+                s_loader.header_bytes[2],
+                s_loader.header_bytes[3],
+                s_loader.header_magic,
+                (u32)SB_ASSET_PACK_MAGIC);
         return SB_STATUS_INVALID_PARAM;
+    }
+
+    transfer_crc32 = s_loader.running_crc32 ^ 0xFFFFFFFFu;
+    status = sb_asset_pack_loader_crc_from_nor(s_loader.expected_size, &s_loader.finalized_crc32);
+    if (status != SB_STATUS_OK) {
+        s_loader.active = 0;
+        sb_asset_loader_set_error(status);
+        return status;
+    }
+
+    if ((s_loader.expected_crc32 != 0u) && (s_loader.finalized_crc32 != s_loader.expected_crc32)) {
+        s_loader.active = 0;
+        sb_asset_loader_set_error(SB_STATUS_CRC_ERROR);
+        SB_LOGW(SB_ASSET_PACK_MODULE_NAME,
+                "flash crc mismatch expected=%08x flash=%08x transfer=%08x",
+                s_loader.expected_crc32,
+                s_loader.finalized_crc32,
+                transfer_crc32);
+        return SB_STATUS_CRC_ERROR;
     }
 
     s_loader.active = 0;
     s_loader.last_error = 0u;
-    SB_LOGI(SB_ASSET_PACK_MODULE_NAME, "end size=%u crc32=%08x", s_loader.received_size, s_loader.finalized_crc32);
+    SB_LOGI(SB_ASSET_PACK_MODULE_NAME,
+            "end size=%u flash_crc32=%08x transfer_crc32=%08x magic=%08x",
+            s_loader.received_size,
+            s_loader.finalized_crc32,
+            transfer_crc32,
+            s_loader.header_magic);
     return SB_STATUS_OK;
 }
 
@@ -209,6 +296,16 @@ sb_status_t sb_asset_pack_loader_status(sb_asset_pack_loader_status_t *status)
         return SB_STATUS_INVALID_PARAM;
     }
     *status = s_loader;
+    if (sb_extnor_is_ready() != 0) {
+        u8 header[4];
+        if (sb_extnor_read(0u, header, (u32)sizeof(header)) == SB_STATUS_OK) {
+            status->header_bytes[0] = header[0];
+            status->header_bytes[1] = header[1];
+            status->header_bytes[2] = header[2];
+            status->header_bytes[3] = header[3];
+            status->header_magic = ((u32)header[0]) | (((u32)header[1]) << 8) | (((u32)header[2]) << 16) | (((u32)header[3]) << 24);
+        }
+    }
     return SB_STATUS_OK;
 }
 

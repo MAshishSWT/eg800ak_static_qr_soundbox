@@ -18,6 +18,7 @@ extern "C" {
 
 #define SB_EXTNOR_ID_LEN              (3u)
 #define SB_EXTNOR_SECTOR_SIZE_BYTES   (4096u)
+#define SB_EXTNOR_PAGE_SIZE_BYTES     (256u)
 #define SB_EXTNOR_MAX_XFER_BYTES      (65535u)
 #define SB_EXTNOR_EXPECTED_MIN_BYTES  (4u * 1024u * 1024u)
 #define SB_EXTNOR_EXPECTED_MAX_BYTES  (16u * 1024u * 1024u)
