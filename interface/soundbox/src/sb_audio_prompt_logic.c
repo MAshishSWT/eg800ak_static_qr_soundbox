@@ -264,7 +264,7 @@ sb_status_t sb_audio_prompt_logic_build_transaction(sb_audio_language_t language
     if (status != SB_STATUS_OK) { return status; }
 
     /* advert.mp3 is referenced by the business workbook but is not present in
-     * the supplied asset pack. The advertisement token is optional by product
+     * the supplied audio library. The advertisement token is optional by product
      * rule, so it is deliberately skipped instead of failing transaction audio.
      */
     (void)options;

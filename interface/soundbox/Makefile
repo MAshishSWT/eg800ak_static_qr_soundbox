@@ -24,12 +24,10 @@ SRC_FILES+= \
   src/sb_led_status.c \
   src/sb_crc32.c \
   src/sb_storage_fs.c \
-  src/sb_extnor.c \
   src/sb_audio_types.c \
   src/sb_amount_tokenizer.c \
   src/sb_audio_asset.c \
   src/sb_audio_asset_store.c \
-  src/sb_asset_pack_loader.c \
   src/sb_audio_prompt_logic.c \
   src/sb_audio_script.c \
   src/sb_audio_codec_es8311.c \
@@ -43,15 +41,11 @@ SRC_FILES+= \
   src/sb_default_certs.c \
   src/sb_demo_profile.c \
   src/sb_mqtt_service.c \
-  src/sb_http_service.c \
   src/sb_json.c \
   src/sb_transaction_ledger.c \
   src/sb_payment_processor.c \
   src/sb_command_dispatcher.c \
   src/sb_business_service.c \
-  src/sb_ota_crypto.c \
-  src/sb_ota_manifest.c \
-  src/sb_ota_service.c \
   src/sb_mode_service.c \
   src/sb_factory_diag.c \
   src/sb_serial_service.c \
@@ -84,9 +78,12 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=10 \
+  -DSB_PHASE_NUMBER=18 \
   -DSB_BUILD_TARGET_EG800AK=1 \
-  -DSB_SERIAL_ASSET_PROVISIONING_ENABLED=1 \
+  -DSB_EXTERNAL_NOR_DISABLED=1 \
+  -DSB_HTTP_SERVICE_DISABLED=1 \
+  -DSB_OTA_SERVICE_DISABLED=1 \
+  -DSB_MQTT_CERT_FROM_BUFFER=1 \
   -DSB_SERIAL_USE_MAIN_UART=1 \
 
 #-------------------------------------------------------------------------------

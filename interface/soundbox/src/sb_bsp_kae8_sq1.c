@@ -92,16 +92,6 @@ sb_status_t sb_bsp_board_init(void)
         return status;
     }
 
-    status = sb_bsp_check_status(sb_hal_gpio_output(SB_KAE8_FLASH_WP_GPIO, PIN_LEVEL_HIGH), "flash_wp_high");
-    if (status != SB_STATUS_OK) {
-        return status;
-    }
-
-    status = sb_bsp_check_status(sb_hal_gpio_output(SB_KAE8_FLASH_RST_GPIO, PIN_LEVEL_HIGH), "flash_rst_high");
-    if (status != SB_STATUS_OK) {
-        return status;
-    }
-
     s_board_ready = 1;
     sb_bsp_log_initial_inputs();
     (void)sb_bsp_board_set_status_led(1);

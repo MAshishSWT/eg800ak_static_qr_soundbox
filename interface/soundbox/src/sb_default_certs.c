@@ -1,20 +1,13 @@
 /*================================================================
- * Static QR UPI Soundbox - Demo Default Certificate Provisioning
+ * Static QR UPI Soundbox - Demo Default Certificate Buffers
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *
  * These PEM blocks are migrated from the provided EC200U-CN-AA demo
- * application source and are written to U: only when the corresponding
- * certificate/key files are not already present.
+ * application source and are provided to the Quectel SSL layer directly
+ * through SSL_CERT_FROM_BUF. No certificate files are created.
  *================================================================*/
-#include "ql_fs.h"
 #include "sb_default_certs.h"
-#include "sb_log.h"
 
-#define SB_DEFAULT_CERTS_MODULE_NAME "cert_defaults"
-#define SB_CERT_MQTT_ROOT_CA_PATH    "U:/mqtt_root_ca.pem"
-#define SB_CERT_MQTT_CLIENT_CRT_PATH "U:/mqtt_client.crt"
-#define SB_CERT_MQTT_CLIENT_KEY_PATH "U:/mqtt_client.key"
-#define SB_CERT_HTTP_ROOT_CA_PATH    "U:/http_root_ca.pem"
 
 static const char s_default_root_ca_pem[] =
     "-----BEGIN CERTIFICATE-----\r\n"
@@ -89,80 +82,17 @@ static const char s_default_client_key_pem[] =
     "Yl4hXTVhNu2r2zbaqSriEuKzcQOuwf6VVIiRDPHm2fwqUtq19bTpdQ==\r\n"
     "-----END RSA PRIVATE KEY-----\r\n";
 
-static u32 sb_default_certs_len(const char *text)
+const char *sb_default_certs_mqtt_root_ca(void)
 {
-    u32 len = 0u;
-
-    if (text == 0) {
-        return 0u;
-    }
-    while (text[len] != '\0') {
-        len++;
-    }
-    return len;
+    return s_default_root_ca_pem;
 }
 
-static sb_status_t sb_default_certs_write_if_missing(const char *path, const char *pem)
+const char *sb_default_certs_mqtt_client_crt(void)
 {
-    QFILE *file;
-    u32 len;
-    int ret;
-
-    if ((path == 0) || (pem == 0)) {
-        return SB_STATUS_INVALID_PARAM;
-    }
-    if (ql_access(path, 0u) == 0) {
-        return SB_STATUS_OK;
-    }
-
-    len = sb_default_certs_len(pem);
-    if (len == 0u) {
-        return SB_STATUS_INVALID_PARAM;
-    }
-
-    file = ql_fopen(path, "w+");
-    if (file == 0) {
-        SB_LOGW(SB_DEFAULT_CERTS_MODULE_NAME, "open failed path=%s", path);
-        return SB_STATUS_FILE_ERROR;
-    }
-
-    ret = ql_fwrite((void *)pem, len, 1u, file);
-    if (ret < 0) {
-        (void)ql_fclose(file);
-        SB_LOGW(SB_DEFAULT_CERTS_MODULE_NAME, "write failed path=%s ret=%d", path, ret);
-        return SB_STATUS_FILE_ERROR;
-    }
-
-    (void)ql_fsync(file);
-    if (ql_fclose(file) != 0) {
-        SB_LOGW(SB_DEFAULT_CERTS_MODULE_NAME, "close failed path=%s", path);
-        return SB_STATUS_FILE_ERROR;
-    }
-
-    SB_LOGI(SB_DEFAULT_CERTS_MODULE_NAME, "created %s bytes=%u", path, len);
-    return SB_STATUS_OK;
+    return s_default_client_crt_pem;
 }
 
-sb_status_t sb_default_certs_ensure(void)
+const char *sb_default_certs_mqtt_client_key(void)
 {
-    sb_status_t status;
-
-    status = sb_default_certs_write_if_missing(SB_CERT_MQTT_ROOT_CA_PATH, s_default_root_ca_pem);
-    if (status != SB_STATUS_OK) {
-        return status;
-    }
-    status = sb_default_certs_write_if_missing(SB_CERT_MQTT_CLIENT_CRT_PATH, s_default_client_crt_pem);
-    if (status != SB_STATUS_OK) {
-        return status;
-    }
-    status = sb_default_certs_write_if_missing(SB_CERT_MQTT_CLIENT_KEY_PATH, s_default_client_key_pem);
-    if (status != SB_STATUS_OK) {
-        return status;
-    }
-    status = sb_default_certs_write_if_missing(SB_CERT_HTTP_ROOT_CA_PATH, s_default_root_ca_pem);
-    if (status != SB_STATUS_OK) {
-        return status;
-    }
-
-    return SB_STATUS_OK;
+    return s_default_client_key_pem;
 }

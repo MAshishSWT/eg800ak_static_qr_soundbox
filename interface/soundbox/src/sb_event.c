@@ -90,10 +90,6 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "BATTERY_SAMPLE";
     case SB_EVENT_STORAGE_READY:
         return "STORAGE_READY";
-    case SB_EVENT_EXTNOR_READY:
-        return "EXTNOR_READY";
-    case SB_EVENT_EXTNOR_FAULT:
-        return "EXTNOR_FAULT";
     case SB_EVENT_CONFIG_READY:
         return "CONFIG_READY";
     case SB_EVENT_SIM_READY:
@@ -128,12 +124,6 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "MQTT_COMMAND_MESSAGE";
     case SB_EVENT_MQTT_PUBLISHED:
         return "MQTT_PUBLISHED";
-    case SB_EVENT_HTTP_HEALTH_DONE:
-        return "HTTP_HEALTH_DONE";
-    case SB_EVENT_HTTP_COMMAND_RESPONSE_DONE:
-        return "HTTP_COMMAND_RESPONSE_DONE";
-    case SB_EVENT_HTTP_FAULT:
-        return "HTTP_FAULT";
     case SB_EVENT_PAYMENT_ACCEPTED:
         return "PAYMENT_ACCEPTED";
     case SB_EVENT_PAYMENT_DUPLICATE:
@@ -148,14 +138,6 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "KEY_ACTION";
     case SB_EVENT_DAILY_SUMMARY_READY:
         return "DAILY_SUMMARY_READY";
-    case SB_EVENT_OTA_STARTED:
-        return "OTA_STARTED";
-    case SB_EVENT_OTA_PROGRESS:
-        return "OTA_PROGRESS";
-    case SB_EVENT_OTA_STAGED:
-        return "OTA_STAGED";
-    case SB_EVENT_OTA_FAILED:
-        return "OTA_FAILED";
     case SB_EVENT_FACTORY_READY:
         return "FACTORY_READY";
     case SB_EVENT_FACTORY_COMMAND:

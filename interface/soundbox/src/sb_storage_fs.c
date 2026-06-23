@@ -56,7 +56,6 @@ static void sb_storage_print_disk_usage(const char *name, char disk_sym)
 void sb_storage_fs_print_usage(void)
 {
     sb_storage_print_disk_usage("userfs", U_DISK_SYM);
-    sb_storage_print_disk_usage("internal", B_DISK_SYM);
 }
 
 static sb_status_t sb_storage_mkdir_if_needed(const char *path)

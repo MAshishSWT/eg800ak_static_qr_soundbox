@@ -142,16 +142,6 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "userfs ready status=%d", event->param_s32);
         break;
 
-    case SB_EVENT_EXTNOR_READY:
-        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "external nor ready capacity=%u status=%d",
-                event->param_u32, event->param_s32);
-        break;
-
-    case SB_EVENT_EXTNOR_FAULT:
-        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "external nor fault capacity=%u status=%d",
-                event->param_u32, event->param_s32);
-        break;
-
     case SB_EVENT_CONFIG_READY:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "config ready seq=%u source=%d", event->param_u32, event->param_s32);
         break;
@@ -238,18 +228,6 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "mqtt published len=%u topic=%s", event->param_u32, event->text);
         break;
 
-    case SB_EVENT_HTTP_HEALTH_DONE:
-        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "http health done code=%u", event->param_u32);
-        break;
-
-    case SB_EVENT_HTTP_COMMAND_RESPONSE_DONE:
-        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "http command response done code=%u", event->param_u32);
-        break;
-
-    case SB_EVENT_HTTP_FAULT:
-        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "http fault status=%d text=%s", event->param_s32, event->text);
-        break;
-
     case SB_EVENT_PAYMENT_ACCEPTED:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "payment accepted amount_paise=%u", event->param_u32);
         break;
@@ -276,22 +254,6 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_DAILY_SUMMARY_READY:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "daily summary count=%u status=%d", event->param_u32, event->param_s32);
-        break;
-
-    case SB_EVENT_OTA_STARTED:
-        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "ota started type=%s status=%d", event->text, event->param_s32);
-        break;
-
-    case SB_EVENT_OTA_PROGRESS:
-        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "ota progress=%u type=%s", event->param_u32, event->text);
-        break;
-
-    case SB_EVENT_OTA_STAGED:
-        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "ota staged kind=%u version=%s", event->param_u32, event->text);
-        break;
-
-    case SB_EVENT_OTA_FAILED:
-        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "ota failed status=%d type=%s", event->param_s32, event->text);
         break;
 
     case SB_EVENT_FACTORY_READY:

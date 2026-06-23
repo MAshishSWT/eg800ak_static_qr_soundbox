@@ -18,7 +18,6 @@ extern "C" {
 #define SB_CONFIG_APN_LEN               (48u)
 #define SB_CONFIG_MQTT_HOST_LEN         (96u)
 #define SB_CONFIG_MQTT_CLIENT_ID_LEN    (64u)
-#define SB_CONFIG_HTTP_BASE_URL_LEN     (128u)
 #define SB_CONFIG_TOPIC_LEN             (96u)
 #define SB_CONFIG_LANG_CODE_LEN         (8u)
 
@@ -35,7 +34,6 @@ typedef struct {
     char mqtt_client_id[SB_CONFIG_MQTT_CLIENT_ID_LEN];
     char mqtt_sub_topic[SB_CONFIG_TOPIC_LEN];
     char mqtt_pub_topic[SB_CONFIG_TOPIC_LEN];
-    char http_base_url[SB_CONFIG_HTTP_BASE_URL_LEN];
     char language[SB_CONFIG_LANG_CODE_LEN];
     u32 volume_percent;
     u32 sms_recovery_enabled;

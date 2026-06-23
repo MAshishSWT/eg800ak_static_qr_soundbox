@@ -105,14 +105,11 @@ void sb_demo_apply_config_defaults(sb_config_payload_t *config)
     if (config->mqtt_pub_topic[0] == '\0') {
         sb_cloud_copy_string(config->mqtt_pub_topic, SB_CONFIG_TOPIC_LEN, SB_DEMO_MQTT_PUB_TOPIC_TEMPLATE);
     }
-    if (config->http_base_url[0] == '\0') {
-        sb_cloud_copy_string(config->http_base_url, SB_CONFIG_HTTP_BASE_URL_LEN, SB_DEMO_HTTP_BASE_URL);
-    }
 }
 
 static void sb_demo_expand_field(char *field, u32 field_len)
 {
-    char expanded[SB_CONFIG_HTTP_BASE_URL_LEN];
+    char expanded[SB_CONFIG_TOPIC_LEN];
 
     if ((field == 0) || (field_len == 0u) || (field[0] == '\0')) {
         return;

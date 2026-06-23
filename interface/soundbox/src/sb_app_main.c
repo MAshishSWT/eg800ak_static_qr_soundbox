@@ -11,18 +11,14 @@
 #include "sb_bsp_kae8_sq1.h"
 #include "sb_business_service.h"
 #include "sb_config.h"
-#include "sb_default_certs.h"
 #include "sb_error.h"
 #include "sb_event_bus.h"
-#include "sb_extnor.h"
-#include "sb_http_service.h"
 #include "sb_factory_diag.h"
 #include "sb_log.h"
 #include "sb_led_status.h"
 #include "sb_mqtt_service.h"
 #include "sb_mode_service.h"
 #include "sb_network_service.h"
-#include "sb_ota_service.h"
 #include "sb_serial_service.h"
 #include "sb_sms_service.h"
 #include "sb_supervisor.h"
@@ -67,11 +63,6 @@ static void sb_app_entry(void *argv)
         SB_LOGW(SB_APP_MODULE_NAME, "config get failed, using audio defaults");
     }
 
-    status = sb_default_certs_ensure();
-    if (status != SB_STATUS_OK) {
-        SB_LOGW(SB_APP_MODULE_NAME, "default cert ensure status=%s", sb_status_to_string(status));
-    }
-
     status = sb_mode_service_init();
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "mode service init status=%s", sb_status_to_string(status));
@@ -95,16 +86,15 @@ static void sb_app_entry(void *argv)
         SB_LOGW(SB_APP_MODULE_NAME, "audio service init status=%s", sb_status_to_string(status));
     }
 
-    status = sb_extnor_init();
-    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
-        SB_LOGW(SB_APP_MODULE_NAME, "external nor init status=%s", sb_status_to_string(status));
-    }
-
     status = sb_audio_asset_store_init();
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "audio asset store init status=%s", sb_status_to_string(status));
     }
     (void)sb_audio_service_play_common("start_tune.mp3");
+
+    SB_LOGI(SB_APP_MODULE_NAME, "external nor service disabled");
+    SB_LOGI(SB_APP_MODULE_NAME, "http health service disabled");
+    SB_LOGI(SB_APP_MODULE_NAME, "ota service disabled");
 
     status = sb_network_service_init(&config);
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
@@ -114,16 +104,6 @@ static void sb_app_entry(void *argv)
     status = sb_mqtt_service_init(&config);
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "mqtt service init status=%s", sb_status_to_string(status));
-    }
-
-    status = sb_http_service_init(&config);
-    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
-        SB_LOGW(SB_APP_MODULE_NAME, "http service init status=%s", sb_status_to_string(status));
-    }
-
-    status = sb_ota_service_init(&config);
-    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
-        SB_LOGW(SB_APP_MODULE_NAME, "ota service init status=%s", sb_status_to_string(status));
     }
 
     status = sb_serial_service_init(&config);

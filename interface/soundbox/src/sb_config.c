@@ -133,7 +133,6 @@ static void sb_config_sanitize(sb_config_payload_t *config)
     config->mqtt_client_id[SB_CONFIG_MQTT_CLIENT_ID_LEN - 1u] = '\0';
     config->mqtt_sub_topic[SB_CONFIG_TOPIC_LEN - 1u] = '\0';
     config->mqtt_pub_topic[SB_CONFIG_TOPIC_LEN - 1u] = '\0';
-    config->http_base_url[SB_CONFIG_HTTP_BASE_URL_LEN - 1u] = '\0';
     config->language[SB_CONFIG_LANG_CODE_LEN - 1u] = '\0';
 
     if (config->volume_percent > 100u) {

@@ -3,12 +3,12 @@
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *================================================================*/
 #include "MQTTClient.h"
-#include "ql_fs.h"
 #include "ql_rtos.h"
 #include "ql_ssl_hal.h"
 #include "sb_business_service.h"
 #include "sb_cloud_utils.h"
 #include "sb_config.h"
+#include "sb_default_certs.h"
 #include "sb_demo_profile.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
@@ -29,9 +29,6 @@ typedef struct {
     u32 retained;
 } sb_mqtt_outbound_message_t;
 
-static char s_mqtt_root_ca_path[] = "U:/mqtt_root_ca.pem";
-static char s_mqtt_client_cert_path[] = SB_DEMO_MQTT_CLIENT_CERT_PATH;
-static char s_mqtt_client_key_path[] = SB_DEMO_MQTT_CLIENT_KEY_PATH;
 static ql_task_t s_mqtt_task = 0;
 static ql_mutex_t s_mqtt_mutex = 0;
 static ql_queue_t s_mqtt_rx_queue = 0;
@@ -56,7 +53,6 @@ static sb_mqtt_status_t s_mqtt_status = {
     0u,
     0u
 };
-static int s_mqtt_cert_missing_logged = 0;
 static u32 s_mqtt_connect_fail_count = 0u;
 
 static void sb_mqtt_zero(void *ptr, u32 length)
@@ -214,43 +210,18 @@ static int sb_mqtt_network_ready(void)
     return (net_status.online != 0) ? 1 : 0;
 }
 
-static int sb_mqtt_cert_file_exists(const char *path)
-{
-    if ((path == 0) || (path[0] == '\0')) {
-        return 0;
-    }
-    return (ql_access(path, 0u) == 0) ? 1 : 0;
-}
-
 static int sb_mqtt_tls_assets_ready(void)
 {
     if (s_mqtt_config.mqtt_port != SB_MQTT_TLS_PORT) {
         return 1;
     }
 
-    if (sb_mqtt_cert_file_exists(s_mqtt_root_ca_path) == 0) {
-        if (s_mqtt_cert_missing_logged == 0) {
-            SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_root_ca_path);
-            s_mqtt_cert_missing_logged = 1;
-        }
+    if ((sb_default_certs_mqtt_root_ca()[0] == '\0') ||
+        (sb_default_certs_mqtt_client_crt()[0] == '\0') ||
+        (sb_default_certs_mqtt_client_key()[0] == '\0')) {
+        SB_LOGE(SB_MQTT_MODULE_NAME, "mqtt certificate buffer missing");
         return 0;
     }
-    if (sb_mqtt_cert_file_exists(s_mqtt_client_cert_path) == 0) {
-        if (s_mqtt_cert_missing_logged == 0) {
-            SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_client_cert_path);
-            s_mqtt_cert_missing_logged = 1;
-        }
-        return 0;
-    }
-    if (sb_mqtt_cert_file_exists(s_mqtt_client_key_path) == 0) {
-        if (s_mqtt_cert_missing_logged == 0) {
-            SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_client_key_path);
-            s_mqtt_cert_missing_logged = 1;
-        }
-        return 0;
-    }
-
-    s_mqtt_cert_missing_logged = 0;
     return 1;
 }
 
@@ -358,10 +329,10 @@ static void sb_mqtt_configure_ssl(u32 port)
         s_mqtt_ssl_config.sessionReuseEn = 0u;
         s_mqtt_ssl_config.vsn = SSL_VSN_ALL;
         s_mqtt_ssl_config.verify = SSL_VERIFY_MODE_REQUIRED;
-        s_mqtt_ssl_config.cert.from = SSL_CERT_FROM_FS;
-        s_mqtt_ssl_config.cert.path.rootCA = s_mqtt_root_ca_path;
-        s_mqtt_ssl_config.cert.path.clientKey = s_mqtt_client_key_path;
-        s_mqtt_ssl_config.cert.path.clientCert = s_mqtt_client_cert_path;
+        s_mqtt_ssl_config.cert.from = SSL_CERT_FROM_BUF;
+        s_mqtt_ssl_config.cert.path.rootCA = (char *)sb_default_certs_mqtt_root_ca();
+        s_mqtt_ssl_config.cert.path.clientKey = (char *)sb_default_certs_mqtt_client_key();
+        s_mqtt_ssl_config.cert.path.clientCert = (char *)sb_default_certs_mqtt_client_crt();
         s_mqtt_ssl_config.cert.clientKeyPwd.data = NULL;
         s_mqtt_ssl_config.cert.clientKeyPwd.len = 0;
         s_mqtt_ssl_config.cipherList = SB_MQTT_CIPHER_LIST;
@@ -642,7 +613,7 @@ sb_status_t sb_mqtt_service_init(const sb_config_payload_t *config)
     s_mqtt_config = *config;
     sb_demo_expand_config_runtime(&s_mqtt_config);
     sb_mqtt_build_command_topic();
-    SB_LOGI(SB_MQTT_MODULE_NAME, "demo mqtt host=%s sub=%s", s_mqtt_config.mqtt_host, s_mqtt_config.mqtt_sub_topic);
+    SB_LOGI(SB_MQTT_MODULE_NAME, "demo mqtt host=%s sub=%s cert=buffer", s_mqtt_config.mqtt_host, s_mqtt_config.mqtt_sub_topic);
 
     ret = ql_rtos_mutex_create(&s_mqtt_mutex);
     if (ret != 0) {

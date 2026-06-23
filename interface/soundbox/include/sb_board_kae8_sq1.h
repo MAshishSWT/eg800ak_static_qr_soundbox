@@ -47,15 +47,7 @@ extern "C" {
 #define SB_KAE8_SPK_SHDN_ASSERT_LEVEL            PIN_LEVEL_HIGH
 #define SB_KAE8_SPK_SHDN_DEASSERT_LEVEL          PIN_LEVEL_LOW
 
-/* External W25Q64JWSIQ schematic nets on U1C.
- * These constants identify GPIO-mode equivalents. The external NOR service uses Quectel ql_spi_nor on EXTERNAL_NORFLASH_PORT4_7 after driving WP/RST high.
- */
-#define SB_KAE8_FLASH_SYNC_GPIO                  GPIO_PIN_NO_5  /* pin 74 KP_MKOUT[1] -> GPIO[5], SPI1_CS */
-#define SB_KAE8_FLASH_CLK_GPIO                   GPIO_PIN_NO_4  /* pin 75 KP_MKIN[1]  -> GPIO[4], SPI1_CLK */
-#define SB_KAE8_FLASH_DOUT_GPIO                  GPIO_PIN_NO_6  /* swapped: module FLASH_DIN net used as SPI data out */
-#define SB_KAE8_FLASH_DIN_GPIO                   GPIO_PIN_NO_7  /* swapped: module FLASH_DOUT net used as SPI data in */
-#define SB_KAE8_FLASH_WP_GPIO                    GPIO_PIN_NO_37 /* pin 79 USIM1_DET   -> GPIO[37] */
-#define SB_KAE8_FLASH_RST_GPIO                   GPIO_PIN_NO_56 /* pin 80 GPIO7       -> GPIO[56] */
+/* External NOR is not used by the clean MQTT demo build. */
 
 #ifdef __cplusplus
 }

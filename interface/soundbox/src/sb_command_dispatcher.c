@@ -13,10 +13,8 @@
 #include "sb_demo_profile.h"
 #include "sb_event.h"
 #include "sb_event_bus.h"
-#include "sb_http_service.h"
 #include "sb_json.h"
 #include "sb_log.h"
-#include "sb_ota_service.h"
 #include "sb_transaction_ledger.h"
 
 #define SB_COMMAND_MODULE_NAME       "command"
@@ -125,7 +123,6 @@ static void sb_command_send_response(const sb_command_t *cmd, const char *status
     if (s_command_config.mqtt_pub_topic[0] != '\0') {
         (void)sb_mqtt_service_publish(s_command_config.mqtt_pub_topic, payload, sb_cloud_str_len(payload), 1u, 0u);
     }
-    (void)sb_http_service_post_command_response(payload, sb_cloud_str_len(payload));
 }
 
 
@@ -156,7 +153,6 @@ static void sb_command_send_summary_response(const sb_command_t *cmd)
     if (s_command_config.mqtt_pub_topic[0] != '\0') {
         (void)sb_mqtt_service_publish(s_command_config.mqtt_pub_topic, payload, sb_cloud_str_len(payload), 1u, 0u);
     }
-    (void)sb_http_service_post_command_response(payload, sb_cloud_str_len(payload));
 }
 
 static sb_status_t sb_command_execute(const sb_command_t *cmd)
@@ -228,20 +224,6 @@ sb_status_t sb_command_dispatcher_handle_message(const sb_mqtt_inbound_message_t
     status = sb_command_parse(message, &cmd);
     if (status != SB_STATUS_OK) {
         sb_command_post_event(SB_EVENT_COMMAND_REJECTED, (s32)status, "parse");
-        return status;
-    }
-
-    if ((sb_cloud_text_equal(cmd.command, "ota_firmware") != 0) ||
-        (sb_cloud_text_equal(cmd.command, "ota_audio_pack") != 0) ||
-        (sb_cloud_text_equal(cmd.command, "ota_manifest") != 0)) {
-        status = sb_ota_service_start_from_manifest_json(message->payload);
-        if (status == SB_STATUS_OK) {
-            sb_command_send_response(&cmd, "accepted");
-            sb_command_post_event(SB_EVENT_COMMAND_ACCEPTED, SB_STATUS_OK, cmd.command);
-        } else {
-            sb_command_send_response(&cmd, "rejected");
-            sb_command_post_event(SB_EVENT_COMMAND_REJECTED, (s32)status, cmd.command);
-        }
         return status;
     }
 
