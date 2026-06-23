@@ -23,6 +23,8 @@ extern "C" {
 #define SB_HTTP_MIN_INTERVAL_SEC            (60u)
 #define SB_HTTP_TOTAL_TIMEOUT_MS            (15000u)
 #define SB_HTTP_TLS_PORT                    (443u)
+#define SB_HTTP_FAIL_LIMIT                  (3u)
+#define SB_HTTP_FAIL_COOLDOWN_MS           (10u * 60u * 1000u)
 
 typedef enum {
     SB_HTTP_POST_HEALTH = 0,

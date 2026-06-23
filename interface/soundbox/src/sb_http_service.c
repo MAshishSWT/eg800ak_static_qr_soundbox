@@ -41,6 +41,9 @@ static int s_http_started = 0;
 static int s_http_cert_missing_logged = 0;
 static sb_config_payload_t s_http_config;
 static sb_http_status_t s_http_status = {0, 0, 0, 0u, 0u};
+static u32 s_http_transport_fail_count = 0u;
+
+static void sb_http_post_event(sb_event_id_t id, s32 status, u32 value, const char *text);
 
 static void sb_http_zero(void *ptr, u32 length)
 {
@@ -75,6 +78,29 @@ static void sb_http_status_update(int configured, int status_code, int error, in
 
     if (s_http_mutex != 0) {
         (void)ql_rtos_mutex_unlock(s_http_mutex);
+    }
+}
+
+
+static void sb_http_note_transport_success(void)
+{
+    s_http_transport_fail_count = 0u;
+}
+
+static void sb_http_note_transport_failure(const char *reason)
+{
+    s_http_transport_fail_count++;
+    if (s_http_transport_fail_count >= SB_HTTP_FAIL_LIMIT) {
+        SB_LOGW(SB_HTTP_MODULE_NAME,
+                "transport circuit breaker reason=%s failures=%u cooldown_ms=%u",
+                (reason != 0) ? reason : "fault",
+                s_http_transport_fail_count,
+                (u32)SB_HTTP_FAIL_COOLDOWN_MS);
+        sb_http_post_event(SB_EVENT_HTTP_FAULT,
+                           (s32)SB_STATUS_HTTP_ERROR,
+                           s_http_transport_fail_count,
+                           "http_cooldown");
+        ql_rtos_task_sleep_ms(SB_HTTP_FAIL_COOLDOWN_MS);
     }
 }
 
@@ -359,6 +385,7 @@ static sb_status_t sb_http_post_json(const char *path, const char *payload, u32 
     if (ret != QL_HTTP_CLIENT_ERR_SUCCESS) {
         sb_http_status_update(1, response_ctx.status_code, (int)ret, 0, 1);
         sb_http_post_event(SB_EVENT_HTTP_FAULT, (s32)ret, 0u, "request");
+        sb_http_note_transport_failure("request");
         return SB_STATUS_HTTP_ERROR;
     }
 
@@ -367,9 +394,11 @@ static sb_status_t sb_http_post_json(const char *path, const char *payload, u32 
         (response_ctx.status_code >= 300)) {
         sb_http_status_update(1, response_ctx.status_code, SB_STATUS_HTTP_ERROR, 0, 1);
         sb_http_post_event(SB_EVENT_HTTP_FAULT, (s32)response_ctx.status_code, (u32)response_ctx.body_len, "response");
+        sb_http_note_transport_failure("response");
         return SB_STATUS_HTTP_ERROR;
     }
 
+    sb_http_note_transport_success();
     sb_http_status_update(1, response_ctx.status_code, 0, 1, 0);
     sb_http_post_event(success_event, SB_STATUS_OK, (u32)response_ctx.status_code, "ok");
     return SB_STATUS_OK;

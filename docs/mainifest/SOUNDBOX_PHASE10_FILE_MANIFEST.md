@@ -92,16 +92,13 @@ Modified:
 - `interface/soundbox/include/sb_app.h`
 - `SOUNDBOX_PHASE10_MAIN_UART_ASSET_PROVISION.md`
 
-## Phase 10 Default Certificate Creation
-
-Added in this package:
-
-- interface/soundbox/include/sb_default_certs.h
-- interface/soundbox/src/sb_default_certs.c
-- SOUNDBOX_PHASE10_DEFAULT_CERTS.md
+## Phase 10 TLS Circuit Breaker
 
 Updated in this package:
 
-- interface/soundbox/Makefile
 - interface/soundbox/include/sb_app.h
-- interface/soundbox/src/sb_app_main.c
+- interface/soundbox/include/sb_mqtt_service.h
+- interface/soundbox/include/sb_http_service.h
+- interface/soundbox/src/sb_mqtt_service.c
+- interface/soundbox/src/sb_http_service.c
+- SOUNDBOX_PHASE10_TLS_CIRCUIT_BREAKER.md

@@ -57,6 +57,7 @@ static sb_mqtt_status_t s_mqtt_status = {
     0u
 };
 static int s_mqtt_cert_missing_logged = 0;
+static u32 s_mqtt_connect_fail_count = 0u;
 
 static void sb_mqtt_zero(void *ptr, u32 length)
 {
@@ -531,6 +532,7 @@ static void sb_mqtt_connected_loop(void)
     int rc;
     u32 health_elapsed_ms = 0u;
 
+    s_mqtt_connect_fail_count = 0u;
     sb_mqtt_status_set(SB_MQTT_STATE_CONNECTED, 1, 0);
     sb_mqtt_post_event(SB_EVENT_MQTT_READY, SB_STATUS_OK, (u32)s_mqtt_config.mqtt_port, "connected");
     SB_LOGI(SB_MQTT_MODULE_NAME, "connected host=%s port=%u", s_mqtt_config.mqtt_host, s_mqtt_config.mqtt_port);
@@ -600,9 +602,22 @@ static void sb_mqtt_task(void *argv)
         status = sb_mqtt_connect();
         if (status != SB_STATUS_OK) {
             sb_mqtt_status_count_reconnect();
+            s_mqtt_connect_fail_count++;
             sb_mqtt_status_set(SB_MQTT_STATE_BACKOFF, 0, (int)status);
-            sb_mqtt_post_event(SB_EVENT_MQTT_FAULT, (s32)status, 0u, "connect");
-            ql_rtos_task_sleep_ms(SB_MQTT_RECONNECT_BACKOFF_MS);
+            sb_mqtt_post_event(SB_EVENT_MQTT_FAULT, (s32)status, s_mqtt_connect_fail_count, "connect");
+            if (s_mqtt_connect_fail_count >= SB_MQTT_CONNECT_FAIL_LIMIT) {
+                SB_LOGW(SB_MQTT_MODULE_NAME,
+                        "connect circuit breaker failures=%u cooldown_ms=%u",
+                        s_mqtt_connect_fail_count,
+                        (u32)SB_MQTT_TLS_FAIL_COOLDOWN_MS);
+                sb_mqtt_post_event(SB_EVENT_MQTT_FAULT,
+                                   (s32)status,
+                                   s_mqtt_connect_fail_count,
+                                   "connect_cooldown");
+                ql_rtos_task_sleep_ms(SB_MQTT_TLS_FAIL_COOLDOWN_MS);
+            } else {
+                ql_rtos_task_sleep_ms(SB_MQTT_RECONNECT_BACKOFF_MS);
+            }
             continue;
         }
 

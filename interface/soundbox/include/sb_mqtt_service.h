@@ -25,6 +25,8 @@ extern "C" {
 #define SB_MQTT_OUTBOUND_QUEUE_DEPTH       (8u)
 #define SB_MQTT_NETWORK_WAIT_MS            (2000u)
 #define SB_MQTT_RECONNECT_BACKOFF_MS       (15000u)
+#define SB_MQTT_CONNECT_FAIL_LIMIT        (3u)
+#define SB_MQTT_TLS_FAIL_COOLDOWN_MS      (10u * 60u * 1000u)
 #define SB_MQTT_YIELD_MS                   (500u)
 #define SB_MQTT_TLS_PORT                   (8883u)
 
