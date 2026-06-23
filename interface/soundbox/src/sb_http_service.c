@@ -31,13 +31,14 @@ typedef struct {
     int failed;
 } sb_http_response_ctx_t;
 
-static char s_http_root_ca_path[] = "U:/certs/http_root_ca.pem";
+static char s_http_root_ca_path[] = "U:/http_root_ca.pem";
 static ql_task_t s_http_task = 0;
 static ql_mutex_t s_http_mutex = 0;
 static ql_queue_t s_http_queue = 0;
 static sb_http_post_request_t s_http_request_pool[SB_HTTP_QUEUE_DEPTH];
 static u8 s_http_request_pool_used[SB_HTTP_QUEUE_DEPTH];
 static int s_http_started = 0;
+static int s_http_cert_missing_logged = 0;
 static sb_config_payload_t s_http_config;
 static sb_http_status_t s_http_status = {0, 0, 0, 0u, 0u};
 
@@ -158,10 +159,14 @@ static int sb_http_tls_assets_ready(void)
     }
 
     if (ql_access(s_http_root_ca_path, 0u) != 0) {
-        SB_LOGE(SB_HTTP_MODULE_NAME, "missing cert %s", s_http_root_ca_path);
+        if (s_http_cert_missing_logged == 0) {
+            SB_LOGE(SB_HTTP_MODULE_NAME, "missing cert %s", s_http_root_ca_path);
+            s_http_cert_missing_logged = 1;
+        }
         return 0;
     }
 
+    s_http_cert_missing_logged = 0;
     return 1;
 }
 

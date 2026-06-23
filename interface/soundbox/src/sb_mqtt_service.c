@@ -29,7 +29,7 @@ typedef struct {
     u32 retained;
 } sb_mqtt_outbound_message_t;
 
-static char s_mqtt_root_ca_path[] = "U:/certs/mqtt_root_ca.pem";
+static char s_mqtt_root_ca_path[] = "U:/mqtt_root_ca.pem";
 static char s_mqtt_client_cert_path[] = SB_DEMO_MQTT_CLIENT_CERT_PATH;
 static char s_mqtt_client_key_path[] = SB_DEMO_MQTT_CLIENT_KEY_PATH;
 static ql_task_t s_mqtt_task = 0;
@@ -56,6 +56,7 @@ static sb_mqtt_status_t s_mqtt_status = {
     0u,
     0u
 };
+static int s_mqtt_cert_missing_logged = 0;
 
 static void sb_mqtt_zero(void *ptr, u32 length)
 {
@@ -227,18 +228,28 @@ static int sb_mqtt_tls_assets_ready(void)
     }
 
     if (sb_mqtt_cert_file_exists(s_mqtt_root_ca_path) == 0) {
-        SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_root_ca_path);
+        if (s_mqtt_cert_missing_logged == 0) {
+            SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_root_ca_path);
+            s_mqtt_cert_missing_logged = 1;
+        }
         return 0;
     }
     if (sb_mqtt_cert_file_exists(s_mqtt_client_cert_path) == 0) {
-        SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_client_cert_path);
+        if (s_mqtt_cert_missing_logged == 0) {
+            SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_client_cert_path);
+            s_mqtt_cert_missing_logged = 1;
+        }
         return 0;
     }
     if (sb_mqtt_cert_file_exists(s_mqtt_client_key_path) == 0) {
-        SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_client_key_path);
+        if (s_mqtt_cert_missing_logged == 0) {
+            SB_LOGE(SB_MQTT_MODULE_NAME, "missing cert %s", s_mqtt_client_key_path);
+            s_mqtt_cert_missing_logged = 1;
+        }
         return 0;
     }
 
+    s_mqtt_cert_missing_logged = 0;
     return 1;
 }
 

@@ -118,4 +118,4 @@ The firmware now applies EC200U demo defaults for a full functional MQTT/HTTP de
 - Health endpoint `/healthpacket`
 - Command-response endpoint `/commandresponse`
 
-The payment processor accepts EC200U legacy payment payloads of the form `<amount>#<language>#<provider>`. Private certificates and keys are not embedded; provision them under `U:/certs/`.
+The payment processor accepts EC200U legacy payment payloads of the form `<amount>#<language>#<provider>`. Private certificates and keys are not embedded; provision them in the `U:/` root.

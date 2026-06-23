@@ -16,7 +16,7 @@ extern "C" {
 #define SB_ASSET_PACK_HEADER_BYTES       (12u)
 #define SB_ASSET_PACK_INDEX_ENTRY_BYTES  (112u)
 #define SB_ASSET_PACK_MAX_BYTES          (8u * 1024u * 1024u)
-#define SB_ASSET_PACK_UART_HEX_MAX_BYTES (160u)
+#define SB_ASSET_PACK_UART_HEX_MAX_BYTES (1024u)
 
 typedef struct {
     int active;

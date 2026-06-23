@@ -16,7 +16,7 @@ extern "C" {
 #define SB_SERIAL_TASK_STACK_SIZE_BYTES   (8u * 1024u)
 #define SB_SERIAL_TASK_PRIORITY           (21u)
 #define SB_SERIAL_QUEUE_DEPTH             (4u)
-#define SB_SERIAL_LINE_LEN                (512u)
+#define SB_SERIAL_LINE_LEN                (2304u)
 #define SB_SERIAL_POOL_DEPTH              (4u)
 
 sb_status_t sb_serial_service_init(const sb_config_payload_t *config);

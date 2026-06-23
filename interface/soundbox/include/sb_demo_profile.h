@@ -23,8 +23,8 @@ extern "C" {
 #define SB_DEMO_MQTT_SUB_TOPIC_TEMPLATE     "kiotel/client1/sb/{imei}"
 #define SB_DEMO_MQTT_PUB_TOPIC_TEMPLATE     "kiotel/client1/sb/{imei}/health"
 #define SB_DEMO_HTTP_BASE_URL               "https://103.75.249.183/dms-OMADM"
-#define SB_DEMO_MQTT_CLIENT_CERT_PATH       "U:/certs/mqtt_client.crt"
-#define SB_DEMO_MQTT_CLIENT_KEY_PATH        "U:/certs/mqtt_client.key"
+#define SB_DEMO_MQTT_CLIENT_CERT_PATH       "U:/mqtt_client.crt"
+#define SB_DEMO_MQTT_CLIENT_KEY_PATH        "U:/mqtt_client.key"
 
 sb_status_t sb_demo_get_imei(char *imei, u32 imei_len);
 sb_status_t sb_demo_expand_text(const char *input, char *output, u32 output_len);
