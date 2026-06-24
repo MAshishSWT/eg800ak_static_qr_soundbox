@@ -79,6 +79,52 @@ static sb_status_t sb_ext_nor_range_check(u32 address, u32 length)
     return SB_STATUS_OK;
 }
 
+static sb_status_t sb_ext_nor_decode_jedec(const unsigned char *raw_id)
+{
+    u8 manufacturer;
+    u8 memory_type;
+    u8 capacity;
+
+    if (raw_id == 0) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+
+    /*
+     * Some EG800AK QuecOpen NOR builds expose the three-byte JEDEC response
+     * in reverse byte order. The PCB log 17 60 EF is the valid W25Q64
+     * signature EF 60 17 returned in reverse order, not an electrical failure.
+     * Normalize it before validating so the rest of the firmware always uses
+     * manufacturer/memory/capacity ordering.
+     */
+    if (raw_id[0] == SB_EXT_NOR_W25Q_MFG_ID) {
+        manufacturer = raw_id[0];
+        memory_type = raw_id[1];
+        capacity = raw_id[2];
+    } else if (raw_id[2] == SB_EXT_NOR_W25Q_MFG_ID) {
+        manufacturer = raw_id[2];
+        memory_type = raw_id[1];
+        capacity = raw_id[0];
+    } else {
+        s_nor_status.manufacturer_id = raw_id[0];
+        s_nor_status.memory_type = raw_id[1];
+        s_nor_status.capacity_id = raw_id[2];
+        s_nor_status.jedec_valid = 0;
+        return SB_STATUS_FLASH_ERROR;
+    }
+
+    s_nor_status.manufacturer_id = manufacturer;
+    s_nor_status.memory_type = memory_type;
+    s_nor_status.capacity_id = capacity;
+    if ((manufacturer == SB_EXT_NOR_W25Q_MFG_ID) &&
+        (capacity == SB_EXT_NOR_W25Q64_CAP_ID)) {
+        s_nor_status.jedec_valid = 1;
+        return SB_STATUS_OK;
+    }
+
+    s_nor_status.jedec_valid = 0;
+    return SB_STATUS_FLASH_ERROR;
+}
+
 static sb_status_t sb_ext_nor_drive_control_pins(void)
 {
     if (ql_gpio_init(SB_KAE8_NOR_WP_GPIO, PIN_DIRECTION_OUT, PIN_PULL_DISABLE, SB_KAE8_NOR_CTRL_ACTIVE_LEVEL) != 0) {
@@ -257,18 +303,19 @@ sb_status_t sb_ext_nor_flash_init(void)
         sb_ext_nor_save_diag("id_null", SB_STATUS_FLASH_ERROR);
         return SB_STATUS_FLASH_ERROR;
     }
-    s_nor_status.manufacturer_id = id[0];
-    s_nor_status.memory_type = id[1];
-    s_nor_status.capacity_id = id[2];
-    if ((id[0] == SB_EXT_NOR_W25Q_MFG_ID) && (id[2] == SB_EXT_NOR_W25Q64_CAP_ID)) {
-        s_nor_status.jedec_valid = 1;
-    }
-    if (s_nor_status.jedec_valid == 0) {
-        SB_LOGE(SB_EXT_NOR_MODULE_NAME, "unexpected JEDEC id=%02X %02X %02X port=%d di_do_swap=%u",
+    status = sb_ext_nor_decode_jedec(id);
+    if (status != SB_STATUS_OK) {
+        SB_LOGE(SB_EXT_NOR_MODULE_NAME,
+                "unexpected JEDEC raw=%02X %02X %02X port=%d di_do_swap=%u",
                 id[0], id[1], id[2], SB_KAE8_NOR_PORT, SB_NOR_DI_DO_INTERCHANGED);
         sb_ext_nor_save_diag("jedec_fail", SB_STATUS_FLASH_ERROR);
         return SB_STATUS_FLASH_ERROR;
     }
+    SB_LOGI(SB_EXT_NOR_MODULE_NAME,
+            "jedec raw=%02X %02X %02X normalized=%02X %02X %02X port=%d di_do_swap=%u",
+            id[0], id[1], id[2],
+            s_nor_status.manufacturer_id, s_nor_status.memory_type, s_nor_status.capacity_id,
+            SB_KAE8_NOR_PORT, SB_NOR_DI_DO_INTERCHANGED);
     s_nor_status.ready = 1;
     status = sb_ext_nor_flash_read(SB_KAE8_NOR_MANIFEST_ADDR, probe, (u32)sizeof(probe));
     if (status != SB_STATUS_OK) {

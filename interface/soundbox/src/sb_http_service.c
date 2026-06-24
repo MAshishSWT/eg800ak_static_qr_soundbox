@@ -170,7 +170,7 @@ static sb_status_t sb_http_build_registration_payload(char *body, u32 body_len)
     }
     if (sb_cloud_append_string(body, body_len, "{\"deviceId\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
     if (sb_cloud_append_json_string(body, body_len, s_http_config.device_id) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
-    if (sb_cloud_append_string(body, body_len, ",\"firmware\":\"1.0.0-phase23-production-fix\",\"hardware\":\"KAE8_SQ1_260611\",\"health\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(body, body_len, ",\"firmware\":\"1.0.0-phase23-production-fix-v4\",\"hardware\":\"KAE8_SQ1_260611\",\"health\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
     if (sb_cloud_append_string(body, body_len, health) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
     return sb_cloud_append_string(body, body_len, "}");
 }

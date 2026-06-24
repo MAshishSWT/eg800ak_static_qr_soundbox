@@ -162,7 +162,7 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_SIM_FAULT:
         SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "sim fault status=%d card=%u text=%s", event->param_s32, event->param_u32, event->text);
-        (void)sb_led_status_set(SB_LED_STATUS_ERROR);
+        (void)sb_led_status_set(SB_LED_STATUS_NO_INTERNET);
         sb_supervisor_play_alert_once(&s_alert_sim_fault_announced, SB_AUDIO_PROMPT_NO_SIM);
         break;
 
