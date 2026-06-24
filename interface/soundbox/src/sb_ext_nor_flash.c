@@ -3,6 +3,7 @@
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *================================================================*/
 #include "ql_gpio.h"
+#include "ql_rtos.h"
 #include "ql_spi_nor.h"
 #include "sb_board_kae8_sq1.h"
 #include "sb_crc32.h"
