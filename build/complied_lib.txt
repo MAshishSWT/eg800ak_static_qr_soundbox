@@ -1,1 +1,2 @@
   
+D:/GitHub/LTE01R07A16V03_C_SDK_A_SDK/ql-sdk/ql-application/threadx/interface/soundbox//build/soundbox.lib  
