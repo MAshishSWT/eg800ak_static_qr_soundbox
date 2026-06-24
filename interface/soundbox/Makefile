@@ -24,10 +24,12 @@ SRC_FILES+= \
   src/sb_led_status.c \
   src/sb_crc32.c \
   src/sb_storage_fs.c \
+  src/sb_ext_nor_flash.c \
   src/sb_audio_types.c \
   src/sb_amount_tokenizer.c \
   src/sb_audio_asset.c \
   src/sb_audio_asset_store.c \
+  src/sb_audio_asset_manifest.c \
   src/sb_audio_prompt_logic.c \
   src/sb_audio_script.c \
   src/sb_audio_codec_es8311.c \
@@ -41,6 +43,7 @@ SRC_FILES+= \
   src/sb_default_certs.c \
   src/sb_demo_profile.c \
   src/sb_mqtt_service.c \
+  src/sb_http_service.c \
   src/sb_json.c \
   src/sb_transaction_ledger.c \
   src/sb_payment_processor.c \
@@ -78,12 +81,11 @@ U_CPPFLAGS:=
 DFLAGS+= \
   -D__TM_ZONE=tm_zone \
   -D__TM_GMTOFF=tm_gmtoff \
-  -DSB_PHASE_NUMBER=18 \
+  -DSB_PHASE_NUMBER=23 \
   -DSB_BUILD_TARGET_EG800AK=1 \
-  -DSB_EXTERNAL_NOR_DISABLED=1 \
-  -DSB_HTTP_SERVICE_DISABLED=1 \
-  -DSB_OTA_SERVICE_DISABLED=1 \
   -DSB_MQTT_CERT_FROM_FS=1 \
+  -DSB_EXTERNAL_NOR_ENABLED=1 \
+  -DSB_HTTP_SERVICE_ENABLED=1 \
   -DSB_SERIAL_USE_MAIN_UART=1 \
   -DSB_SERIAL_FILE_PROVISIONING_ENABLED=1 \
 

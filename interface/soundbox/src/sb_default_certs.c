@@ -3,17 +3,18 @@
  * Target: Quectel EG800AK-CN QuecOpen SDK
  *
  * These PEM blocks are migrated from the provided EC200U-CN-AA demo
- * application source and are provided to the Quectel SSL layer directly
- * through SSL_CERT_FROM_BUF. No certificate files are created.
+ * application source. Phase 22 writes them once to UFS certificate files
+ * because the EG800AK MQTT stack is configured for SSL_CERT_FROM_FS.
  *================================================================*/
 #include "sb_default_certs.h"
 #include "ql_fs.h"
+#include "sb_storage_fs.h"
 #include "sb_log.h"
 
 #define SB_DEFAULT_CERTS_MODULE_NAME "cert_defaults"
-#define SB_MQTT_ROOT_CA_PATH         "U:/mqtt_root_ca.pem"
-#define SB_MQTT_CLIENT_CRT_PATH      "U:/mqtt_client.crt"
-#define SB_MQTT_CLIENT_KEY_PATH      "U:/mqtt_client.key"
+#define SB_MQTT_ROOT_CA_PATH         "U:/certs/mqtt_root_ca.pem"
+#define SB_MQTT_CLIENT_CRT_PATH      "U:/certs/mqtt_client.crt"
+#define SB_MQTT_CLIENT_KEY_PATH      "U:/certs/mqtt_client.key"
 
 static const char s_default_root_ca_pem[] =
     "-----BEGIN CERTIFICATE-----\n"
@@ -115,6 +116,9 @@ static sb_status_t sb_default_cert_write_file(const char *path, const char *data
     }
     if (ql_access(path, 0u) == 0) {
         return SB_STATUS_ALREADY_INITIALIZED;
+    }
+    if (sb_storage_fs_mkdir_recursive(SB_STORAGE_CERT_DIR) != SB_STATUS_OK) {
+        return SB_STATUS_FILE_ERROR;
     }
 
     fp = ql_fopen(path, "w+");

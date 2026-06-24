@@ -7,6 +7,13 @@
 #include "ql_rtos.h"
 #include "ql_fs.h"
 #include "sb_audio_service.h"
+#include "sb_audio_asset_manifest.h"
+#include "sb_audio_asset_store.h"
+#include "sb_audio_types.h"
+#include "sb_ext_nor_flash.h"
+#include "sb_hal_led.h"
+#include "sb_http_service.h"
+#include "sb_led_status.h"
 #include "sb_cloud_utils.h"
 #include "sb_config.h"
 #include "sb_crc32.h"
@@ -18,6 +25,7 @@
 #include "sb_mode_service.h"
 #include "sb_mqtt_service.h"
 #include "sb_network_service.h"
+#include "sb_storage_fs.h"
 #include "sb_transaction_ledger.h"
 
 #define SB_FACTORY_MODULE_NAME "factory"
@@ -224,6 +232,132 @@ static int sb_factory_can_provision(sb_factory_channel_t channel, const sb_confi
     return 0;
 }
 
+
+static sb_status_t sb_factory_reply_status_u32(char *reply,
+                                               u32 reply_len,
+                                               const char *detail,
+                                               u32 value)
+{
+    reply[0] = '\0';
+    if (sb_cloud_append_string(reply, reply_len, "{\"status\":\"ok\",\"detail\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_json_string(reply, reply_len, detail) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"value\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, value) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, "}") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_factory_reply_nor_status(char *reply, u32 reply_len)
+{
+    sb_ext_nor_status_t nor;
+    if (sb_ext_nor_flash_get_status(&nor) != SB_STATUS_OK) {
+        return sb_factory_reply_status(reply, reply_len, "error", "nor_status");
+    }
+    reply[0] = '\0';
+    if (sb_cloud_append_string(reply, reply_len, "{\"status\":\"ok\",\"mfg\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, nor.manufacturer_id) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"memory\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, nor.memory_type) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"capacity\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, nor.capacity_id) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"ready\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, (nor.ready != 0) ? 1u : 0u) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, "}") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_factory_reply_asset_status(char *reply, u32 reply_len)
+{
+    sb_audio_manifest_status_t manifest;
+    sb_audio_store_status_t store;
+    (void)sb_audio_manifest_get_status(&manifest);
+    (void)sb_audio_asset_store_get_status(&store);
+    reply[0] = '\0';
+    if (sb_cloud_append_string(reply, reply_len, "{\"status\":\"ok\",\"manifest_ready\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, (manifest.ready != 0) ? 1u : 0u) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"entries\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, manifest.entry_count) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"missing\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, store.missing_count) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, "}") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_factory_diag_test_from_json(const char *json,
+                                                  sb_factory_channel_t channel,
+                                                  char *reply,
+                                                  u32 reply_len)
+{
+    char test[32];
+    char file[64];
+    char language[SB_AUDIO_LANG_CODE_LEN];
+    sb_status_t status;
+    sb_mqtt_status_t mqtt;
+    sb_http_status_t http;
+
+    if (channel != SB_FACTORY_CHANNEL_SERIAL) {
+        return sb_factory_reply_status(reply, reply_len, "rejected", "serial_only");
+    }
+    if (sb_json_get_string(json, "test", test, (u32)sizeof(test)) != SB_STATUS_OK) {
+        return sb_factory_reply_diag(reply, reply_len);
+    }
+    if (sb_cloud_text_equal(test, "fs_self_test") != 0) {
+        status = sb_storage_fs_self_test();
+        return sb_factory_reply_status(reply, reply_len, (status == SB_STATUS_OK) ? "ok" : "error", sb_status_to_string(status));
+    }
+    if (sb_cloud_text_equal(test, "nor_id") != 0) {
+        return sb_factory_reply_nor_status(reply, reply_len);
+    }
+    if (sb_cloud_text_equal(test, "nor_rw_test") != 0) {
+        status = sb_ext_nor_flash_factory_rw_test();
+        return sb_factory_reply_status(reply, reply_len, (status == SB_STATUS_OK) ? "ok" : "error", sb_status_to_string(status));
+    }
+    if (sb_cloud_text_equal(test, "list_assets") != 0) {
+        return sb_factory_reply_asset_status(reply, reply_len);
+    }
+    if (sb_cloud_text_equal(test, "play_common") != 0) {
+        if (sb_json_get_string(json, "file", file, (u32)sizeof(file)) != SB_STATUS_OK) {
+            return sb_factory_reply_status(reply, reply_len, "error", "file");
+        }
+        status = sb_audio_service_play_common(file);
+        return sb_factory_reply_status(reply, reply_len, (status == SB_STATUS_OK) ? "ok" : "error", sb_status_to_string(status));
+    }
+    if (sb_cloud_text_equal(test, "play_lang") != 0) {
+        if (sb_json_get_string(json, "language", language, (u32)sizeof(language)) != SB_STATUS_OK) {
+            return sb_factory_reply_status(reply, reply_len, "error", "language");
+        }
+        if (sb_json_get_string(json, "file", file, (u32)sizeof(file)) != SB_STATUS_OK) {
+            return sb_factory_reply_status(reply, reply_len, "error", "file");
+        }
+        status = sb_audio_service_play_alert(sb_audio_language_from_code(language), file);
+        return sb_factory_reply_status(reply, reply_len, (status == SB_STATUS_OK) ? "ok" : "error", sb_status_to_string(status));
+    }
+    if (sb_cloud_text_equal(test, "led_test") != 0) {
+        (void)sb_led_status_set(SB_LED_STATUS_INTERNET_OK);
+        return sb_factory_reply_status(reply, reply_len, "ok", "led_ready_pattern");
+    }
+    if (sb_cloud_text_equal(test, "key_test") != 0) {
+        return sb_factory_reply_status(reply, reply_len, "ok", "press_keys_and_watch_uart");
+    }
+    if (sb_cloud_text_equal(test, "mqtt_test") != 0) {
+        (void)sb_mqtt_get_status(&mqtt);
+        return sb_factory_reply_status_u32(reply, reply_len, sb_mqtt_state_name(mqtt.state), (mqtt.connected != 0) ? 1u : 0u);
+    }
+    if (sb_cloud_text_equal(test, "http_test") != 0) {
+        (void)sb_http_get_status(&http);
+        return sb_factory_reply_status_u32(reply, reply_len, sb_http_state_name(http.state), (http.registered != 0) ? 1u : 0u);
+    }
+    if (sb_cloud_text_equal(test, "cert_check") != 0) {
+        if ((sb_storage_fs_file_exists("U:/certs/mqtt_root_ca.pem") == SB_STATUS_OK) &&
+            (sb_storage_fs_file_exists("U:/certs/mqtt_client.crt") == SB_STATUS_OK) &&
+            (sb_storage_fs_file_exists("U:/certs/mqtt_client.key") == SB_STATUS_OK)) {
+            return sb_factory_reply_status(reply, reply_len, "ok", "certs_present");
+        }
+        return sb_factory_reply_status(reply, reply_len, "error", "certs_missing");
+    }
+    return sb_factory_reply_status(reply, reply_len, "rejected", "unsupported_test");
+}
+
 static sb_status_t sb_factory_commit_config_from_json(const char *json,
                                                       sb_factory_channel_t channel,
                                                       char *reply,
@@ -323,6 +457,25 @@ static int sb_factory_file_access_allowed(sb_factory_channel_t channel)
 #endif
 }
 
+static int sb_factory_ufs_upload_path_allowed(const char *path)
+{
+    if (path == 0) {
+        return 0;
+    }
+    if ((sb_cloud_text_equal(path, "U:/start_tune.mp3") != 0) ||
+        (sb_cloud_text_equal(path, "U:/ping.mp3") != 0) ||
+        (sb_cloud_text_equal(path, "U:/good_bye.mp3") != 0) ||
+        (sb_cloud_text_equal(path, "U:/transaction_error.mp3") != 0)) {
+        return 1;
+    }
+    if ((sb_cloud_has_prefix(path, "U:/certs/") != 0) ||
+        (sb_cloud_has_prefix(path, "U:/config/") != 0) ||
+        (sb_cloud_has_prefix(path, "U:/diag/") != 0)) {
+        return 1;
+    }
+    return 0;
+}
+
 static sb_status_t sb_factory_file_to_ufs_path(const char *input, char *out, u32 out_len)
 {
     if ((input == 0) || (out == 0) || (out_len == 0u)) {
@@ -330,13 +483,24 @@ static sb_status_t sb_factory_file_to_ufs_path(const char *input, char *out, u32
     }
     out[0] = '\0';
     if (sb_cloud_has_prefix(input, "U:/") != 0) {
-        if ((sb_cloud_has_prefix(input, "U:/audio/") == 0) && (sb_cloud_text_equal(input, "U:/audio") == 0)) {
+        if (sb_factory_ufs_upload_path_allowed(input) == 0) {
             return SB_STATUS_SECURITY_ERROR;
         }
         sb_cloud_copy_string(out, out_len, input);
         return SB_STATUS_OK;
     }
-    if (sb_cloud_has_prefix(input, "audio/") != 0) {
+    if ((sb_cloud_text_equal(input, "start_tune.mp3") != 0) ||
+        (sb_cloud_text_equal(input, "ping.mp3") != 0) ||
+        (sb_cloud_text_equal(input, "good_bye.mp3") != 0) ||
+        (sb_cloud_text_equal(input, "transaction_error.mp3") != 0)) {
+        if (sb_cloud_append_string(out, out_len, "U:/") != SB_STATUS_OK) {
+            return SB_STATUS_NO_MEMORY;
+        }
+        return sb_cloud_append_string(out, out_len, input);
+    }
+    if ((sb_cloud_has_prefix(input, "certs/") != 0) ||
+        (sb_cloud_has_prefix(input, "config/") != 0) ||
+        (sb_cloud_has_prefix(input, "diag/") != 0)) {
         if (sb_cloud_append_string(out, out_len, "U:/") != SB_STATUS_OK) {
             return SB_STATUS_NO_MEMORY;
         }
@@ -602,7 +766,9 @@ sb_status_t sb_factory_diag_dispatch_json(const char *json,
         return SB_STATUS_INVALID_PARAM;
     }
 
-    if ((sb_cloud_text_equal(cmd, "diag") != 0) || (sb_cloud_text_equal(cmd, "status") != 0)) {
+    if (sb_cloud_text_equal(cmd, "diag") != 0) {
+        status = sb_factory_diag_test_from_json(json, channel, reply, reply_len);
+    } else if (sb_cloud_text_equal(cmd, "status") != 0) {
         status = sb_factory_reply_diag(reply, reply_len);
     } else if ((sb_cloud_text_equal(cmd, "set_config") != 0) || (sb_cloud_text_equal(cmd, "provision") != 0)) {
         status = sb_factory_commit_config_from_json(json, channel, reply, reply_len);

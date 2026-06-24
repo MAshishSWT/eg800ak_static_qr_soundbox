@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#define SB_AUDIO_ASSET_ROOT         "U:/audio"
+#define SB_AUDIO_ASSET_ROOT         "audio"
 
 void sb_audio_script_init(sb_audio_script_t *script);
 sb_status_t sb_audio_script_append_path(sb_audio_script_t *script, const char *path);

@@ -90,6 +90,10 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "BATTERY_SAMPLE";
     case SB_EVENT_STORAGE_READY:
         return "STORAGE_READY";
+    case SB_EVENT_NOR_READY:
+        return "NOR_READY";
+    case SB_EVENT_NOR_FAULT:
+        return "NOR_FAULT";
     case SB_EVENT_CONFIG_READY:
         return "CONFIG_READY";
     case SB_EVENT_SIM_READY:
@@ -156,6 +160,14 @@ const char *sb_event_id_to_string(sb_event_id_t id)
         return "SMS_COMMAND";
     case SB_EVENT_SMS_FAULT:
         return "SMS_FAULT";
+    case SB_EVENT_HTTP_REGISTERED:
+        return "HTTP_REGISTERED";
+    case SB_EVENT_HTTP_UNREGISTERED:
+        return "HTTP_UNREGISTERED";
+    case SB_EVENT_HTTP_FAILED:
+        return "HTTP_FAILED";
+    case SB_EVENT_HTTP_TLS_FAILED:
+        return "HTTP_TLS_FAILED";
     default:
         return "UNKNOWN";
     }

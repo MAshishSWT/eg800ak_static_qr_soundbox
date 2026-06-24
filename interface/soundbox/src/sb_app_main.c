@@ -14,6 +14,8 @@
 #include "sb_default_certs.h"
 #include "sb_error.h"
 #include "sb_event_bus.h"
+#include "sb_ext_nor_flash.h"
+#include "sb_http_service.h"
 #include "sb_factory_diag.h"
 #include "sb_log.h"
 #include "sb_led_status.h"
@@ -84,6 +86,16 @@ static void sb_app_entry(void *argv)
         SB_LOGW(SB_APP_MODULE_NAME, "led status init status=%s", sb_status_to_string(status));
     }
 
+    status = sb_ext_nor_flash_init();
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "external NOR init status=%s", sb_status_to_string(status));
+    }
+
+    status = sb_audio_asset_store_init();
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "audio asset store init status=%s", sb_status_to_string(status));
+    }
+
     audio_language = sb_audio_language_from_code(config.language);
     audio_volume = config.volume_percent;
 
@@ -91,20 +103,18 @@ static void sb_app_entry(void *argv)
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "audio service init status=%s", sb_status_to_string(status));
     }
-
-    status = sb_audio_asset_store_init();
-    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
-        SB_LOGW(SB_APP_MODULE_NAME, "audio asset store init status=%s", sb_status_to_string(status));
-    }
     (void)sb_audio_service_play_common("start_tune.mp3");
 
-    SB_LOGI(SB_APP_MODULE_NAME, "external nor service disabled");
-    SB_LOGI(SB_APP_MODULE_NAME, "http health service disabled");
-    SB_LOGI(SB_APP_MODULE_NAME, "ota service disabled");
+    SB_LOGI(SB_APP_MODULE_NAME, "feature summary phase=23 nor=enabled http=enabled mqtt_tls=fs audio_store=ufs_root_plus_extnor");
 
     status = sb_network_service_init(&config);
     if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
         SB_LOGW(SB_APP_MODULE_NAME, "network service init status=%s", sb_status_to_string(status));
+    }
+
+    status = sb_http_service_init(&config);
+    if ((status != SB_STATUS_OK) && (status != SB_STATUS_ALREADY_INITIALIZED)) {
+        SB_LOGW(SB_APP_MODULE_NAME, "http service init status=%s", sb_status_to_string(status));
     }
 
     status = sb_mqtt_service_init(&config);

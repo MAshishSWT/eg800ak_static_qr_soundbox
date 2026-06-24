@@ -168,6 +168,28 @@ int sb_cloud_text_equal(const char *a, const char *b)
     return (a[i] == b[i]) && (b[i] == '\0');
 }
 
+
+int sb_cloud_find(const char *text, const char *needle)
+{
+    u32 i;
+    u32 j;
+
+    if ((text == 0) || (needle == 0) || (needle[0] == '\0')) {
+        return 0;
+    }
+    for (i = 0u; text[i] != '\0'; i++) {
+        for (j = 0u; needle[j] != '\0'; j++) {
+            if (text[i + j] != needle[j]) {
+                break;
+            }
+        }
+        if (needle[j] == '\0') {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 int sb_cloud_url_is_https(const char *url)
 {
     return sb_cloud_has_prefix(url, "https://");

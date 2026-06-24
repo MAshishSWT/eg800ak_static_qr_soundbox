@@ -226,6 +226,25 @@ static sb_status_t sb_logic_append_rupees_and_paise(sb_audio_script_t *script,
     return SB_STATUS_OK;
 }
 
+
+sb_status_t sb_audio_prompt_logic_build_transaction_fallback(sb_audio_language_t language,
+                                                              sb_audio_provider_t provider,
+                                                              sb_audio_script_t *script)
+{
+    sb_status_t status;
+
+    if (script == 0) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+    sb_audio_script_init(script);
+
+    status = sb_logic_append_audio_file(script, language, "prefix.mp3");
+    if (status != SB_STATUS_OK) { return status; }
+    status = sb_logic_append_provider(script, language, provider);
+    if (status != SB_STATUS_OK) { return status; }
+    return sb_logic_append_audio_file(script, language, "thankyou.mp3");
+}
+
 sb_status_t sb_audio_prompt_logic_build_transaction(sb_audio_language_t language,
                                                      sb_audio_provider_t provider,
                                                      u64 amount_paise,
@@ -320,12 +339,12 @@ sb_status_t sb_audio_prompt_logic_build_daily_summary(sb_audio_language_t langua
         if (status != SB_STATUS_OK) { return status; }
         status = sb_logic_append_number(script, language, (u64)summary->count);
         if (status != SB_STATUS_OK) { return status; }
-        return sb_logic_append_audio_file(script, language, (summary->count == 1u) ? "single_txn.mp3" : "transactions.mp3");
+        return sb_logic_append_audio_file(script, language, (summary->count == 1u) ? "transaction.mp3" : "transaction_s.mp3");
     }
 
     status = sb_logic_append_number(script, language, (u64)summary->count);
     if (status != SB_STATUS_OK) { return status; }
-    status = sb_logic_append_audio_file(script, language, (summary->count == 1u) ? "single_txn.mp3" : "transactions.mp3");
+    status = sb_logic_append_audio_file(script, language, (summary->count == 1u) ? "transaction.mp3" : "transaction_s.mp3");
     if (status != SB_STATUS_OK) { return status; }
     status = sb_logic_append_rupees_and_paise(script, language, summary->total_paise, with_paise);
     if (status != SB_STATUS_OK) { return status; }

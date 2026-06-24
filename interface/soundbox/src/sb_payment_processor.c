@@ -100,7 +100,7 @@ static void sb_payment_publish_ack(const char *tx_id, const char *status)
 }
 
 
-static int sb_payment_payload_is_legacy_hash(const char *payload)
+static int sb_payment_payload_is_compat_hash(const char *payload)
 {
     u32 i;
 
@@ -117,7 +117,7 @@ static int sb_payment_payload_is_legacy_hash(const char *payload)
     return 0;
 }
 
-static sb_status_t sb_payment_read_legacy_token(const char *payload,
+static sb_status_t sb_payment_read_compat_token(const char *payload,
                                                 u32 *offset,
                                                 char *token,
                                                 u32 token_len)
@@ -148,7 +148,7 @@ static sb_status_t sb_payment_read_legacy_token(const char *payload,
     return (i > 0u) ? SB_STATUS_OK : SB_STATUS_INVALID_PARAM;
 }
 
-static sb_status_t sb_payment_parse_legacy_amount_paise(const char *amount_text, u64 *amount_paise)
+static sb_status_t sb_payment_parse_compat_amount_paise(const char *amount_text, u64 *amount_paise)
 {
     u32 i;
     u64 rupees = 0u;
@@ -210,7 +210,7 @@ static void sb_payment_u32_to_hex(u32 value, char *out, u32 out_len)
     out[8] = '\0';
 }
 
-static void sb_payment_make_legacy_tx_id(const char *payload, char *tx_id, u32 tx_id_len)
+static void sb_payment_make_compat_tx_id(const char *payload, char *tx_id, u32 tx_id_len)
 {
     char crc_hex[9];
     char tick_hex[9];
@@ -227,13 +227,13 @@ static void sb_payment_make_legacy_tx_id(const char *payload, char *tx_id, u32 t
     sb_payment_u32_to_hex(tick, tick_hex, (u32)sizeof(tick_hex));
 
     tx_id[0] = '\0';
-    (void)sb_cloud_append_string(tx_id, tx_id_len, "legacy-");
+    (void)sb_cloud_append_string(tx_id, tx_id_len, "compat-");
     (void)sb_cloud_append_string(tx_id, tx_id_len, crc_hex);
     (void)sb_cloud_append_string(tx_id, tx_id_len, "-");
     (void)sb_cloud_append_string(tx_id, tx_id_len, tick_hex);
 }
 
-static sb_status_t sb_payment_record_from_legacy_message(const sb_mqtt_inbound_message_t *message,
+static sb_status_t sb_payment_record_from_compat_message(const sb_mqtt_inbound_message_t *message,
                                                          sb_transaction_record_t *record,
                                                          sb_audio_language_t *play_language)
 {
@@ -248,7 +248,7 @@ static sb_status_t sb_payment_record_from_legacy_message(const sb_mqtt_inbound_m
         return SB_STATUS_INVALID_PARAM;
     }
 
-    status = sb_payment_read_legacy_token(message->payload, &offset, amount_text, (u32)sizeof(amount_text));
+    status = sb_payment_read_compat_token(message->payload, &offset, amount_text, (u32)sizeof(amount_text));
     if (status != SB_STATUS_OK) {
         return status;
     }
@@ -258,22 +258,22 @@ static sb_status_t sb_payment_record_from_legacy_message(const sb_mqtt_inbound_m
         return SB_STATUS_UNSUPPORTED;
     }
 
-    status = sb_payment_read_legacy_token(message->payload, &offset, language_text, (u32)sizeof(language_text));
+    status = sb_payment_read_compat_token(message->payload, &offset, language_text, (u32)sizeof(language_text));
     if (status != SB_STATUS_OK) {
         return status;
     }
-    status = sb_payment_read_legacy_token(message->payload, &offset, provider_text, (u32)sizeof(provider_text));
+    status = sb_payment_read_compat_token(message->payload, &offset, provider_text, (u32)sizeof(provider_text));
     if (status != SB_STATUS_OK) {
         return status;
     }
 
     sb_payment_zero_record(record);
-    status = sb_payment_parse_legacy_amount_paise(amount_text, &record->amount_paise);
+    status = sb_payment_parse_compat_amount_paise(amount_text, &record->amount_paise);
     if (status != SB_STATUS_OK) {
         return status;
     }
 
-    sb_payment_make_legacy_tx_id(message->payload, record->tx_id, SB_LEDGER_TX_ID_LEN);
+    sb_payment_make_compat_tx_id(message->payload, record->tx_id, SB_LEDGER_TX_ID_LEN);
     record->provider = sb_payment_provider_from_text(provider_text);
     *play_language = sb_audio_language_from_code(language_text);
 
@@ -298,8 +298,8 @@ static sb_status_t sb_payment_record_from_message(const sb_mqtt_inbound_message_
     }
 
     *play_language = sb_audio_language_from_code(s_payment_config.language);
-    if (sb_payment_payload_is_legacy_hash(message->payload) != 0) {
-        return sb_payment_record_from_legacy_message(message, record, play_language);
+    if (sb_payment_payload_is_compat_hash(message->payload) != 0) {
+        return sb_payment_record_from_compat_message(message, record, play_language);
     }
 
     sb_payment_zero_record(record);
@@ -359,8 +359,8 @@ sb_status_t sb_payment_processor_handle_message(const sb_mqtt_inbound_message_t 
 
     status = sb_payment_record_from_message(message, &record, &play_language);
     if (status == SB_STATUS_UNSUPPORTED) {
-        SB_LOGW(SB_PAYMENT_MODULE_NAME, "legacy non-payment payload ignored");
-        sb_payment_post_event(SB_EVENT_PAYMENT_FAULT, (s32)status, 0u, "legacy_command");
+        SB_LOGW(SB_PAYMENT_MODULE_NAME, "compat non-payment payload ignored");
+        sb_payment_post_event(SB_EVENT_PAYMENT_FAULT, (s32)status, 0u, "compat_command");
         return status;
     }
     if (status != SB_STATUS_OK) {

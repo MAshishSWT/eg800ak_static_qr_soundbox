@@ -27,6 +27,10 @@ sb_status_t sb_audio_prompt_logic_build_health(sb_audio_language_t language,
                                                 sb_audio_health_kind_t kind,
                                                 u32 percent,
                                                 sb_audio_script_t *script);
+sb_status_t sb_audio_prompt_logic_build_transaction_fallback(sb_audio_language_t language,
+                                                              sb_audio_provider_t provider,
+                                                              sb_audio_script_t *script);
+
 sb_status_t sb_audio_prompt_logic_build_transaction(sb_audio_language_t language,
                                                      sb_audio_provider_t provider,
                                                      u64 amount_paise,

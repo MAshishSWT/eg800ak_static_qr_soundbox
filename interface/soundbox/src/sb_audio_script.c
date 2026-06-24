@@ -21,7 +21,7 @@ sb_status_t sb_audio_script_build_status(sb_audio_language_t language,
     case SB_AUDIO_PROMPT_READY:
         return sb_audio_prompt_logic_build_alert(language, "internet.mp3", script);
     case SB_AUDIO_PROMPT_SETUP:
-        return sb_audio_prompt_logic_build_alert(language, "unregistered_device.mp3", script);
+        return sb_audio_prompt_logic_build_alert(language, "device_unregistered.mp3", script);
     case SB_AUDIO_PROMPT_NO_SIM:
         return sb_audio_prompt_logic_build_alert(language, "no_SIM.mp3", script);
     case SB_AUDIO_PROMPT_NO_NETWORK:

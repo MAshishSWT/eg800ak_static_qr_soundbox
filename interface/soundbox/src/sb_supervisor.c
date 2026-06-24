@@ -142,6 +142,15 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "userfs ready status=%d", event->param_s32);
         break;
 
+    case SB_EVENT_NOR_READY:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "external NOR ready bytes=%u status=%d", event->param_u32, event->param_s32);
+        break;
+
+    case SB_EVENT_NOR_FAULT:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "external NOR fault status=%d text=%s", event->param_s32, event->text);
+        (void)sb_led_status_set(SB_LED_STATUS_ERROR);
+        break;
+
     case SB_EVENT_CONFIG_READY:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "config ready seq=%u source=%d", event->param_u32, event->param_s32);
         break;
@@ -226,6 +235,24 @@ static void sb_supervisor_handle_event(const sb_event_t *event)
 
     case SB_EVENT_MQTT_PUBLISHED:
         SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "mqtt published len=%u topic=%s", event->param_u32, event->text);
+        break;
+
+    case SB_EVENT_HTTP_REGISTERED:
+        SB_LOGI(SB_SUPERVISOR_MODULE_NAME, "http registered status=%d", event->param_s32);
+        break;
+
+    case SB_EVENT_HTTP_UNREGISTERED:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "http unregistered status=%d text=%s", event->param_s32, event->text);
+        (void)sb_led_status_set(SB_LED_STATUS_UNREGISTERED);
+        (void)sb_audio_service_play_prompt(sb_supervisor_language(), SB_AUDIO_PROMPT_SETUP);
+        break;
+
+    case SB_EVENT_HTTP_FAILED:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "http failed status=%d text=%s", event->param_s32, event->text);
+        break;
+
+    case SB_EVENT_HTTP_TLS_FAILED:
+        SB_LOGW(SB_SUPERVISOR_MODULE_NAME, "http tls failed status=%d text=%s", event->param_s32, event->text);
         break;
 
     case SB_EVENT_PAYMENT_ACCEPTED:

@@ -107,7 +107,6 @@ sb_status_t sb_audio_asset_build_common_path(const char *file, char *path, u32 p
         return SB_STATUS_INVALID_PARAM;
     }
     path[0] = '\0';
-    if (sb_path_append(path, path_len, "audio/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
     return sb_path_append(path, path_len, file);
 }
 
@@ -134,7 +133,6 @@ sb_status_t sb_audio_asset_build_prompt_path(sb_audio_language_t language,
     }
     path[0] = '\0';
     if (common != 0) {
-        if (sb_path_append(path, path_len, "audio/") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
         return sb_path_append(path, path_len, asset);
     }
     return sb_lang_alert_path(language, asset, path, path_len);

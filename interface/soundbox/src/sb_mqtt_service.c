@@ -16,11 +16,13 @@
 #include "sb_log.h"
 #include "sb_mqtt_service.h"
 #include "sb_network_service.h"
+#include "sb_storage_fs.h"
+#include "sb_time_service.h"
 
 #define SB_MQTT_MODULE_NAME              "mqtt"
-#define SB_MQTT_ROOT_CA_PATH              "U:/mqtt_root_ca.pem"
-#define SB_MQTT_CLIENT_CRT_PATH           "U:/mqtt_client.crt"
-#define SB_MQTT_CLIENT_KEY_PATH           "U:/mqtt_client.key"
+#define SB_MQTT_ROOT_CA_PATH              "U:/certs/mqtt_root_ca.pem"
+#define SB_MQTT_CLIENT_CRT_PATH           "U:/certs/mqtt_client.crt"
+#define SB_MQTT_CLIENT_KEY_PATH           "U:/certs/mqtt_client.key"
 #define SB_MQTT_CIPHER_LIST              "ALL"
 #define SB_MQTT_COMMAND_SUFFIX           "/cmd"
 #define SB_MQTT_HEALTH_TYPE              "health"
@@ -214,16 +216,54 @@ static int sb_mqtt_network_ready(void)
     return (net_status.online != 0) ? 1 : 0;
 }
 
+static int sb_mqtt_tls_file_ready(const char *path, const char *begin_marker, const char *end_marker)
+{
+    char buffer[96];
+    u32 actual = 0u;
+
+    if ((path == 0) || (path[0] == '\0') || (begin_marker == 0) || (end_marker == 0)) {
+        return 0;
+    }
+    if (ql_access(path, 0u) != 0) {
+        return 0;
+    }
+    if (sb_storage_fs_read_file_partial(path, buffer, (u32)(sizeof(buffer) - 1u), &actual) != SB_STATUS_OK) {
+        return 0;
+    }
+    if (actual == 0u) {
+        return 0;
+    }
+    buffer[(actual < (u32)sizeof(buffer)) ? actual : ((u32)sizeof(buffer) - 1u)] = '\0';
+    if (sb_cloud_has_prefix(buffer, begin_marker) == 0) {
+        return 0;
+    }
+    (void)end_marker;
+    return 1;
+}
+
+static int sb_mqtt_time_ready(void)
+{
+    sb_time_status_t time_status;
+    if (sb_time_get_rtc(&time_status) != SB_STATUS_OK) {
+        return 0;
+    }
+    return (time_status.rtc_valid != 0) ? 1 : 0;
+}
+
 static int sb_mqtt_tls_assets_ready(void)
 {
     if (s_mqtt_config.mqtt_port != SB_MQTT_TLS_PORT) {
         return 1;
     }
 
-    if ((sb_default_certs_mqtt_root_ca()[0] == '\0') ||
-        (sb_default_certs_mqtt_client_crt()[0] == '\0') ||
-        (sb_default_certs_mqtt_client_key()[0] == '\0')) {
-        SB_LOGE(SB_MQTT_MODULE_NAME, "mqtt certificate buffer missing");
+    if (sb_mqtt_time_ready() == 0) {
+        SB_LOGW(SB_MQTT_MODULE_NAME, "tls blocked until rtc/ntp time is valid");
+        return 0;
+    }
+    if ((sb_mqtt_tls_file_ready(SB_MQTT_ROOT_CA_PATH, "-----BEGIN CERTIFICATE-----", "-----END CERTIFICATE-----") == 0) ||
+        (sb_mqtt_tls_file_ready(SB_MQTT_CLIENT_CRT_PATH, "-----BEGIN CERTIFICATE-----", "-----END CERTIFICATE-----") == 0) ||
+        (sb_mqtt_tls_file_ready(SB_MQTT_CLIENT_KEY_PATH, "-----BEGIN", "-----END") == 0)) {
+        SB_LOGE(SB_MQTT_MODULE_NAME, "mqtt certificate file invalid or missing under U:/certs");
         return 0;
     }
     return 1;

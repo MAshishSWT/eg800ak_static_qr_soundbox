@@ -181,7 +181,20 @@ static void sb_audio_service_handle_request(const sb_audio_request_t *request)
     }
 
     SB_LOGI(SB_AUDIO_SERVICE_MODULE_NAME, "script items=%u", script.count);
-    (void)sb_audio_play_script(&script);
+    status = sb_audio_play_script(&script);
+    if ((status == SB_STATUS_NOT_FOUND) && (request->type == SB_AUDIO_REQ_AMOUNT)) {
+        SB_LOGW(SB_AUDIO_SERVICE_MODULE_NAME, "amount assets missing, trying transaction fallback");
+        status = sb_audio_prompt_logic_build_transaction_fallback(request->language,
+                                                                  request->provider,
+                                                                  &script);
+        if (status == SB_STATUS_OK) {
+            SB_LOGI(SB_AUDIO_SERVICE_MODULE_NAME, "fallback script items=%u", script.count);
+            status = sb_audio_play_script(&script);
+        }
+    }
+    if (status != SB_STATUS_OK) {
+        SB_LOGW(SB_AUDIO_SERVICE_MODULE_NAME, "script play final status=%s", sb_status_to_string(status));
+    }
 }
 
 static void sb_audio_task(void *argv)

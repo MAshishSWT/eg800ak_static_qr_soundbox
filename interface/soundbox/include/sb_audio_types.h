@@ -18,7 +18,7 @@ extern "C" {
 #define SB_AUDIO_PROVIDER_NAME_LEN    (16u)
 
 /* Supported product audio languages. Each language maps to one asset directory
- * under U:/audio/<code>/.
+ * under external NOR logical path audio/<code>/. Common files are U-drive root files.
  */
 typedef enum {
     SB_AUDIO_LANG_EN = 0,

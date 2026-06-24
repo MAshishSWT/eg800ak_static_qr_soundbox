@@ -63,6 +63,10 @@ const char *sb_status_to_string(sb_status_t status)
         return "SMS_ERROR";
     case SB_STATUS_SERIAL_ERROR:
         return "SERIAL_ERROR";
+    case SB_STATUS_HTTP_ERROR:
+        return "HTTP_ERROR";
+    case SB_STATUS_GPIO_ERROR:
+        return "GPIO_ERROR";
     default:
         return "UNKNOWN";
     }
