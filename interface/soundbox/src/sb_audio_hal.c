@@ -15,11 +15,14 @@
 #define SB_AUDIO_HAL_MIN_TIMEOUT_MS    (1000u)
 #define SB_AUDIO_HAL_MAX_TIMEOUT_MS    (60000u)
 #define SB_AUDIO_HAL_STREAM_CHUNK      (512u)
+#define SB_AUDIO_HAL_OLD_API_RETRY_MS  (150u)
 
 static ql_sem_t s_mp3_done_sem = 0;
 static volatile int s_mp3_last_status = -1;
 static int s_audio_ready = 0;
 static u32 s_volume_percent = 70u;
+static signed short s_audio_dsp_gain_table[12] = {-36, -31, -27, -24, -21, -18, -15, -12, -9, -6, -3, 0};
+static volatile int s_old_player_last_state = AUD_PLAYER_ERROR;
 
 static AUDIOHAL_SPK_LEVEL_T sb_audio_hal_percent_to_level(u32 volume_percent)
 {
@@ -81,6 +84,42 @@ static void sb_audio_hal_mp3_event_cb(Mp3PlayEventType type, int value)
         }
     }
 }
+
+static void sb_audio_hal_player_cb(char *data, int len, enum_aud_player_state state)
+{
+    (void)data;
+    (void)len;
+    s_old_player_last_state = state;
+
+    if ((state == AUD_PLAYER_ERROR) || (state == AUD_PLAYER_FINISHED)) {
+        if (s_mp3_done_sem != 0) {
+            (void)ql_rtos_semaphore_release(s_mp3_done_sem);
+        }
+    }
+}
+
+static void sb_audio_hal_pa_cb(unsigned int on)
+{
+    (void)sb_bsp_board_set_speaker_amp(on ? 1 : 0);
+}
+
+static void sb_audio_hal_apply_quec_sample_gain_table(void)
+{
+    (void)ql_set_rxcodec_gain_table(1u, 0, 36u, 1u, 1u, 0u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 1, 36u, 1u, 1u, 0u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 2, 36u, 1u, 2u, 0u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 3, 36u, 1u, 2u, 0u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 4, 36u, 1u, 3u, 0u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 5, 36u, 1u, 3u, 1u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 6, 36u, 1u, 4u, 1u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 7, 36u, 1u, 4u, 1u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 8, 36u, 1u, 4u, 1u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 9, 36u, 1u, 4u, 1u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 10, 36u, 1u, 4u, 1u, 2u);
+    (void)ql_set_rxcodec_gain_table(1u, 11, 36u, 1u, 4u, 1u, 2u);
+    (void)ql_set_dsp_gain_table(1u, s_audio_dsp_gain_table);
+}
+
 
 static sb_status_t sb_audio_hal_wait_audio_ready(void)
 {
@@ -223,6 +262,11 @@ sb_status_t sb_audio_hal_init(u32 volume_percent)
         }
     }
 
+    (void)ql_audio_play_init(sb_audio_hal_player_cb);
+    ql_bind_speakerpa_cb(sb_audio_hal_pa_cb);
+    ql_set_audio_path_speaker();
+    sb_audio_hal_apply_quec_sample_gain_table();
+
     pcm_config.pcmbclk = PCM_FS_64;
     pcm_config.sample = PCM_CODEC_SAMPLE_16000;
     pcm_config.is_i2s = 0;
@@ -256,6 +300,51 @@ sb_status_t sb_audio_hal_set_volume_percent(u32 volume_percent)
     level = sb_audio_hal_percent_to_level(volume_percent);
     ql_set_volume(level);
     s_volume_percent = volume_percent;
+    return SB_STATUS_OK;
+}
+
+static sb_status_t sb_audio_hal_play_mp3_old_file_api(const char *path, u32 timeout_ms, u32 file_size)
+{
+    int ret;
+    QlOSStatus wait_status;
+
+    (void)file_size;
+    if ((path == 0) || (path[0] == '\0')) {
+        return SB_STATUS_INVALID_PARAM;
+    }
+
+    s_old_player_last_state = AUD_PLAYER_ERROR;
+    (void)sb_bsp_board_set_speaker_amp(1);
+    ret = ql_mp3_file_play((char *)path);
+    if (ret == -2) {
+        ql_mp3_file_stop();
+        ql_rtos_task_sleep_ms(SB_AUDIO_HAL_OLD_API_RETRY_MS);
+        ret = ql_mp3_file_play((char *)path);
+    }
+    if (ret != 0) {
+        (void)sb_bsp_board_set_speaker_amp(0);
+        SB_LOGW(SB_AUDIO_HAL_MODULE_NAME, "mp3 old file API start failed ret=%d path=%s", ret, path);
+        return SB_STATUS_FILE_ERROR;
+    }
+
+    wait_status = ql_rtos_semaphore_wait(s_mp3_done_sem, timeout_ms + 1000u);
+    ql_mp3_file_stop();
+    (void)sb_bsp_board_set_speaker_amp(0);
+
+    if (wait_status != 0) {
+        SB_LOGW(SB_AUDIO_HAL_MODULE_NAME, "mp3 old file API wait timeout path=%s", path);
+        return SB_STATUS_TIMEOUT;
+    }
+    if (s_old_player_last_state == AUD_PLAYER_FINISHED) {
+        SB_LOGI(SB_AUDIO_HAL_MODULE_NAME, "mp3 old file API finished path=%s", path);
+        return SB_STATUS_OK;
+    }
+    if (s_old_player_last_state == AUD_PLAYER_ERROR) {
+        SB_LOGW(SB_AUDIO_HAL_MODULE_NAME, "mp3 old file API decoder error path=%s", path);
+        return SB_STATUS_FILE_ERROR;
+    }
+
+    SB_LOGI(SB_AUDIO_HAL_MODULE_NAME, "mp3 old file API state=%d path=%s", s_old_player_last_state, path);
     return SB_STATUS_OK;
 }
 
@@ -300,8 +389,15 @@ sb_status_t sb_audio_hal_play_mp3_file(const char *path, u32 timeout_ms)
     ret = ql_play_mp3((char *)path, &handle, &config);
     if (ret != 0) {
         SB_LOGW(SB_AUDIO_HAL_MODULE_NAME,
-                "mp3 file API start failed ret=%d path=%s, trying stream fallback",
+                "mp3 file API start failed ret=%d path=%s, trying old API fallback",
                 ret, path);
+        status = sb_audio_hal_play_mp3_old_file_api(path, timeout_ms, file_size);
+        if (status == SB_STATUS_OK) {
+            return SB_STATUS_OK;
+        }
+        SB_LOGW(SB_AUDIO_HAL_MODULE_NAME,
+                "mp3 old file API fallback failed status=%s path=%s, trying stream fallback",
+                sb_status_to_string(status), path);
         status = sb_audio_hal_play_mp3_stream_from_file(path, timeout_ms, file_size);
         (void)sb_bsp_board_set_speaker_amp(0);
         if (status == SB_STATUS_OK) {

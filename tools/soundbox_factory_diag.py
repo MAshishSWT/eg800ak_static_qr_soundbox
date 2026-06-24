@@ -32,7 +32,7 @@ def main() -> int:
     parser.add_argument("--port", default="COM5")
     parser.add_argument("--baud", type=int, default=115200)
     parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("command", choices=sorted(list(COMMANDS) + ["play_common", "play_lang"]))
+    parser.add_argument("command", choices=sorted(list(COMMANDS) + ["play_common", "play_lang", "ufs_file"]))
     parser.add_argument("args", nargs="*")
     args = parser.parse_args()
 
@@ -40,6 +40,10 @@ def main() -> int:
         if len(args.args) != 1:
             raise SystemExit("play_common requires filename")
         obj = {"cmd":"diag", "test":"play_common", "file":args.args[0]}
+    elif args.command == "ufs_file":
+        if len(args.args) != 1:
+            raise SystemExit("ufs_file requires filename, for example start_tune.mp3")
+        obj = {"cmd":"diag", "test":"ufs_file", "file":args.args[0]}
     elif args.command == "play_lang":
         if len(args.args) != 2:
             raise SystemExit("play_lang requires language and filename")

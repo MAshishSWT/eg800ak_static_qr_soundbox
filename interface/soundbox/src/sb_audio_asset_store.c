@@ -16,9 +16,66 @@
 
 static sb_audio_store_status_t s_store_status;
 
+static sb_status_t sb_store_common_to_ufs(const char *logical_path, char *ufs_path, u32 ufs_path_len);
+
 static void sb_store_copy(char *dst, u32 dst_len, const char *src)
 {
     sb_cloud_copy_string(dst, dst_len, src);
+}
+
+static int sb_store_ufs_file_present(const char *path, u32 *size_out)
+{
+    QFILE *fp;
+    int size;
+
+    if (size_out != 0) {
+        *size_out = 0u;
+    }
+    if ((path == 0) || (path[0] == '\0')) {
+        return 0;
+    }
+
+    /* ql_access() may return stale/not-mounted results on some EG800AK
+     * LittleFS builds immediately after factory serial upload. A real fopen
+     * plus fsize is a stronger proof that the audio decoder can consume it.
+     */
+    fp = ql_fopen(path, "rb");
+    if (fp == 0) {
+        return 0;
+    }
+    size = ql_fsize(fp);
+    (void)ql_fclose(fp);
+    if (size <= 0) {
+        return 0;
+    }
+    if (size_out != 0) {
+        *size_out = (u32)size;
+    }
+    return 1;
+}
+
+static void sb_store_log_common_files(void)
+{
+    static const char *const files[] = {
+        "start_tune.mp3",
+        "ping.mp3",
+        "good_bye.mp3",
+        "transaction_error.mp3"
+    };
+    u32 i;
+
+    for (i = 0u; i < (u32)(sizeof(files) / sizeof(files[0])); i++) {
+        char path[SB_AUDIO_PATH_LEN];
+        u32 size = 0u;
+        if (sb_store_common_to_ufs(files[i], path, (u32)sizeof(path)) != SB_STATUS_OK) {
+            continue;
+        }
+        if (sb_store_ufs_file_present(path, &size) != 0) {
+            SB_LOGI(SB_AUDIO_STORE_MODULE_NAME, "common asset present path=%s size=%u", path, size);
+        } else {
+            SB_LOGW(SB_AUDIO_STORE_MODULE_NAME, "common asset missing path=%s", path);
+        }
+    }
 }
 
 static int sb_store_is_common_root_file(const char *logical_path)
@@ -79,6 +136,7 @@ sb_status_t sb_audio_asset_store_init(void)
     SB_LOGI(SB_AUDIO_STORE_MODULE_NAME, "ready common=%s lang=%s nor=%d manifest=%d",
             SB_AUDIO_STORE_UFS_ROOT, SB_AUDIO_STORE_EXT_ROOT,
             s_store_status.nor_ready, s_store_status.manifest_ready);
+    sb_store_log_common_files();
     return SB_STATUS_OK;
 }
 
@@ -97,7 +155,7 @@ int sb_audio_asset_store_exists(const char *logical_path)
     sb_audio_manifest_entry_t entry;
 
     if (sb_store_common_to_ufs(logical_path, path, (u32)sizeof(path)) == SB_STATUS_OK) {
-        return (ql_access(path, 0u) == 0) ? 1 : 0;
+        return sb_store_ufs_file_present(path, 0);
     }
     if (sb_audio_manifest_find_with_fallback(logical_path, &entry) == SB_STATUS_OK) {
         return 1;
@@ -198,11 +256,14 @@ sb_status_t sb_audio_asset_store_prepare_play_path(const char *logical_path,
     play_path[0] = '\0';
     status = sb_store_common_to_ufs(logical_path, ufs_path, (u32)sizeof(ufs_path));
     if (status == SB_STATUS_OK) {
-        if (ql_access(ufs_path, 0u) == 0) {
+        u32 size = 0u;
+        if (sb_store_ufs_file_present(ufs_path, &size) != 0) {
+            SB_LOGI(SB_AUDIO_STORE_MODULE_NAME, "prepare common path=%s size=%u", ufs_path, size);
             sb_store_copy(play_path, play_path_len, ufs_path);
             s_store_status.backend = SB_AUDIO_STORE_BACKEND_UFS_ROOT;
             return SB_STATUS_OK;
         }
+        SB_LOGW(SB_AUDIO_STORE_MODULE_NAME, "common asset not found path=%s", ufs_path);
         s_store_status.missing_count++;
         return SB_STATUS_NOT_FOUND;
     }

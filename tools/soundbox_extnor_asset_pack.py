@@ -6,6 +6,7 @@ import argparse
 import csv
 import os
 import shutil
+import subprocess
 import struct
 import sys
 import tempfile
@@ -22,6 +23,8 @@ ASSETS_BASE_ADDR = 0x00030000
 MAX_NOR_SIZE = 8 * 1024 * 1024
 LANGUAGES = ("bn", "en", "gu", "hi", "kn", "ma", "ml", "pa", "ta", "tl")
 COMMON_FILES = {"start_tune.mp3", "ping.mp3", "good_bye.mp3", "transaction_error.mp3"}
+NORMALIZED_MP3_RATE = "16000"
+NORMALIZED_MP3_BITRATE = "32k"
 
 
 def align4(value: int) -> int:
@@ -50,6 +53,27 @@ def find_asset_root(path: Path) -> Path:
     return candidates[0][1]
 
 
+def normalize_mp3_if_requested(source: Path, cache_root: Path, normalize: bool) -> Path:
+    if not normalize:
+        return source
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        raise SystemExit("--normalize-mp3 requires ffmpeg in PATH; install ffmpeg or pass --no-normalize-mp3")
+    rel_name = source.name
+    target = cache_root / rel_name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    cmd = [
+        ffmpeg, "-y", "-hide_banner", "-loglevel", "error",
+        "-i", str(source),
+        "-vn", "-ac", "1", "-ar", NORMALIZED_MP3_RATE,
+        "-codec:a", "libmp3lame", "-b:a", NORMALIZED_MP3_BITRATE,
+        "-write_id3v1", "0", "-id3v2_version", "0",
+        str(target),
+    ]
+    subprocess.run(cmd, check=True)
+    return target
+
+
 def make_entry(logical_path: str, offset: int, data: bytes, language: str) -> bytes:
     path_bytes = logical_path.encode("utf-8")
     if len(path_bytes) >= PATH_LEN:
@@ -70,6 +94,7 @@ def main() -> int:
     parser.add_argument("--input", required=True, help="Vi_mp3 folder or zip")
     parser.add_argument("--out-dir", required=True, help="output folder")
     parser.add_argument("--image-name", default="soundbox_extnor_audio.bin")
+    parser.add_argument("--no-normalize-mp3", action="store_true", help="pack original MP3 files without 16 kHz/no-ID3 normalization")
     args = parser.parse_args()
 
     input_path = Path(args.input).resolve()
@@ -78,6 +103,8 @@ def main() -> int:
 
     with tempfile.TemporaryDirectory(prefix="sb_asset_pack_") as td:
         root = find_asset_root(extract_input(input_path, Path(td)))
+        normalized_cache = Path(td) / "normalized_mp3"
+        normalize_mp3 = not args.no_normalize_mp3
         entries = []
         data_chunks = []
         current = ASSETS_BASE_ADDR
@@ -91,7 +118,8 @@ def main() -> int:
                 continue
             files = sorted(p for p in lang_dir.iterdir() if p.is_file() and p.suffix.lower() == ".mp3")
             for file_path in files:
-                data = file_path.read_bytes()
+                packed_path = normalize_mp3_if_requested(file_path, normalized_cache / lang, normalize_mp3)
+                data = packed_path.read_bytes()
                 logical = f"audio/{lang}/{file_path.name}"
                 current = align4(current)
                 entries.append(make_entry(logical, current, data, lang))
@@ -135,6 +163,7 @@ def main() -> int:
             fp.write(f"entries={len(entries)}\n")
             fp.write(f"image_bytes={len(image)}\n")
             fp.write(f"manifest_crc32=0x{crc32(entries_blob) & 0xFFFFFFFF:08X}\n")
+            fp.write(f"normalized_mp3={normalize_mp3} rate={NORMALIZED_MP3_RATE} bitrate={NORMALIZED_MP3_BITRATE}\n")
             fp.write("missing_language_folders=" + ",".join(missing_langs) + "\n")
             for lang in LANGUAGES:
                 lang_dir = root / lang

@@ -192,6 +192,16 @@ static void sb_audio_service_handle_request(const sb_audio_request_t *request)
             status = sb_audio_play_script(&script);
         }
     }
+    if ((status == SB_STATUS_NOT_FOUND) &&
+        (request->type != SB_AUDIO_REQ_COMMON) &&
+        (request->type != SB_AUDIO_REQ_VOLUME)) {
+        SB_LOGW(SB_AUDIO_SERVICE_MODULE_NAME,
+                "language/status asset missing, trying common transaction_error fallback");
+        if (sb_audio_prompt_logic_build_common("transaction_error.mp3", &script) == SB_STATUS_OK) {
+            status = sb_audio_play_script(&script);
+        }
+    }
+
     if (status != SB_STATUS_OK) {
         SB_LOGW(SB_AUDIO_SERVICE_MODULE_NAME, "script play final status=%s", sb_status_to_string(status));
     }

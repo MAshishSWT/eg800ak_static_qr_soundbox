@@ -152,10 +152,22 @@ static sb_status_t sb_storage_make_parent_dir(const char *file_path)
 
 sb_status_t sb_storage_fs_file_exists(const char *path)
 {
+    QFILE *fp;
+
     if (sb_storage_validate_path(path) != SB_STATUS_OK) {
         return SB_STATUS_INVALID_PARAM;
     }
-    return (ql_access(path, 0u) == 0) ? SB_STATUS_OK : SB_STATUS_NOT_FOUND;
+
+    /* EG800AK LittleFS builds have shown ql_access() inconsistencies after
+     * serial provisioning. Use ql_fopen() as the authoritative existence
+     * probe because the MP3 player also consumes files through fopen/fread.
+     */
+    fp = ql_fopen(path, "rb");
+    if (fp == 0) {
+        return SB_STATUS_NOT_FOUND;
+    }
+    (void)ql_fclose(fp);
+    return SB_STATUS_OK;
 }
 
 sb_status_t sb_storage_fs_read_file(const char *path, void *buffer, u32 length)

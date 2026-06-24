@@ -26,3 +26,20 @@
 - MP3 player timeout field now follows the QuecOpen audio guide recommendation and uses `0` for normal file playback.
 - Added stream-mode fallback when `ql_play_mp3(path, ...)` returns failure on EG800AK U-drive files.
 - External NOR JEDEC normalization remains enabled for raw `17 60 EF` responses, which represent normalized W25Q64 ID `EF 60 17`.
+
+## Runtime patch v5
+
+- Version string changed to `1.0.0-phase23-production-fix-v5`.
+- Common U-drive MP3 existence now uses `ql_fopen()`/`ql_fsize()` instead of `ql_access()` to avoid false missing results after serial provisioning.
+- Boot now logs the presence and size of all four common root MP3 assets.
+- Added `ufs_file` factory diagnostic command to verify a U-drive file by name.
+- If external NOR language assets are not yet provisioned, missing status prompts fall back to `U:/transaction_error.mp3` instead of ending silently.
+
+
+## v6 runtime patch — U-drive MP3 playback compatibility
+
+- U-drive was confirmed good by `ql_fopen()`/`ql_fsize()` and file persistence across reboot.
+- Runtime failure was isolated to MP3 decoder/API compatibility: original common prompts were ID3v2.2 tagged 11.025/12 kHz MP3 files; QuecOpen MP3 API returned `-1` after file probe succeeded.
+- Added QuecOpen sample-aligned playback init: `ql_audio_play_init`, `ql_bind_speakerpa_cb`, `ql_set_audio_path_speaker`, gain-table setup, and old-architecture `ql_mp3_file_play()` fallback.
+- Updated UFS provisioning tool to push known-good 16 kHz mono 32 kbps no-ID3 common MP3 files by default.
+- Added bundled factory assets under `tools/factory_assets/common_mp3_16k/`.

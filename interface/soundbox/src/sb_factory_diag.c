@@ -283,6 +283,45 @@ static sb_status_t sb_factory_reply_asset_status(char *reply, u32 reply_len)
     return SB_STATUS_OK;
 }
 
+
+static sb_status_t sb_factory_reply_ufs_file_status(const char *file, char *reply, u32 reply_len)
+{
+    char path[SB_FACTORY_FILE_PATH_LEN];
+    QFILE *fp;
+    int size = 0;
+
+    if ((file == 0) || (file[0] == '\0')) {
+        return sb_factory_reply_status(reply, reply_len, "error", "file");
+    }
+    path[0] = '\0';
+    if (sb_cloud_has_prefix(file, "U:/") != 0) {
+        sb_cloud_copy_string(path, (u32)sizeof(path), file);
+    } else {
+        if (sb_cloud_append_string(path, (u32)sizeof(path), "U:/") != SB_STATUS_OK) {
+            return SB_STATUS_NO_MEMORY;
+        }
+        if (sb_cloud_append_string(path, (u32)sizeof(path), file) != SB_STATUS_OK) {
+            return SB_STATUS_NO_MEMORY;
+        }
+    }
+
+    fp = ql_fopen(path, "rb");
+    if (fp != 0) {
+        size = ql_fsize(fp);
+        (void)ql_fclose(fp);
+    }
+
+    reply[0] = '\0';
+    if (sb_cloud_append_string(reply, reply_len, "{\"status\":\"ok\",\"path\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_json_string(reply, reply_len, path) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"exists\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, (fp != 0) ? 1u : 0u) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, ",\"size\":") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_u32(reply, reply_len, (size > 0) ? (u32)size : 0u) != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    if (sb_cloud_append_string(reply, reply_len, "}") != SB_STATUS_OK) { return SB_STATUS_NO_MEMORY; }
+    return SB_STATUS_OK;
+}
+
 static sb_status_t sb_factory_diag_test_from_json(const char *json,
                                                   sb_factory_channel_t channel,
                                                   char *reply,
@@ -314,6 +353,12 @@ static sb_status_t sb_factory_diag_test_from_json(const char *json,
     }
     if (sb_cloud_text_equal(test, "list_assets") != 0) {
         return sb_factory_reply_asset_status(reply, reply_len);
+    }
+    if (sb_cloud_text_equal(test, "ufs_file") != 0) {
+        if (sb_json_get_string(json, "file", file, (u32)sizeof(file)) != SB_STATUS_OK) {
+            return sb_factory_reply_status(reply, reply_len, "error", "file");
+        }
+        return sb_factory_reply_ufs_file_status(file, reply, reply_len);
     }
     if (sb_cloud_text_equal(test, "play_common") != 0) {
         if (sb_json_get_string(json, "file", file, (u32)sizeof(file)) != SB_STATUS_OK) {
